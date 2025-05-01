@@ -194,16 +194,68 @@ function showTime() {
   var minute = date.getMinutes();
   minute = minute < 10 ? "0" + minute : minute;
 
-  var current =
-    month +
-    "-" +
-    day +
-    "&nbsp;&nbsp;" +
-    hour +
-    ":" +
-    minute
+  var current = month + "-" + day + "&nbsp;&nbsp;" + hour + ":" + minute;
 
   document.getElementById("time").innerHTML = current;
 }
 
-setInterval("showTime()", 10);
+const textField = document.getElementById("excludeNums");
+const addButton = document.querySelector(".close-block-dialog");
+const msgList = document.querySelector(".msgList");
+const unreadCount = document.getElementById("unreadCount");
+const select = document.getElementById("msgFontSize");
+
+addButton.addEventListener("click", function () {
+  const inputValue = textField.value;
+
+  if (inputValue.trim() !== "") {
+    const newCard = document.createElement("mdui-card");
+    newCard.className = "msgCard";
+    newCard.style.marginBottom = "1rem";
+    newCard.style.width = "100%";
+    newCard.style.padding = "1rem";
+
+    const cardContent = document.createElement("mdui-card-content");
+    cardContent.style.whiteSpace = "pre-wrap";
+
+    const textNode = document.createTextNode(inputValue);
+
+    cardContent.appendChild(textNode);
+
+    newCard.appendChild(cardContent);
+    msgList.appendChild(newCard);
+
+    const cardCount = msgList.querySelectorAll("mdui-card").length;
+    unreadCount.textContent = cardCount;
+
+    textField.value = '';
+  }
+});
+
+select.addEventListener("change", function () {
+  const selectedValue = select.value;
+
+  let fontSize;
+  switch (selectedValue) {
+    case "small":
+      fontSize = "1rem";
+      break;
+    case "middle":
+      fontSize = "1.2rem";
+      break;
+    case "large":
+      fontSize = "1.5rem";
+      break;
+    case "larger":
+      fontSize = "3rem";
+      break;
+    default:
+      fontSize = "1rem"; // 默认字体大小
+      break;
+  }
+
+  const msgCards = document.querySelectorAll("mdui-card.msgCard");
+  msgCards.forEach((card) => {
+    card.style.fontSize = fontSize;
+  });
+});

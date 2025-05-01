@@ -22,7 +22,7 @@ mdui-layout {
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #E2E2E5;
+    background: #E2E2E5aa;
     border-radius: 1rem;
     /* 滑块圆角 */
   }
