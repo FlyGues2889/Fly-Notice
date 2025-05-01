@@ -1,16 +1,16 @@
 {
-  "name": "random-num-you",
-  "version": "0.4.5",
-  "description": "A random number generator",
+  "name": "fly-notice",
+  "version": "0.0.1",
+  "description": "A notice displayer",
   "main": "main.js",
   "icon": "app/assets/appIcon.ico",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "packager": "electron-packager . RandomNum You --win --out ./out --icon=assets/appIcon.ico --overwrite"
+    "packager": "electron-packager . FlyNotice --win --out ./out --icon=assets/appIcon.ico --overwrite"
   },
   "author": "FlyGues",
-  "license": "AGPL-3.0-only",
+  "license": "MIT",
   "devDependencies": {
     "electron": "^33.2.1",
     "electron-packager": "^17.1.2"

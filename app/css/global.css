@@ -6,7 +6,6 @@ mdui-layout {
   width: 100vw;
   height: 100vh;
 
-  background-color: rgb(var(--mdui-color-surface-container));
   font-family: 'HarmonyOS Sans SC', sans-serif;
 
   user-select: none;
@@ -14,7 +13,7 @@ mdui-layout {
 
 :root {
   ::-webkit-scrollbar {
-    width: 0.4rem;
+    width: 0.5rem;
     height: 0.4rem;
   }
 
@@ -23,7 +22,7 @@ mdui-layout {
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgb(var(--mdui-color-primary), 0.15);
+    background: #E2E2E5;
     border-radius: 1rem;
     /* 滑块圆角 */
   }
@@ -61,7 +60,7 @@ mdui-top-app-bar {
 
   mdui-top-app-bar-title {
     opacity: 0.8;
-    margin-left: -0.2rem;
+    margin-left: 0.2rem;
     font-size: small;
     -webkit-app-region: drag;
     user-select: none;
@@ -95,11 +94,13 @@ div#topWindowBar {
 
 mdui-navigation-rail {
   background-color: rgb(var(--mdui-color-surface-container));
+  border-radius: 0 1rem 1rem 0;
+
+  padding: 1rem 0;
 
   font-family: 'Harmony Sans SC M';
   z-index: 990;
 
-  margin: 1rem 0;
 
   div[slot="bottom"] {
     display: flex;
@@ -113,8 +114,8 @@ div.page {
   width: 100%;
   display: flex;
   flex-direction: column;
-  border-radius: 2rem;
-  margin: 4rem 1rem 1rem 5rem;
+  margin: 3rem 0rem 0rem 3rem;
+  padding-right: 3rem;
   background-color: rgb(var(--mdui-color-surface));
 
   overflow: auto;
@@ -123,7 +124,7 @@ div.page {
   font-family: 'Harmony Sans SC';
 
   div.page-container {
-    margin: 1rem 4rem;
+    margin: 1rem 0rem;
   }
 }
 
