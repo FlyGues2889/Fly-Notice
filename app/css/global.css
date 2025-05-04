@@ -154,4 +154,10 @@ div.showList {
   justify-content: center;
   align-items: center;
   white-space: pre-wrap;
+
+  transition: all 0.3s cubic-bezier(0.28, 0.02, 0.45, 0.98);
+}
+
+mdui-card.viewCard {
+  transition: all 0.1s;
 }
