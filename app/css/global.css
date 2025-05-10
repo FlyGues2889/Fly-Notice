@@ -53,7 +53,7 @@ span[slot="description"] {
 mdui-top-app-bar {
   height: 3rem;
   align-items: center;
-  background-color: rgb(var(--mdui-color-surface-container));
+  background-color: #00000000;
   color: rgb(var(--mdui-color-primary));
 
 
@@ -104,6 +104,7 @@ div.page {
 
   div.page-container {
     margin: 1rem 0rem;
+    margin-bottom: 6rem;
   }
 }
 
@@ -129,7 +130,6 @@ mdui-snackbar {
 
 mdui-card.container {
   margin: 0rem;
-  margin-left: 0;
   padding: 1rem;
 
   width: 100%;
@@ -149,7 +149,7 @@ mdui-list-subheader {
 
 div.showList {
   width: 100%;
-  height: calc(100vh - 250px);
+  height: calc(100vh - 240px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -160,4 +160,9 @@ div.showList {
 
 mdui-card.viewCard {
   transition: all 0.1s;
+}
+
+mdui-bottom-app-bar {
+  position: fixed;
+  bottom: 0;
 }

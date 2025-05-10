@@ -112,23 +112,23 @@ document.getElementById("toSettings").onclick = function () {
   document.getElementById("toHistory").removeAttribute("active");
 };
 
-function showTime() {
-  var date = new Date();
+// function showTime() {
+//   var date = new Date();
 
-  var year = date.getFullYear();
-  var month = date.getMonth() + 1;
-  month = month < 10 ? "0" + month : month;
-  var day = date.getDate();
-  day = day < 10 ? "0" + day : day;
-  var hour = date.getHours();
-  hour = hour < 10 ? "0" + hour : hour; // 用三目运算符调整数字显示格式
-  var minute = date.getMinutes();
-  minute = minute < 10 ? "0" + minute : minute;
+//   var year = date.getFullYear();
+//   var month = date.getMonth() + 1;
+//   month = month < 10 ? "0" + month : month;
+//   var day = date.getDate();
+//   day = day < 10 ? "0" + day : day;
+//   var hour = date.getHours();
+//   hour = hour < 10 ? "0" + hour : hour; // 用三目运算符调整数字显示格式
+//   var minute = date.getMinutes();
+//   minute = minute < 10 ? "0" + minute : minute;
 
-  var current = month + "-" + day + "&nbsp;&nbsp;" + hour + ":" + minute;
+//   var current = month + "-" + day + "&nbsp;&nbsp;" + hour + ":" + minute;
 
-  document.getElementById("time").innerHTML = current;
-}
+//   document.getElementById("time").innerHTML = current;
+// }
 
 const textField = document.getElementById("excludeNums");
 const addButton = document.querySelector(".add-button"); // 确保引用正确
@@ -214,7 +214,7 @@ fontSizeSlider.addEventListener("input", function () { // 使用 'input' 事件�
 
 // 初始化显示消息
 window.onload = function () {
-  showTime();
+  // showTime();
   setInterval(showTime, 1000);
   displayMessages(); // 初始化显示消息
 };
