@@ -59,7 +59,6 @@ mdui-top-app-bar {
 
   mdui-top-app-bar-title {
     opacity: 0.8;
-    margin-left: 0.2rem;
     font-size: small;
     -webkit-app-region: drag;
     user-select: none;
