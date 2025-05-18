@@ -134,7 +134,7 @@ const textField = document.getElementById("excludeNums");
 const addButton = document.querySelector(".add-button"); // 确保引用正确
 const msgList = document.querySelector(".msgList");
 const unreadCount = document.getElementById("unreadCount");
-const fontSizeSlider = document.getElementById("msgFontSize"); // 重命名变量以避免冲突
+const fontSizeSlider = document.querySelectorAll(".msgFontSize"); // 重命名变量以避免冲突
 const showList = document.getElementById("showList"); // 获取展示列表的引用
 
 let messageInterval; // 定义一个变量来存储定时器
@@ -198,18 +198,24 @@ addButton.addEventListener("click", function () {
   }
 });
 
-fontSizeSlider.addEventListener("input", function () { // 使用 'input' 事件以实现实时更新
-  let fontSizeValue = fontSizeSlider.value + "rem"; 
+fontSizeSlider.forEach((slider) => {
+  slider.addEventListener("input", function () { // 使用 'input' 事件以实现实时更新
+    let fontSizeValue = slider.value + "rem"; 
 
-  const msgCards = document.querySelectorAll("mdui-card.msgCard");
-  const viewCard = document.querySelector("mdui-card.viewCard");
-  const showList = document.querySelector("div.showList");
+    const msgCards = document.querySelectorAll("mdui-card.msgCard");
+    const viewCard = document.querySelector("mdui-card.viewCard");
+    const showList = document.querySelector("div.showList");
 
-  msgCards.forEach((card) => {
-    card.style.fontSize = fontSizeValue;
+    msgCards.forEach((card) => {
+      card.style.fontSize = fontSizeValue;
+    });
+    if (viewCard) {
+      viewCard.style.fontSize = fontSizeValue;
+    }
+    if (showList) {
+      showList.style.fontSize = fontSizeValue;
+    }
   });
-  viewCard.style.fontSize = fontSizeValue;
-  showList.style.fontSize = fontSizeValue;
 });
 
 // 初始化显示消息
