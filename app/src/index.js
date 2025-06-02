@@ -112,23 +112,22 @@ document.getElementById("toSettings").onclick = function () {
   document.getElementById("toHistory").removeAttribute("active");
 };
 
-// function showTime() {
-//   var date = new Date();
+function showTime() {
+  var date = new Date();
 
-//   var year = date.getFullYear();
-//   var month = date.getMonth() + 1;
-//   month = month < 10 ? "0" + month : month;
-//   var day = date.getDate();
-//   day = day < 10 ? "0" + day : day;
-//   var hour = date.getHours();
-//   hour = hour < 10 ? "0" + hour : hour; // 用三目运算符调整数字显示格式
-//   var minute = date.getMinutes();
-//   minute = minute < 10 ? "0" + minute : minute;
+  var month = date.getMonth() + 1;
+  month = month < 10 ? "0" + month : month;
+  var day = date.getDate();
+  day = day < 10 ? "0" + day : day;
+  var hour = date.getHours();
+  hour = hour < 10 ? "0" + hour : hour; // 用三目运算符调整数字显示格式
+  var minute = date.getMinutes();
+  minute = minute < 10 ? "0" + minute : minute;
 
-//   var current = month + "-" + day + "&nbsp;&nbsp;" + hour + ":" + minute;
+  var current = month + "-" + day + "&nbsp;&nbsp;" + hour + ":" + minute;
 
-//   document.getElementById("time").innerHTML = current;
-// }
+  document.getElementById("time").innerHTML = current;
+}
 
 const textField = document.getElementById("excludeNums");
 const addButton = document.querySelector(".add-button"); // 确保引用正确
@@ -175,7 +174,7 @@ addButton.addEventListener("click", function () {
     newCard.style.marginBottom = "0.5rem";
     newCard.style.width = "100%";
     newCard.style.padding = "1rem";
-    newCard.variant = "filled";
+    newCard.clickable = true;
 
     const cardContent = document.createElement("mdui-card-content");
     cardContent.style.whiteSpace = "pre-wrap"; // 保留空白符并允许自动换行
