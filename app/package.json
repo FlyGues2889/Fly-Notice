@@ -1,6 +1,6 @@
 {
   "name": "fly-notice",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A notice displayer",
   "main": "main.js",
   "icon": "app/assets/appIcon.ico",

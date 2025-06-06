@@ -1,52 +1,3 @@
-// 定义一个变量进行判断，默认false 非全屏状态
-var exitFullscreen = false;
-
-// 全屏事件
-function handleFullScreen() {
-  var element = document.documentElement;
-  var btnIcon = document.getElementById("btn-fullscreen-icon"); // 获取按钮的引用
-
-  if (document.fullscreenElement) {
-    // 当前已全屏，退出全屏
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitCancelFullScreen) {
-      document.webkitCancelFullScreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    }
-    btnIcon.innerHTML =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5 16h3v3h2v-5H5zm3-8H5v2h5V5H8zm6 11h2v-3h3v-2h-5zm2-11V5h-2v5h5V8z"/></svg>'; // 更改图标为 SVG
-  } else {
-    // 当前未全屏，请求全屏
-    if (element.requestFullscreen) {
-      element.requestFullscreen();
-    } else if (element.webkitRequestFullScreen) {
-      element.webkitRequestFullScreen();
-    } else if (element.mozRequestFullScreen) {
-      element.mozRequestFullScreen();
-    } else if (element.msRequestFullscreen) {
-      // IE11
-      element.msRequestFullscreen();
-    }
-    btnIcon.innerHTML =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5 16h3v3h2v-5H5zm3-8H5v2h5V5H8zm6 11h2v-3h3v-2h-5zm2-11V5h-2v5h5V8z"/></svg>'; // 更改图标为 SVG
-  }
-}
-
-window.onresize = function () {
-  var isFull = !!document.fullscreenElement; // 使用现代API来检测全屏状态
-  if (isFull == false) {
-    $("#exitFullScreen").css("display", "none");
-    $("#fullScreen").css("display", "");
-  } else {
-    $("#exitFullScreen").css("display", "");
-    $("#fullScreen").css("display", "none");
-  }
-};
-
 function openDialog1() {
   const dialog1 = document.querySelector(".example-action");
   const closeButton1 = dialog1.querySelector("mdui-button");
@@ -135,6 +86,7 @@ const msgList = document.querySelector(".msgList");
 const unreadCount = document.getElementById("unreadCount");
 const fontSizeSlider = document.querySelectorAll(".msgFontSize"); // 重命名变量以避免冲突
 const showList = document.getElementById("showList"); // 获取展示列表的引用
+const overviewList = document.querySelector(".overviewList"); // 获取概览列表的引用
 
 let messageInterval; // 定义一个变量来存储定时器
 
@@ -186,6 +138,13 @@ addButton.addEventListener("click", function () {
 
     newCard.appendChild(cardContent);
     msgList.appendChild(newCard);
+
+    const overviewCard = document.createElement("mdui-list-item");
+    overviewCard.rounded = true;
+    overviewCard.description = inputValue;
+    overviewCard.style.margin = "0.1rem";
+
+    overviewList.appendChild(overviewCard);
 
     const cardCount = msgList.querySelectorAll("mdui-card").length;
     unreadCount.textContent = cardCount;

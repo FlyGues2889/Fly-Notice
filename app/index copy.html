@@ -18,107 +18,117 @@
 
 <body id="body" class="mdui-theme-auto" style="margin: 0;">
     <mdui-layout style="height: 100vh;">
-        <mdui-navigation-rail contained value="listPage">
-            <mdui-button-icon disabled slot="top" style="color: rgb(var(--mdui-color-secondary));">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 24 24">
+
+        <mdui-top-app-bar class="topBar">
+            <mdui-button-icon style="color: rgb(var(--mdui-color-secondary));">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                     <path fill="currentColor"
                         d="M7.58 4.08L6.15 2.65C3.75 4.48 2.17 7.3 2.03 10.5h2a8.45 8.45 0 0 1 3.55-6.42m12.39 6.42h2c-.15-3.2-1.73-6.02-4.12-7.85l-1.42 1.43a8.5 8.5 0 0 1 3.54 6.42M18 11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-6 11c.14 0 .27-.01.4-.04c.65-.14 1.18-.58 1.44-1.18q.15-.36.15-.78h-4c.01 1.1.9 2 2.01 2" />
                 </svg>
             </mdui-button-icon>
-            <mdui-fab slot="top" lowered onclick="openBlockDialog()">
-                <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                    <path fill="currentColor"
-                        d="M12 21q-.425 0-.712-.288T11 20v-7H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7V4q0-.425.288-.712T12 3t.713.288T13 4v7h7q.425 0 .713.288T21 12t-.288.713T20 13h-7v7q0 .425-.288.713T12 21" />
-                </svg>
-            </mdui-fab>
+            <mdui-top-app-bar-title>FlyNotice</mdui-top-app-bar-title>
+            <div style="flex-grow: 1"></div>
+        </mdui-top-app-bar>
 
-            <mdui-navigation-rail-item id="toMain" value="mainPage" href="javascript:void(0);"
-                onclick="navigate('mainPage')">
-                <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                    <path fill="currentColor"
-                        d="M15.85 12.425q.225-.15.225-.425t-.225-.425L10.275 8q-.25-.175-.513-.025t-.262.45v7.15q0 .3.263.45t.512-.025zM5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm0-2h14V5H5zM5 5v14z" />
-                </svg>
-                <svg slot="active-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                    <path fill="currentColor"
-                        d="M15.85 12.425q.225-.15.225-.425t-.225-.425L10.275 8q-.25-.175-.513-.025t-.262.45v7.15q0 .3.263.45t.512-.025zM5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21z" />
-                </svg>
-            </mdui-navigation-rail-item>
-            <mdui-navigation-rail-item id="toList" value="listPage" href="javascript:void(0);"
-                onclick="navigate('listPage')">
-                <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                    <path fill="currentColor"
-                        d="M7.5 20q-1.45 0-2.475-1.025T4 16.5t1.025-2.475T7.5 13h11q1.45 0 2.475 1.025T22 16.5t-1.025 2.475T18.5 20zm0-2h11q.625 0 1.063-.437T20 16.5t-.437-1.062T18.5 15h-11q-.625 0-1.062.438T6 16.5t.438 1.063T7.5 18m-2-7q-1.45 0-2.475-1.025T2 7.5t1.025-2.475T5.5 4h11q1.45 0 2.475 1.025T20 7.5t-1.025 2.475T16.5 11zm0-2h11q.625 0 1.063-.437T18 7.5t-.437-1.062T16.5 6h-11q-.625 0-1.062.438T4 7.5t.438 1.063T5.5 9M11 7.5" />
-                </svg>
-                <svg slot="active-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                    <path fill="currentColor"
-                        d="M7.5 20q-1.45 0-2.475-1.025T4 16.5t1.025-2.475T7.5 13h11q1.45 0 2.475 1.025T22 16.5t-1.025 2.475T18.5 20zm-2-9q-1.45 0-2.475-1.025T2 7.5t1.025-2.475T5.5 4h11q1.45 0 2.475 1.025T20 7.5t-1.025 2.475T16.5 11z" />
-                </svg>
-            </mdui-navigation-rail-item>
-
-            <mdui-button-icon slot="bottom" id="toSettings" href="javascript:void(0);"
-                onclick="navigate('settingPage')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                    <path fill="currentColor"
-                        d="M10.825 22q-.675 0-1.162-.45t-.588-1.1L8.85 18.8q-.325-.125-.612-.3t-.563-.375l-1.55.65q-.625.275-1.25.05t-.975-.8l-1.175-2.05q-.35-.575-.2-1.225t.675-1.075l1.325-1Q4.5 12.5 4.5 12.337v-.675q0-.162.025-.337l-1.325-1Q2.675 9.9 2.525 9.25t.2-1.225L3.9 5.975q.35-.575.975-.8t1.25.05l1.55.65q.275-.2.575-.375t.6-.3l.225-1.65q.1-.65.588-1.1T10.825 2h2.35q.675 0 1.163.45t.587 1.1l.225 1.65q.325.125.613.3t.562.375l1.55-.65q.625-.275 1.25-.05t.975.8l1.175 2.05q.35.575.2 1.225t-.675 1.075l-1.325 1q.025.175.025.338v.674q0 .163-.05.338l1.325 1q.525.425.675 1.075t-.2 1.225l-1.2 2.05q-.35.575-.975.8t-1.25-.05l-1.5-.65q-.275.2-.575.375t-.6.3l-.225 1.65q-.1.65-.587 1.1t-1.163.45zM11 20h1.975l.35-2.65q.775-.2 1.438-.587t1.212-.938l2.475 1.025l.975-1.7l-2.15-1.625q.125-.35.175-.737T17.5 12t-.05-.787t-.175-.738l2.15-1.625l-.975-1.7l-2.475 1.05q-.55-.575-1.212-.962t-1.438-.588L13 4h-1.975l-.35 2.65q-.775.2-1.437.588t-1.213.937L5.55 7.15l-.975 1.7l2.15 1.6q-.125.375-.175.75t-.05.8q0 .4.05.775t.175.75l-2.15 1.625l.975 1.7l2.475-1.05q.55.575 1.213.963t1.437.587zm1.05-4.5q1.45 0 2.475-1.025T15.55 12t-1.025-2.475T12.05 8.5q-1.475 0-2.487 1.025T8.55 12t1.013 2.475T12.05 15.5M12 12" />
-                </svg>
-            </mdui-button-icon>
-
-        </mdui-navigation-rail>
-
-        <div class="list-container">
-            <p class="showCount">
-                当前有
-                <span id="unreadCount" style="font-family: 'Product Sans';font-size: medium;margin-top: 1.5px;">0</span>
-                条通知在队列中
-            </p>
-
-            <mdui-list-subheader>通知列表</mdui-list-subheader>
-
-            <div class="overviewList"></div>
-
-            <mdui-list-subheader style="position: absolute;bottom: 6.625rem;">快捷设置</mdui-list-subheader>
-
-            <div class="toolBar">
-                <mdui-button-icon disabled>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 24 24">
+        <mdui-bottom-app-bar>
+            <mdui-navigation-bar value="mainPage"
+                style="background-color: #ffffff00;box-shadow: none;position: relative;width: 10rem;"
+                label-visibility="selected">
+                <mdui-navigation-bar-item id="toMain" value="mainPage" href="javascript:void(0);"
+                    onclick="navigate('mainPage')">
+                    <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 24 24">
                         <path fill="currentColor"
-                            d="M8.5 20q-.625 0-1.062-.437T7 18.5V7H3.5q-.625 0-1.062-.437T2 5.5t.438-1.062T3.5 4h10q.625 0 1.063.438T15 5.5t-.437 1.063T13.5 7H10v11.5q0 .625-.437 1.063T8.5 20m9 0q-.625 0-1.062-.437T16 18.5V12h-1.5q-.625 0-1.062-.437T13 10.5t.438-1.062T14.5 9h6q.625 0 1.063.438T22 10.5t-.437 1.063T20.5 12H19v6.5q0 .625-.437 1.063T17.5 20" />
+                            d="m12 5.69l5 4.5V18h-2v-6H9v6H7v-7.81zM12 3L2 12h3v8h6v-6h2v6h6v-8h3z" />
+                    </svg>
+                    <svg slot="active-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M10 20v-6h4v6h5v-8h3L12 3L2 12h3v8z" />
+                    </svg>
+                    主页
+                </mdui-navigation-bar-item>
+                <mdui-navigation-bar-item id="toSettings" href="javascript:void(0);" onclick="navigate('settingPage')">
+                    <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65A.49.49 0 0 0 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1a.6.6 0 0 0-.18-.03c-.17 0-.34.09-.43.25l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46a.5.5 0 0 0 .61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1q.09.03.18.03c.17 0 .34-.09.43-.25l2-3.46c.12-.22.07-.49-.12-.64zm-1.98-1.71c.04.31.05.52.05.73s-.02.43-.05.73l-.14 1.13l.89.7l1.08.84l-.7 1.21l-1.27-.51l-1.04-.42l-.9.68c-.43.32-.84.56-1.25.73l-1.06.43l-.16 1.13l-.2 1.35h-1.4l-.19-1.35l-.16-1.13l-1.06-.43c-.43-.18-.83-.41-1.23-.71l-.91-.7l-1.06.43l-1.27.51l-.7-1.21l1.08-.84l.89-.7l-.14-1.13c-.03-.31-.05-.54-.05-.74s.02-.43.05-.73l.14-1.13l-.89-.7l-1.08-.84l.7-1.21l1.27.51l1.04.42l.9-.68c.43-.32.84-.56 1.25-.73l1.06-.43l.16-1.13l.2-1.35h1.39l.19 1.35l.16 1.13l1.06.43c.43.18.83.41 1.23.71l.91.7l1.06-.43l1.27-.51l.7 1.21l-1.07.85l-.89.7zM12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4s4-1.79 4-4s-1.79-4-4-4m0 6c-1.1 0-2-.9-2-2s.9-2 2-2s2 .9 2 2s-.9 2-2 2" />
+                    </svg>
+                    <svg slot="active-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="M19.14 12.94c.04-.3.06-.61.06-.94c0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6s3.6 1.62 3.6 3.6s-1.62 3.6-3.6 3.6" />
+                    </svg>
+                    设置
+                </mdui-navigation-bar-item>
+            </mdui-navigation-bar>
+
+            <div style="height: 1.4rem;margin-right: 1rem;">
+                <mdui-divider vertical style="width: 0.16rem;border-radius: 10rem;"></mdui-divider>
+            </div>
+
+            <div style="display: flex;align-items: center;">
+                <mdui-button-icon disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M2.5 4v3h5v12h3V7h5V4zm19 5h-9v3h3v7h3v-7h3z" />
                     </svg>
                 </mdui-button-icon>
+
                 <mdui-slider nolabel slot="end-icon" class="msgFontSize" value="1" min="1" max="5" step="0.1"
                     style="width: 8rem;"></mdui-slider>
             </div>
-        </div>
-
-        <mdui-top-app-bar class="topBar"></mdui-top-app-bar>
-
-        <mdui-bottom-app-bar>
-            <div style="display: flex;align-items: center;">
-
-            </div>
 
             <div style="flex-grow: 1"></div>
+            <mdui-fab onclick="openBlockDialog()">
+                <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M16 14v3H8v-7c0-2.21 1.79-4 4-4c.85 0 1.64.26 2.28.72l1.43-1.43A5.9 5.9 0 0 0 13.5 4.2v-.7c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.7C7.91 4.86 6 7.21 6 10v7H4v2h16v-2h-2v-3zm-4 8c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2M24 8h-3V5h-2v3h-3v2h3v3h2v-3h3z" />
+                </svg>
+            </mdui-fab>
         </mdui-bottom-app-bar>
 
 
 
-        <div class="page" id="mainPage" style="display: none">
+        <div class="page" id="mainPage">
             <div class="page-container">
                 <h1 style="margin-top: 0.5rem;display: none;">
                     <span id="time"
                         style="font-family: 'Product Sans';color: rgb(var(--mdui-color-primary));">正在获取系统时间...</span>
                 </h1>
 
+                <mdui-tabs value="tab-1" placement="top-end">
+                    <mdui-button style="margin-top: -0.5rem;position: absolute;left: 0;top: 0.875rem;" variant="text">
+                        <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="18" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2m6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5zM7.58 4.08L6.15 2.65C3.75 4.48 2.17 7.3 2.03 10.5h2a8.45 8.45 0 0 1 3.55-6.42m12.39 6.42h2c-.15-3.2-1.73-6.02-4.12-7.85l-1.42 1.43a8.5 8.5 0 0 1 3.54 6.42" />
+                        </svg>
+                        <!-- 当前有&nbsp; -->
+                        <span id="unreadCount"
+                            style="font-family: 'Product Sans';font-size: medium;margin-top: 1.5px;">0</span>
+                    </mdui-button>
+                    <mdui-tab value="tab-1">
+                        <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                d="M10 8v8l5-4zm9-5H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m0 16H5V5h14z" />
+                        </svg>
+                        <!-- 正在展示 -->
+                    </mdui-tab>
+                    <mdui-tab value="tab-2">
+                        <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5s1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5m0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5S5.5 6.83 5.5 6S4.83 4.5 4 4.5m0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5s1.5-.68 1.5-1.5s-.67-1.5-1.5-1.5M7 19h14v-2H7zm0-6h14v-2H7zm0-8v2h14V5z" />
+                        </svg>
+                        <!-- 通知列表 -->
+                    </mdui-tab>
 
+                    <mdui-tab-panel slot="panel" value="tab-1">
+                        <div class="showList" id="showList"></div>
+                    </mdui-tab-panel>
+                    <mdui-tab-panel slot="panel" value="tab-2">
+                        <div class="msgList"></div>
+                    </mdui-tab-panel>
+                </mdui-tabs>
             </div>
 
-            <div class="showList" id="showList"></div>
-        </div>
 
-        <div class="page" id="listPage">
-            <div class="msgList"></div>
         </div>
-
         <div class="page" id="settingPage" style="display: none;">
             <div class="page-container">
                 <h1>设置</h1>
@@ -260,7 +270,7 @@
                                 d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8" />
                         </svg>
                         关于 FlyNotice
-                        <span slot="description">版本 0.1.0</span>
+                        <span slot="description">版本 0.0.2</span>
                     </mdui-list-item>
                 </mdui-card>
             </div>
