@@ -44,7 +44,7 @@ mdui-tabs::part(container) {
 }
 
 span[slot="description"] {
-  opacity: 0.6;
+  /* opacity: 0.6; */
   color: rgb(var(--mdui-color-secondary));
   font-size: small;
 }
