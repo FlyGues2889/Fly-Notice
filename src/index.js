@@ -68,6 +68,8 @@ function showTime() {
   var current =
     month + "-" + day + "&nbsp;&nbsp;" + hour + ":" + minute + ":" + seconds;
   document.getElementById("time").innerHTML = current;
+
+  loading.style.display = "none";
 }
 
 const pages = document.querySelectorAll(".page");
@@ -80,6 +82,7 @@ const showList = document.getElementById("showList");
 const overviewList = document.querySelector(".overviewList");
 const listContainer = document.querySelector(".list-container");
 const listContainerSwitch = document.getElementById("list-container-switch");
+const loading = document.querySelector(".loading");
 
 let messageInterval;
 
@@ -112,7 +115,7 @@ function showListContainer() {
       page.style.width = "calc(100vw - 5rem - 14rem - 5rem)";
     });
     listContainerSwitch.innerHTML =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11.5 14.8V9.2q0-.35-.3-.475t-.55.125L8.2 11.3q-.3.3-.3.7t.3.7l2.45 2.45q.25.25.55.125t.3-.475M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm9-2V5H5v14z"/></svg>';
+      '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h11q.425 0 .713.288T16 17t-.288.713T15 18zm14.9-1.7l-3.6-3.6q-.3-.3-.3-.7t.3-.7l3.6-3.6q.275-.275.7-.275t.7.275t.275.7t-.275.7L17.4 12l2.9 2.9q.275.275.275.7t-.275.7t-.7.275t-.7-.275M4 13q-.425 0-.712-.288T3 12t.288-.712T4 11h8q.425 0 .713.288T13 12t-.288.713T12 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h11q.425 0 .713.288T16 7t-.288.713T15 8z"/></svg>';
   } else {
     listContainer.style.transform = "translateX(-100%)";
     listContainer.style.opacity = "0";
@@ -122,7 +125,7 @@ function showListContainer() {
       page.style.width = "calc(100vw - 5rem)";
     });
     listContainerSwitch.innerHTML =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12.5 9.2v5.6q0 .35.3.475t.55-.125l2.45-2.45q.3-.3.3-.7t-.3-.7l-2.45-2.45q-.25-.25-.55-.125t-.3.475M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm5-2h9V5h-9z" /></svg>';
+      '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h16q.425 0 .713.288T21 17t-.288.713T20 18zm0-5q-.425 0-.712-.288T3 12t.288-.712T4 11h16q.425 0 .713.288T21 12t-.288.713T20 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h16q.425 0 .713.288T21 7t-.288.713T20 8z"/></svg>';
     setTimeout(() => {
       listContainer.style.display = "none";
     }, 300);
