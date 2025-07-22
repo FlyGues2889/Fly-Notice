@@ -134,9 +134,12 @@ function showListContainer() {
 
 function displayMessages() {
   showList.style.opacity = "1";
+  showList.style.flexDirection = "row";
+
   const msgCards = document.querySelectorAll("mdui-card.msgCard");
   const overviewItems = overviewList.querySelectorAll("mdui-list-item");
   const scrollTimeSlider = document.getElementById("msgScrollTime");
+
   let currentIndex = 0;
   let lastSwitchSecond = -1;
 
@@ -147,8 +150,9 @@ function displayMessages() {
 
   if (msgCards.length === 0) {
     showList.innerHTML =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="52" viewBox="0 0 24 24"><path fill="currentColor" d="M16.15 19H5q-.425 0-.712-.288T4 18t.288-.712T5 17h1v-7q0-.825.213-1.625T6.85 6.85l1.5 1.5q-.175.4-.262.813T8 10v7h6.2L2.1 4.9q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l17 17q.275.275.288.688t-.288.712q-.275.275-.7.275t-.7-.275zM13.5 4.2q2 .5 3.25 2.112T18 10v2.75q0 .5-.312.75t-.688.25t-.687-.262t-.313-.763V10q0-1.65-1.175-2.825T12 6q-.4 0-.85.1t-.8.25q-.425.175-.837.075t-.638-.475q-.2-.325-.137-.687t.387-.538t.675-.3t.7-.225v-.7q0-.625.438-1.062T12 2t1.063.438T13.5 3.5zM12 22q-.75 0-1.338-.413t-.587-1.112q0-.2.163-.337T10.6 20h2.8q.2 0 .363.138t.162.337q0 .7-.587 1.113T12 22m.825-12.025"/></svg>';
+      '<svg xmlns="http://www.w3.org/2000/svg" width="64" viewBox="0 0 24 24"><path fill="currentColor" d="M16.15 19H5q-.425 0-.712-.288T4 18t.288-.712T5 17h1v-7q0-.825.213-1.625T6.85 6.85L10 10H7.2L2.1 4.9q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l17 17q.275.275.288.688t-.288.712q-.275.275-.7.275t-.7-.275zM18 12.725q0 .3-.175.55t-.45.375t-.575.063t-.5-.263L9.175 6.325Q9 6.15 8.925 5.95t-.075-.425q0-.275.138-.537t.387-.388q.275-.125.55-.225T10.5 4.2v-.7q0-.625.438-1.062T12 2t1.063.438T13.5 3.5v.7q2 .5 3.25 2.125T18 10zM12 22q-.75 0-1.338-.413t-.587-1.112q0-.2.163-.337T10.6 20h2.8q.2 0 .363.138t.162.337q0 .7-.587 1.113T12 22"/></svg> <br> <p style="font-size: larger; margin-top: -1rem;">没有通知</p>';
     showList.style.opacity = "0.2";
+    showList.style.flexDirection = "column";
     overviewItems.forEach((item) => item.removeAttribute("active"));
     return;
   }
@@ -223,7 +227,7 @@ addButton.addEventListener("click", function () {
     const overviewCard = document.createElement("mdui-list-item");
     overviewCard.rounded = true;
     overviewCard.description = displayText;
-    overviewCard.style.margin = "1rem 0";
+    overviewCard.style.margin = "0.5rem 0 0 0";
     overviewCard.style.padding = "0.25rem 0";
     overviewList.appendChild(overviewCard);
 
