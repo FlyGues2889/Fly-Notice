@@ -86,14 +86,16 @@ div.page {
   flex-direction: column;
   margin: 3rem 0rem 0rem calc(5rem + 14rem);
   padding: 0 3rem;
- 
+
   overflow: auto;
   min-height: 600px;
 
   font-family: 'Harmony Sans SC';
 
-  transition: transform 0.3s ease; /* 主内容平移动画 */
-  transform: translateX(0); /* 初始位置（不偏移） */
+  transition: transform 0.3s ease;
+  /* 主内容平移动画 */
+  transform: translateX(0);
+  /* 初始位置（不偏移） */
 
   div.page-container {
     margin: 1rem 0rem;
@@ -199,7 +201,8 @@ div.list-container {
 
   background-color: rgb(var(--mdui-color-surface));
 
-  transform: translateX(0); /* 初始显示 */
+  transform: translateX(0);
+  /* 初始显示 */
   transition: transform 0.3s ease, opacity 0.3s ease;
   opacity: 1;
   z-index: 10;

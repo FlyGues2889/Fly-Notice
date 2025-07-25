@@ -82,7 +82,10 @@ const showList = document.getElementById("showList");
 const overviewList = document.querySelector(".overviewList");
 const listContainer = document.querySelector(".list-container");
 const listContainerSwitch = document.getElementById("list-container-switch");
+
 const loading = document.querySelector(".loading");
+
+const navigationRail = document.getElementById("navigation-rail");
 
 let messageInterval;
 
@@ -105,10 +108,14 @@ function showListContainer() {
     listContainer.style.display === "none" ||
     listContainer.style.transform === "translateX(-100%)";
   if (isHidden) {
+    // 显示侧边栏
     listContainer.style.display = "block";
     void listContainer.offsetWidth;
     listContainer.style.transform = "translateX(0)";
     listContainer.style.opacity = "1";
+    
+    navigationRail.style.backgroundColor = "rgb(var(--mdui-color-surface))";
+
     pages.forEach((page) => {
       page.style.transform = "translateX(14rem)";
       page.style.margin = "3rem 0rem 0rem 5rem";
@@ -117,8 +124,12 @@ function showListContainer() {
     listContainerSwitch.innerHTML =
       '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h11q.425 0 .713.288T16 17t-.288.713T15 18zm14.9-1.7l-3.6-3.6q-.3-.3-.3-.7t.3-.7l3.6-3.6q.275-.275.7-.275t.7.275t.275.7t-.275.7L17.4 12l2.9 2.9q.275.275.275.7t-.275.7t-.7.275t-.7-.275M4 13q-.425 0-.712-.288T3 12t.288-.712T4 11h8q.425 0 .713.288T13 12t-.288.713T12 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h11q.425 0 .713.288T16 7t-.288.713T15 8z"/></svg>';
   } else {
+    // 隐藏侧边栏
     listContainer.style.transform = "translateX(-100%)";
     listContainer.style.opacity = "0";
+
+    navigationRail.style.backgroundColor = "unset";
+
     pages.forEach((page) => {
       page.style.transform = "translateX(0)";
       page.style.margin = "3rem 0rem 0rem 5rem";
