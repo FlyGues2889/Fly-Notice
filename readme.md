@@ -1,7 +1,7 @@
-# <center> RandomNum You
+# <center> FlyNotice </center>
 
 <center>
-  基于 Tauri，使用 Material You 设计风格的随机数抽取器
+  基于 Tauri，使用 Material You 设计风格的通知展示程序
 </center>
 
 
