@@ -85,6 +85,9 @@ packages:
     engines: {node: '>= 10'}
     hasBin: true
 
+  material-icons@1.13.14:
+    resolution: {integrity: sha512-kZOfc7xCC0rAT8Q3DQixYAeT+tBqZnxkseQtp2bxBxz7q5pMAC+wmit7vJn1g/l7wRU+HEPq23gER4iPjGs5Cg==}
+
 snapshots:
 
   '@tauri-apps/cli-darwin-arm64@2.6.2':
@@ -133,3 +136,5 @@ snapshots:
       '@tauri-apps/cli-win32-arm64-msvc': 2.6.2
       '@tauri-apps/cli-win32-ia32-msvc': 2.6.2
       '@tauri-apps/cli-win32-x64-msvc': 2.6.2
+
+  material-icons@1.13.14: {}

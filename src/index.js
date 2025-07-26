@@ -122,7 +122,7 @@ function showListContainer() {
       page.style.width = "calc(100vw - 5rem - 14rem - 5rem)";
     });
     listContainerSwitch.innerHTML =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h11q.425 0 .713.288T16 17t-.288.713T15 18zm14.9-1.7l-3.6-3.6q-.3-.3-.3-.7t.3-.7l3.6-3.6q.275-.275.7-.275t.7.275t.275.7t-.275.7L17.4 12l2.9 2.9q.275.275.275.7t-.275.7t-.7.275t-.7-.275M4 13q-.425 0-.712-.288T3 12t.288-.712T4 11h8q.425 0 .713.288T13 12t-.288.713T12 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h11q.425 0 .713.288T16 7t-.288.713T15 8z"/></svg>';
+      '<span class="material-icons-outlined">menu_open</span>';
   } else {
     // 隐藏侧边栏
     listContainer.style.transform = "translateX(-100%)";
@@ -136,7 +136,7 @@ function showListContainer() {
       page.style.width = "calc(100vw - 5rem)";
     });
     listContainerSwitch.innerHTML =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h16q.425 0 .713.288T21 17t-.288.713T20 18zm0-5q-.425 0-.712-.288T3 12t.288-.712T4 11h16q.425 0 .713.288T21 12t-.288.713T20 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h16q.425 0 .713.288T21 7t-.288.713T20 8z"/></svg>';
+      '<span class="material-icons-outlined">menu</span>';
     setTimeout(() => {
       listContainer.style.display = "none";
     }, 300);
@@ -161,7 +161,7 @@ function displayMessages() {
 
   if (msgCards.length === 0) {
     showList.innerHTML =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="64" viewBox="0 0 24 24"><path fill="currentColor" d="M16.15 19H5q-.425 0-.712-.288T4 18t.288-.712T5 17h1v-7q0-.825.213-1.625T6.85 6.85L10 10H7.2L2.1 4.9q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l17 17q.275.275.288.688t-.288.712q-.275.275-.7.275t-.7-.275zM18 12.725q0 .3-.175.55t-.45.375t-.575.063t-.5-.263L9.175 6.325Q9 6.15 8.925 5.95t-.075-.425q0-.275.138-.537t.387-.388q.275-.125.55-.225T10.5 4.2v-.7q0-.625.438-1.062T12 2t1.063.438T13.5 3.5v.7q2 .5 3.25 2.125T18 10zM12 22q-.75 0-1.338-.413t-.587-1.112q0-.2.163-.337T10.6 20h2.8q.2 0 .363.138t.162.337q0 .7-.587 1.113T12 22"/></svg>';
+      '<span class="material-icons-outlined" style="font-size: 3.2rem;">notifications_off</span>';
     showList.style.opacity = "0.2";
     showList.style.flexDirection = "column";
     overviewItems.forEach((item) => item.removeAttribute("active"));
@@ -217,6 +217,7 @@ addButton.addEventListener("click", function () {
     newCard.style.width = "100%";
     newCard.style.padding = "1rem";
     newCard.clickable = true;
+    newCard.variant = "outlined";
 
     const cardContent = document.createElement("mdui-card-content");
     cardContent.style.whiteSpace = "pre-wrap";

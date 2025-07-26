@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "FlyNotice",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "identifier": "cpm.flygues.flynotice.app",
   "build": {
     "frontendDist": "../src"
@@ -13,6 +13,8 @@
         "title": "flynotice",
         "width": 1024,
         "height": 600,
+        "minWidth": 720,
+        "minHeight": 480,
         "decorations": false,
         "transparent": true
       }
@@ -28,12 +30,9 @@
       "../src/assets/appIcon.ico"
     ],
     "category": "Utility",
-    "shortDescription": "便携白板",
+    "shortDescription": "通知板",
     "longDescription": "使用 Tauri 开发的 Material You 风格的通知工具。",
     "windows": {
-      "wix": {
-        "language": "zh-CN"
-      },
       "nsis": {
         "languages": [
           "SimpChinese",
