@@ -17,10 +17,23 @@
 
     <script src="tauri.js"></script>
     <script defer src="index.js"></script>
+    <script defer src="disturb.js"></script>
 </head>
 
 <body id="body" class="mdui-theme-auto" style="margin: 0;">
-    <mdui-layout style="height: 100vh;">
+    <mdui-layout style="height: 100vh;" class="content-wrapper">
+        <div class="no-disturb-screen" id="no-disturb-screen">
+            <div class="time-display" id="time-display">Requesting...</div>
+            <div class="count-display" id="count-display">No notifications</div>
+
+            <div class="showList" id="showList"></div>
+
+            <mdui-button variant="tonal" class="exit-button" id="exit-screensaver">
+                <span slot="icon" class="material-icons-outlined">close</span>
+                退出息屏显示
+            </mdui-button>
+        </div>
+
         <mdui-navigation-rail contained value="listPage" alignment="center" id="navigation-rail">
             <mdui-button-icon slot="top" id="list-container-switch" onclick="showListContainer()">
                 <span class="material-icons-outlined">menu_open</span>
@@ -37,6 +50,9 @@
                 <span slot="active-icon" class="material-icons">featured_play_list</span>
             </mdui-navigation-rail-item>
 
+            <mdui-button-icon slot="bottom" id="open-nodisturb" style="margin: 0;">
+                <span class="material-icons-outlined">screenshot_monitor</span>
+            </mdui-button-icon>
             <mdui-button-icon slot="bottom" id="toSettings" href="javascript:void(0);"
                 onclick="navigate('settingPage')">
                 <span class="material-icons-outlined">settings</span>
@@ -79,13 +95,13 @@
         <mdui-top-app-bar class="topBar">
             <div style="flex-grow: 1"></div>
 
-            <mdui-button-icon id="titlebar-minimize">
+            <mdui-button-icon id="titlebar-minimize" class="windowBtn">
                 <span class="material-icons-outlined">minimize</span>
             </mdui-button-icon>
-            <mdui-button-icon id="titlebar-maximize">
+            <mdui-button-icon id="titlebar-maximize" class="windowBtn">
                 <span class="material-icons-outlined" style="font-size: 1.4rem;">crop_square</span>
             </mdui-button-icon>
-            <mdui-button-icon id="titlebar-close">
+            <mdui-button-icon id="titlebar-close" class="windowBtn">
                 <span class="material-icons-outlined">close</span>
             </mdui-button-icon>
         </mdui-top-app-bar>
@@ -160,7 +176,7 @@
                     <mdui-list-item rounded nonclickable>
                         <span slot="icon" class="material-icons-outlined">info</span>
                         关于 FlyNotice
-                        <span slot="description">版本 1.0.4</span>
+                        <span slot="description">版本 1.0.5</span>
                     </mdui-list-item>
                     <mdui-list-item rounded nonclickable>
                         <span slot="icon" class="material-icons-outlined">inventory_2</span>

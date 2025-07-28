@@ -178,6 +178,7 @@ mdui-bottom-app-bar {
 }
 
 mdui-navigation-rail {
+  z-index: 100;
   background-color: rgb(var(--mdui-color-surface));
 
   mdui-button-icon[slot="bottom"] {
@@ -261,4 +262,69 @@ mdui-button.openBlockBtn {
   position: fixed;
   bottom: 9rem;
   left: 1rem;
+}
+
+.no-disturb-screen {
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+
+  display: none;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  background-color: black;
+  color: white;
+
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.28, 0.02, 0.45, 0.98);
+
+  div.showList {
+    max-width: calc(100vw - 10vh);
+  }
+}
+
+.no-disturb-screen.active {
+  opacity: 1;
+}
+
+.time-display {
+  position: absolute;
+  top: 5vh;
+  left: 5vh;
+
+  font-family: 'Product Sans';
+  font-size: 10vh;
+
+  opacity: 0.7;
+}
+
+.count-display {
+  position: absolute;
+  top: calc(5vh + 10vh + 1vh);
+  left: calc(5vh + 0.2rem);
+
+  font-family: 'Product Sans';
+  font-size: 2vh;
+
+  opacity: 0.7;
+}
+
+.exit-button {
+  position: absolute;
+  bottom: 50px;
+
+  background-color: rgb(var(--mdui-color-on-surface-dark),0.1);
+  color: rgb(var(--mdui-color-on-surface),0.7);
+
+  cursor: pointer;
+}
+
+div.showList {
+      font-family: 'Harmony Sans SC M';
 }

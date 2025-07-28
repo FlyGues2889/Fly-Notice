@@ -3,6 +3,51 @@ const STORAGE_KEYS = {
   FONT_SIZE: "fontSize",
 };
 
+//定义一个变量进行判断，默认false 非全屏状态
+var exitFullscreen = false;
+
+// 全屏事件
+function handleFullScreen() {
+  var element = document.documentElement;
+  var btnIcon = document.getElementById("btn-fullscreen"); // 获取按钮的引用
+
+  if (document.fullscreenElement) {
+    // 当前已全屏，退出全屏
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitCancelFullScreen) {
+      document.webkitCancelFullScreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  } else {
+    // 当前未全屏，请求全屏
+    if (element.requestFullscreen) {
+      element.requestFullscreen();
+    } else if (element.webkitRequestFullScreen) {
+      element.webkitRequestFullScreen();
+    } else if (element.mozRequestFullScreen) {
+      element.mozRequestFullScreen();
+    } else if (element.msRequestFullscreen) {
+      // IE11
+      element.msRequestFullscreen();
+    }
+  }
+}
+
+window.onresize = function () {
+  var isFull = !!document.fullscreenElement; // 使用现代API来检测全屏状态
+  if (isFull == false) {
+    $("#exitFullScreen").css("display", "none");
+    $("#fullScreen").css("display", "");
+  } else {
+    $("#exitFullScreen").css("display", "");
+    $("#fullScreen").css("display", "none");
+  }
+};
+
 function openDialog1() {
   const dialog1 = document.querySelector(".example-action");
   const closeButton1 = dialog1.querySelector("mdui-button");
@@ -78,7 +123,7 @@ const addButton = document.querySelector(".add-button");
 const msgList = document.querySelector(".msgList");
 const unreadCount = document.getElementById("unreadCount");
 const fontSizeSlider = document.querySelectorAll(".msgFontSize");
-const showList = document.getElementById("showList");
+const showListElements = document.querySelectorAll("#showList");
 const overviewList = document.querySelector(".overviewList");
 const listContainer = document.querySelector(".list-container");
 const listContainerSwitch = document.getElementById("list-container-switch");
@@ -113,7 +158,7 @@ function showListContainer() {
     void listContainer.offsetWidth;
     listContainer.style.transform = "translateX(0)";
     listContainer.style.opacity = "1";
-    
+
     navigationRail.style.backgroundColor = "rgb(var(--mdui-color-surface))";
 
     pages.forEach((page) => {
@@ -144,8 +189,15 @@ function showListContainer() {
 }
 
 function displayMessages() {
-  showList.style.opacity = "1";
-  showList.style.flexDirection = "row";
+  if (showListElements.length === 0) {
+    console.error("No element found to display messages!");
+    return;
+  }
+
+  showListElements.forEach((el) => {
+    el.style.opacity = "1";
+    el.style.flexDirection = "row";
+  });
 
   const msgCards = document.querySelectorAll("mdui-card.msgCard");
   const overviewItems = overviewList.querySelectorAll("mdui-list-item");
@@ -160,17 +212,21 @@ function displayMessages() {
   }
 
   if (msgCards.length === 0) {
-    showList.innerHTML =
-      '<span class="material-icons-outlined" style="font-size: 3.2rem;">notifications_off</span>';
-    showList.style.opacity = "0.2";
-    showList.style.flexDirection = "column";
+    showListElements.forEach((el) => {
+      el.innerHTML =
+        '<span class="material-icons-outlined" style="font-size: 3.2rem;">notifications_off</span>';
+      el.style.opacity = "0.2";
+      el.style.flexDirection = "column";
+    });
     overviewItems.forEach((item) => item.removeAttribute("active"));
     return;
   }
 
   const firstMessage =
     msgCards[currentIndex].querySelector("mdui-card-content").textContent;
-  showList.textContent = firstMessage;
+  showListElements.forEach((el) => {
+    el.textContent = firstMessage;
+  });
   overviewItems.forEach((item) => item.removeAttribute("active"));
   if (overviewItems[currentIndex])
     overviewItems[currentIndex].setAttribute("active", "");
@@ -196,7 +252,9 @@ function displayMessages() {
     if (secondDiff >= scrollTime) {
       const messageText =
         msgCards[currentIndex].querySelector("mdui-card-content").textContent;
-      showList.textContent = messageText;
+      showListElements.forEach((el) => {
+        el.textContent = messageText;
+      });
 
       overviewItems.forEach((item) => item.removeAttribute("active"));
       if (overviewItems[currentIndex])
@@ -207,7 +265,6 @@ function displayMessages() {
     }
   }, 100);
 }
-
 addButton.addEventListener("click", function () {
   const inputValue = textField.value;
   if (inputValue.trim() !== "") {
@@ -245,6 +302,8 @@ addButton.addEventListener("click", function () {
 
     const cardCount = msgList.querySelectorAll("mdui-card").length;
     unreadCount.textContent = cardCount;
+    const countDisplay = document.getElementById("count-display");
+    countDisplay.textContent = cardCount + " Notifications";
 
     textField.value = "";
     displayMessages();
@@ -255,7 +314,7 @@ function initFontSize() {
   const currentFontSize = fontSizeSlider[0].value + "rem";
   const msgCards = document.querySelectorAll("mdui-card.msgCard");
   const viewCard = document.querySelector("mdui-card.viewCard");
-  const showList = document.querySelector("div.showList");
+  const showListElements = document.querySelectorAll("#showList");
 
   msgCards.forEach((card) => {
     card.style.fontSize = currentFontSize;
@@ -263,9 +322,9 @@ function initFontSize() {
   if (viewCard) {
     viewCard.style.fontSize = currentFontSize;
   }
-  if (showList) {
-    showList.style.fontSize = currentFontSize;
-  }
+  showListElements.forEach(el => {
+    el.style.fontSize = currentFontSize;
+  });
 }
 
 fontSizeSlider.forEach((slider) => {
@@ -275,7 +334,7 @@ fontSizeSlider.forEach((slider) => {
     localStorage.setItem(STORAGE_KEYS.FONT_SIZE, currentValue);
     const msgCards = document.querySelectorAll("mdui-card.msgCard");
     const viewCard = document.querySelector("mdui-card.viewCard");
-    const showList = document.querySelector("div.showList");
+    const showListElements = document.querySelectorAll("#showList"); 
 
     msgCards.forEach((card) => {
       card.style.fontSize = fontSizeValue;
@@ -283,12 +342,11 @@ fontSizeSlider.forEach((slider) => {
     if (viewCard) {
       viewCard.style.fontSize = fontSizeValue;
     }
-    if (showList) {
-      showList.style.fontSize = fontSizeValue;
-    }
+    showListElements.forEach(el => {
+      el.style.fontSize = fontSizeValue;
+    });
   });
 });
-
 window.onload = function () {
   setInterval(showTime, 1000);
   loadSettings();
