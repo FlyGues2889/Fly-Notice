@@ -303,7 +303,7 @@ addButton.addEventListener("click", function () {
     const cardCount = msgList.querySelectorAll("mdui-card").length;
     unreadCount.textContent = cardCount;
     const countDisplay = document.getElementById("count-display");
-    countDisplay.textContent = cardCount + " Notifications";
+    countDisplay.textContent = cardCount + " 条通知在队列中";
 
     textField.value = "";
     displayMessages();

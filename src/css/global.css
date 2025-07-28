@@ -307,7 +307,7 @@ mdui-button.openBlockBtn {
 .count-display {
   position: absolute;
   top: calc(5vh + 10vh + 1vh);
-  left: calc(5vh + 0.2rem);
+  left: calc(5vh + 1rem);
 
   font-family: 'Product Sans';
   font-size: 2vh;
@@ -319,12 +319,12 @@ mdui-button.openBlockBtn {
   position: absolute;
   bottom: 50px;
 
-  background-color: rgb(var(--mdui-color-on-surface-dark),0.1);
-  color: rgb(var(--mdui-color-on-surface),0.7);
+  background-color: rgb(var(--mdui-color-on-surface-dark), 0.1);
+  color: rgba(255, 255, 255, 0.7);
 
   cursor: pointer;
 }
 
 div.showList {
-      font-family: 'Harmony Sans SC M';
+  font-family: 'Harmony Sans SC M';
 }
