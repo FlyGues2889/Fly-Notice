@@ -192,7 +192,7 @@ div.list-container {
 
   position: fixed;
   top: 0;
-  padding: 1rem;
+  padding: 0.5rem;
   margin-left: 5rem;
 
   font-family: 'Harmony Sans SC';
@@ -222,7 +222,7 @@ div.list-container {
     justify-content: center;
 
     position: absolute;
-    bottom: 3.6rem;
+    bottom: 2.6rem;
     left: 0;
   }
 
@@ -238,14 +238,20 @@ div.list-container {
     color: rgb(var(--mdui-color-secondary));
     font-family: 'Harmony Sans SC M';
   }
+
+  mdui-button {
+    border: rgb(var(--mdui-color-primary), 0.2) dashed 0.1rem;
+    color: rgb(var(--mdui-color-secondary));
+  }
+
+  div.overviewList {
+    max-height: calc(100vh - 17rem);
+    overflow: auto;
+
+    scrollbar-color: rgb(var(--mdui-color-primary), 0.2) #00000000;
+  }
 }
 
-div.overviewList {
-  max-height: calc(100vh - 17rem);
-  overflow: auto;
-
-  scrollbar-color: rgb(var(--mdui-color-primary), 0.2) #00000000;
-}
 
 
 .loading {
@@ -286,6 +292,8 @@ mdui-button.openBlockBtn {
 
   div.showList {
     max-width: calc(100vw - 10vh);
+    max-height: calc(100vh - 16rem);
+    margin-top: 3rem;
   }
 }
 
