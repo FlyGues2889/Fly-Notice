@@ -224,13 +224,15 @@ function displayMessages() {
 
   const firstMessage =
     msgCards[currentIndex].querySelector("mdui-card-content").textContent;
-  showListElements.forEach((el) => {
-    el.textContent = firstMessage;
+  showListElements.forEach((el) => (el.textContent = firstMessage));
+  overviewItems.forEach((item) => {
+    item.removeAttribute("active");
+    item.style.opacity = "0.2";
   });
-  overviewItems.forEach((item) => item.removeAttribute("active"));
-  if (overviewItems[currentIndex])
+  if (overviewItems[currentIndex]) {
     overviewItems[currentIndex].setAttribute("active", "");
-
+    overviewItems[currentIndex].style.opacity = "1";
+  }
   currentIndex = (currentIndex + 1) % msgCards.length;
   lastSwitchSecond = new Date().getSeconds();
 
@@ -256,9 +258,14 @@ function displayMessages() {
         el.textContent = messageText;
       });
 
-      overviewItems.forEach((item) => item.removeAttribute("active"));
-      if (overviewItems[currentIndex])
+      overviewItems.forEach((item) => {
+        item.removeAttribute("active"); 
+        item.style.opacity = "0.2"; 
+      });
+      if (overviewItems[currentIndex]) {
         overviewItems[currentIndex].setAttribute("active", "");
+        overviewItems[currentIndex].style.opacity = "1"; 
+      }
 
       currentIndex = (currentIndex + 1) % msgCards.length;
       lastSwitchSecond = currentSecond;
@@ -273,8 +280,10 @@ addButton.addEventListener("click", function () {
     newCard.style.marginBottom = "0.5rem";
     newCard.style.width = "100%";
     newCard.style.padding = "1rem";
-    newCard.clickable = true;
+    // newCard.clickable = true;
     newCard.variant = "outlined";
+    newCard.style.border =
+      "0.1rem solid rgb(var(--mdui-color-surface-container))";
 
     const cardContent = document.createElement("mdui-card-content");
     cardContent.style.whiteSpace = "pre-wrap";
@@ -287,17 +296,19 @@ addButton.addEventListener("click", function () {
     const currentFontSize = fontSizeSlider[0].value + "rem";
     newCard.style.fontSize = currentFontSize;
 
-    const overviewMaxLength = 18;
+    const overviewMaxLength = 16;
     let displayText = inputValue;
     if (inputValue.length > overviewMaxLength) {
       displayText = inputValue.substring(0, overviewMaxLength) + "...";
     }
 
+    // 在侧边栏的通知列表添加对应通知
     const overviewCard = document.createElement("mdui-list-item");
     overviewCard.rounded = true;
     overviewCard.description = displayText;
     overviewCard.style.margin = "0.5rem 0 0 0";
-    overviewCard.style.padding = "0.25rem 0";
+    overviewCard.style.padding = "0 0.25rem";
+    overviewCard.style.opacity = "0.2";
     overviewList.appendChild(overviewCard);
 
     const cardCount = msgList.querySelectorAll("mdui-card").length;
@@ -322,7 +333,7 @@ function initFontSize() {
   if (viewCard) {
     viewCard.style.fontSize = currentFontSize;
   }
-  showListElements.forEach(el => {
+  showListElements.forEach((el) => {
     el.style.fontSize = currentFontSize;
   });
 }
@@ -334,7 +345,7 @@ fontSizeSlider.forEach((slider) => {
     localStorage.setItem(STORAGE_KEYS.FONT_SIZE, currentValue);
     const msgCards = document.querySelectorAll("mdui-card.msgCard");
     const viewCard = document.querySelector("mdui-card.viewCard");
-    const showListElements = document.querySelectorAll("#showList"); 
+    const showListElements = document.querySelectorAll("#showList");
 
     msgCards.forEach((card) => {
       card.style.fontSize = fontSizeValue;
@@ -342,7 +353,7 @@ fontSizeSlider.forEach((slider) => {
     if (viewCard) {
       viewCard.style.fontSize = fontSizeValue;
     }
-    showListElements.forEach(el => {
+    showListElements.forEach((el) => {
       el.style.fontSize = fontSizeValue;
     });
   });

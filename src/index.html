@@ -72,6 +72,7 @@
                 </mdui-list-item>
             </div>
 
+            <mdui-divider style="margin: 0 1rem 0.6rem 1rem;"></mdui-divider>
             <mdui-list-subheader>通知列表</mdui-list-subheader>
 
             <div class="overviewList"></div>
@@ -124,19 +125,19 @@
                     <mdui-list-subheader>通用</mdui-list-subheader>
                     <mdui-list-item nonclickable>
                         <span slot="icon" class="material-icons-outlined">featured_play_list</span>
-                        设置通知容器样式
-                        <span slot="description">预览并设置通知卡片的样式</span>
+                        通知卡片样式
+                        <span slot="description">设置并预览通知卡片的样式</span>
                     </mdui-list-item>
                     <div style="margin-left: 2.5rem;">
                         <mdui-list-item nonclickable>
-                            展示字体大小
+                            卡片内容文字大小
                             <mdui-slider nolabel slot="end-icon" class="msgFontSize" value="1" min="1" max="5"
                                 step="0.1" style="width: 12rem;"></mdui-slider>
                         </mdui-list-item>
                         <mdui-list-item nonclickable>
-                            <mdui-card style="width: 100%;padding: 1rem;height: 6.4rem;" variant="filled"
+                            <mdui-card style="width: 100%;padding: 1.4rem;height: 5.2rem;display: flex;align-items: center;color: rgb(var(--mdui-color-on-surface),0.5);" variant="filled"
                                 class="viewCard">
-                                示例文字 <br> Test123456
+                                通知文字示例
                             </mdui-card>
                         </mdui-list-item>
                     </div>
@@ -176,7 +177,7 @@
                     <mdui-list-item rounded nonclickable>
                         <span slot="icon" class="material-icons-outlined">info</span>
                         关于 FlyNotice
-                        <span slot="description">版本 1.0.6</span>
+                        <span slot="description">版本 1.0.7</span>
                     </mdui-list-item>
                     <mdui-list-item rounded nonclickable>
                         <span slot="icon" class="material-icons-outlined">inventory_2</span>
