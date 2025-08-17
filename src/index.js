@@ -296,7 +296,7 @@ addButton.addEventListener("click", function () {
     const currentFontSize = fontSizeSlider[0].value + "rem";
     newCard.style.fontSize = currentFontSize;
 
-    const overviewMaxLength = 16;
+    const overviewMaxLength = 12;
     let displayText = inputValue;
     if (inputValue.length > overviewMaxLength) {
       displayText = inputValue.substring(0, overviewMaxLength) + "...";

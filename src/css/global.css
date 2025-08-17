@@ -245,6 +245,8 @@ div.list-container {
   }
 
   div.overviewList {
+    padding: 0 0.4rem;
+
     max-height: calc(100vh - 18rem);
     overflow: auto;
 
