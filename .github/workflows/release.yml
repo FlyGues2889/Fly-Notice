@@ -17,21 +17,12 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: latest 
+          version: 9.15.4
 
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 确保能获取所有标签信息
-
-      - name: Get tag message
-        id: tag-info
-        run: |
-          TAG_MESSAGE=$(git tag -l --format='%(contents)' ${{ github.ref_name }})
-          echo "TAG_MESSAGE<<EOF" >> $GITHUB_OUTPUT
-          echo "$TAG_MESSAGE" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-        shell: bash
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -47,6 +38,9 @@ jobs:
         with:
           toolchain: stable
 
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+
       - name: Install Tauri CLI
         run: cargo install tauri-cli
 
@@ -57,7 +51,8 @@ jobs:
         with:
           tagName: ${{ github.ref_name }}
           releaseName: "Release ${{ github.ref_name }}"
-          releaseBody: ${{ steps.tag-info.outputs.TAG_MESSAGE }}  # 使用标签注释作为发布说明
+          releaseBody: ""
           releaseDraft: false
           prerelease: false
+          args: --target x86_64-pc-windows-msvc  # 明确指定Windows 64位目标
     
