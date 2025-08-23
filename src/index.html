@@ -34,7 +34,7 @@
             </mdui-button>
         </div>
 
-        <mdui-navigation-rail contained value="listPage" alignment="center" id="navigation-rail">
+        <mdui-navigation-rail contained value="mainPage"  id="navigation-rail">
             <mdui-button-icon slot="top" id="list-container-switch" onclick="showListContainer()">
                 <span class="material-icons-outlined">menu_open</span>
             </mdui-button-icon>
@@ -108,11 +108,11 @@
         </mdui-top-app-bar>
 
 
-        <div class="page" id="mainPage" style="display: none">
+        <div class="page" id="mainPage">
             <div class="showList" id="showList"></div>
         </div>
 
-        <div class="page" id="listPage">
+        <div class="page" id="listPage" style="display: none">
             <h1>卡片展示</h1>
 
             <div class="msgList"></div>
