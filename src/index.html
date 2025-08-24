@@ -28,14 +28,13 @@
 
             <div class="showList" id="showList"></div>
 
-            <mdui-button variant="outlined" class="exit-button" id="exit-screensaver">
-                <span slot="icon" class="material-icons-outlined">close</span>
-                退出息屏显示
-            </mdui-button>
+            <mdui-fab variant="surface" class="exit-button" id="exit-screensaver">
+                <span slot="icon" class="material-icons-outlined">cancel_presentation</span>
+            </mdui-fab>
         </div>
 
-        <mdui-navigation-rail contained value="mainPage"  id="navigation-rail">
-            <mdui-button-icon slot="top" id="list-container-switch" onclick="showListContainer()">
+        <mdui-navigation-rail contained value="mainPage" id="navigation-rail">
+            <mdui-button-icon slot="top" id="list-container-switch" onclick="showListContainer()" variant="tonal">
                 <span class="material-icons-outlined">menu_open</span>
             </mdui-button-icon>
 
@@ -51,7 +50,7 @@
             </mdui-navigation-rail-item>
 
             <mdui-button-icon slot="bottom" id="open-nodisturb" style="margin: 0;">
-                <span class="material-icons-outlined">screenshot_monitor</span>
+                <span class="material-icons-outlined">fit_screen</span>
             </mdui-button-icon>
             <mdui-button-icon slot="bottom" id="toSettings" href="javascript:void(0);"
                 onclick="navigate('settingPage')">
@@ -77,19 +76,26 @@
 
             <div class="overviewList"></div>
 
-            <mdui-button full-width onclick="openBlockDialog()" variant="outlined" class="openBlockBtn">
-                <span slot="icon" class="material-icons-outlined">add</span>
-                添加新通知
-            </mdui-button>
-
-            <mdui-list-subheader style="position: absolute;bottom: 5.8rem;">快捷设置</mdui-list-subheader>
 
             <div class="toolBar">
-                <mdui-button-icon disabled>
-                    <span class="material-icons">text_fields</span>
-                </mdui-button-icon>
-                <mdui-slider nolabel slot="end-icon" class="msgFontSize" value="1" min="1" max="5" step="0.1"
-                    style="width: 8rem;"></mdui-slider>
+                <mdui-collapse accordion>
+                    <mdui-collapse-item trigger="mdui-button-icon">
+                        <mdui-list-item slot="header" nonclickable>
+                            <mdui-button onclick="openBlockDialog()" class="openBlockBtn">
+                                <span class="material-icons-outlined">add</span>
+                            </mdui-button>
+                            <mdui-button-icon variant="tonal">
+                                <span class="material-icons-outlined">expand_less</span>
+                            </mdui-button-icon>
+                        </mdui-list-item>
+
+                        <mdui-list-item nonclickable>
+                            <span slot="icon" class="material-icons">text_fields</span>
+                            <mdui-slider nolabel slot="end-icon" class="msgFontSize" value="1" min="1" max="5" step="0.1"
+                                style="width: 7.2rem;"></mdui-slider>
+                        </mdui-list-item>
+                    </mdui-collapse-item>
+                </mdui-collapse>
             </div>
         </div>
 
@@ -135,8 +141,9 @@
                                 step="0.1" style="width: 12rem;"></mdui-slider>
                         </mdui-list-item>
                         <mdui-list-item nonclickable>
-                            <mdui-card style="width: 100%;padding: 1.4rem;height: 5.2rem;display: flex;align-items: center;color: rgb(var(--mdui-color-on-surface),0.5);" variant="filled"
-                                class="viewCard">
+                            <mdui-card
+                                style="width: 100%;padding: 1.4rem;height: 5.2rem;display: flex;align-items: center;color: rgb(var(--mdui-color-on-surface),0.5);"
+                                variant="filled" class="viewCard">
                                 通知文字示例
                             </mdui-card>
                         </mdui-list-item>
@@ -146,8 +153,7 @@
                         <span slot="icon" class="material-icons-outlined">timer</span>
                         通知滚动时间
                         <span slot="description">显示每条通知的时间间隔</span>
-                        <mdui-text-field variant="outlined" slot="end-icon" id="msgScrollTime" suffix="s"
-                            value="10"></mdui-text-field>
+                        <mdui-text-field slot="end-icon" id="msgScrollTime" suffix="s" value="10"></mdui-text-field>
                     </mdui-list-item>
 
                     <mdui-list-subheader>个性化</mdui-list-subheader>

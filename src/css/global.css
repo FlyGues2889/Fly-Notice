@@ -39,6 +39,10 @@ div#settingPage {
     font-family: 'Product Sans';
     max-width: 16em;
   }
+
+  mdui-text-field::part(container) {
+    border-radius: var(--mdui-shape-corner-medium) var(--mdui-shape-corner-medium) 0 0;
+  }
 }
 
 mdui-tabs::part(container) {
@@ -50,6 +54,25 @@ span[slot="description"] {
   opacity: 0.6;
   color: rgb(var(--mdui-color-secondary));
   font-size: small;
+}
+
+mdui-segmented-button-group {
+  mdui-segmented-button {
+    margin: 0 0.1rem;
+
+    border-radius: var(--mdui-shape-corner-medium);
+    color: rgb(var(--mdui-color-primary));
+    background-color: rgb(var(--mdui-color-secondary-container));
+    border: none;
+
+    transition: all 0.2s;
+  }
+
+  mdui-segmented-button[selected] {
+    border-radius: var(--mdui-shape-corner-extra-large);
+    color: rgb(var(--mdui-color-surface));
+    background-color: rgb(var(--mdui-color-primary));
+  }
 }
 
 
@@ -188,7 +211,7 @@ mdui-navigation-rail {
 
 div.list-container {
   width: 12rem;
-  height: 100vh;
+  height: calc(100vh - 1rem);
 
   position: fixed;
   top: 0;
@@ -197,8 +220,7 @@ div.list-container {
 
   font-family: 'Harmony Sans SC';
 
-  /* border-style: none solid none none;
-  border-right-color: rgb(var(--mdui-color-surface-container)); */
+  border-radius: 0 var(--mdui-shape-corner-large) var(--mdui-shape-corner-large) 0;
 
   background-color: rgb(var(--mdui-color-surface));
 
@@ -222,8 +244,18 @@ div.list-container {
     justify-content: center;
 
     position: absolute;
-    bottom: 2.6rem;
+    bottom: 1rem;
     left: 0;
+
+    mdui-collapse {
+      width: 100%;
+      padding: 0 0.2rem;
+    }
+
+    mdui-list-item,
+    mdui-collapse-item {
+      padding: 0 0.2rem;
+    }
   }
 
   mdui-list-item {
@@ -240,8 +272,16 @@ div.list-container {
   }
 
   mdui-button {
-    border: rgb(var(--mdui-color-primary), 0.2) dashed 0.1rem;
-    color: rgb(var(--mdui-color-secondary));
+    width: 6rem;
+    border-radius: var(--mdui-shape-corner-medium);
+
+    background-color: rgb(var(--mdui-color-surface-container));
+    color: rgb(var(--mdui-color-on-surface));
+  }
+
+  mdui-button-icon {
+    background-color: rgb(var(--mdui-color-surface-container));
+    color: rgb(var(--mdui-color-on-surface));
   }
 
   div.overviewList {
@@ -257,19 +297,14 @@ div.list-container {
 
 
 .loading {
-  width: 100vw;
+  width: 10.2rem;
 
   position: fixed;
-  top: 0;
-  left: 0;
-}
+  top: 4.8rem;
+  left: 6.4rem;
+  z-index: 999;
 
-mdui-button.openBlockBtn {
-  width: calc(100% - 2rem);
-
-  position: fixed;
-  bottom: 9rem;
-  left: 1rem;
+  border-radius: var(--mdui-shape-corner-large);
 }
 
 .no-disturb-screen {
@@ -329,10 +364,17 @@ mdui-button.openBlockBtn {
   position: absolute;
   bottom: 50px;
 
-  background-color: rgb(var(--mdui-color-on-surface-dark), 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  background-color: rgb(var(--mdui-color-surface-container-high-dark));
+  color: rgb(var(--mdui-color-primary-dark));
+  border-radius: var(--mdui-shape-corner-large);
 
   cursor: pointer;
+
+  transition: all 0.2s;
+}
+
+.exit-button:hover {
+  border-radius: var(--mdui-shape-corner-extra-large);
 }
 
 div.showList {
