@@ -2,8 +2,40 @@ const STORAGE_KEYS = {
   SCROLL_TIME: "scrollTime",
   FONT_SIZE: "fontSize",
 };
+const navigationRail = document.getElementById("navigation-rail");
+const pages = document.querySelectorAll(".page");
 
-//定义一个变量进行判断，默认false 非全屏状态
+const textField = document.getElementById("excludeNums");
+const addButton = document.querySelector(".add-button");
+const fontSizeSlider = document.querySelectorAll(".msgFontSize");
+const listContainerSwitch = document.getElementById("list-container-switch");
+const openAddDialogButton = document.querySelector(".openBlockBtn");
+
+const msgList = document.querySelector(".msgList");
+const overviewList = document.querySelector(".overviewList");
+const listContainer = document.querySelector(".list-container");
+const showListElements = document.querySelectorAll("#showList");
+
+const unreadCount = document.getElementById("unreadCount");
+
+
+function alert(icon, title, message) {
+  mdui.alert({
+    icon: icon,
+    headline: title,
+    description: message,
+    confirmText: "确定",
+    onConfirm: () => console.log("confirmed"),
+  });
+}
+
+function notice(message,closeTime) {
+  mdui.snackbar({
+    message: message,
+    autoCloseDelay: closeTime,
+  });
+}
+
 var exitFullscreen = false;
 
 // 全屏事件
@@ -47,13 +79,6 @@ window.onresize = function () {
     $("#fullScreen").css("display", "none");
   }
 };
-
-function openDialog1() {
-  const dialog1 = document.querySelector(".example-action");
-  const closeButton1 = dialog1.querySelector("mdui-button");
-  dialog1.open = true;
-  closeButton1.addEventListener("click", () => (dialog1.open = false));
-}
 
 function openErrorDialog() {
   const errorSnackbar = document.querySelector(".errorSnackbar");
@@ -114,23 +139,8 @@ function showTime() {
     month + "-" + day + "&nbsp;&nbsp;" + hour + ":" + minute + ":" + seconds;
   document.getElementById("time").innerHTML = current;
 
-  loading.style.display = "none";
+  openAddDialogButton.removeAttribute("loading");
 }
-
-const pages = document.querySelectorAll(".page");
-const textField = document.getElementById("excludeNums");
-const addButton = document.querySelector(".add-button");
-const msgList = document.querySelector(".msgList");
-const unreadCount = document.getElementById("unreadCount");
-const fontSizeSlider = document.querySelectorAll(".msgFontSize");
-const showListElements = document.querySelectorAll("#showList");
-const overviewList = document.querySelector(".overviewList");
-const listContainer = document.querySelector(".list-container");
-const listContainerSwitch = document.getElementById("list-container-switch");
-
-const loading = document.querySelector(".loading");
-
-const navigationRail = document.getElementById("navigation-rail");
 
 let messageInterval;
 
@@ -159,29 +169,25 @@ function showListContainer() {
     listContainer.style.transform = "translateX(0)";
     listContainer.style.opacity = "1";
 
-    navigationRail.style.backgroundColor = "rgb(var(--mdui-color-surface))";
-
     pages.forEach((page) => {
       page.style.transform = "translateX(14rem)";
-      page.style.margin = "3rem 0rem 0rem 5rem";
-      page.style.width = "calc(100vw - 5rem - 14rem - 5rem)";
+      page.style.margin = "4rem 1rem 0rem 5rem";
+      page.style.width = "calc(100vw - 5rem - 14rem - 5rem - 2rem)";
     });
     listContainerSwitch.innerHTML =
-      '<span class="material-icons-outlined">menu_open</span>';
+      '<span class="material-icons-round">menu_open</span>';
   } else {
     // 隐藏侧边栏
     listContainer.style.transform = "translateX(-100%)";
     listContainer.style.opacity = "0";
 
-    navigationRail.style.backgroundColor = "unset";
-
     pages.forEach((page) => {
       page.style.transform = "translateX(0)";
-      page.style.margin = "3rem 0rem 0rem 5rem";
+      page.style.margin = "4rem 1rem 0rem 5rem";
       page.style.width = "calc(100vw - 5rem)";
     });
     listContainerSwitch.innerHTML =
-      '<span class="material-icons-outlined">menu</span>';
+      '<span class="material-icons-round">menu</span>';
     setTimeout(() => {
       listContainer.style.display = "none";
     }, 300);
@@ -190,7 +196,7 @@ function showListContainer() {
 
 function displayMessages() {
   if (showListElements.length === 0) {
-    console.error("No element found to display messages!");
+    notice("错误：没有找到可以显示的消息内容。");
     return;
   }
 
@@ -214,7 +220,7 @@ function displayMessages() {
   if (msgCards.length === 0) {
     showListElements.forEach((el) => {
       el.innerHTML =
-        '<span class="material-icons-outlined" style="font-size: 3.2rem;">notifications_off</span>';
+        '<span class="material-icons-round" style="font-size: 3.2rem;">notifications_off</span>';
       el.style.opacity = "0.2";
       el.style.flexDirection = "column";
     });
@@ -259,12 +265,12 @@ function displayMessages() {
       });
 
       overviewItems.forEach((item) => {
-        item.removeAttribute("active"); 
-        item.style.opacity = "0.2"; 
+        item.removeAttribute("active");
+        item.style.opacity = "0.2";
       });
       if (overviewItems[currentIndex]) {
         overviewItems[currentIndex].setAttribute("active", "");
-        overviewItems[currentIndex].style.opacity = "1"; 
+        overviewItems[currentIndex].style.opacity = "1";
       }
 
       currentIndex = (currentIndex + 1) % msgCards.length;
@@ -272,6 +278,7 @@ function displayMessages() {
     }
   }, 100);
 }
+
 addButton.addEventListener("click", function () {
   const inputValue = textField.value;
   if (inputValue.trim() !== "") {
@@ -283,7 +290,8 @@ addButton.addEventListener("click", function () {
     // newCard.clickable = true;
     newCard.variant = "outlined";
     newCard.style.border =
-      "0.1rem solid rgb(var(--mdui-color-surface-container))";
+      "0.15rem solid rgba(var(--mdui-color-secondary),0.2)";
+    newCard.style.backgroundColor = "rgba(var(--mdui-color-surface-container),0.2)";
 
     const cardContent = document.createElement("mdui-card-content");
     cardContent.style.whiteSpace = "pre-wrap";
@@ -304,11 +312,11 @@ addButton.addEventListener("click", function () {
 
     // 在侧边栏的通知列表添加对应通知
     const overviewCard = document.createElement("mdui-list-item");
-    overviewCard.rounded = true;
     overviewCard.description = displayText;
     overviewCard.style.margin = "0.5rem 0 0 0";
     overviewCard.style.padding = "0 0.25rem";
     overviewCard.style.opacity = "0.2";
+    overviewCard.style.borderRadius = 'var(--mdui-shape-corner-large)';
     overviewList.appendChild(overviewCard);
 
     const cardCount = msgList.querySelectorAll("mdui-card").length;
@@ -318,6 +326,8 @@ addButton.addEventListener("click", function () {
 
     textField.value = "";
     displayMessages();
+
+    notice("已添加新通知。",1000);
   }
 });
 

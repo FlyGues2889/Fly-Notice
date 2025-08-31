@@ -8,7 +8,7 @@ mdui-layout {
 
   font-family: 'HarmonyOSSans SC M', sans-serif;
 
-  background-color: rgb(var(--mdui-color-primary), 0.05);
+  background-color: rgba(var(--mdui-color-primary), 0.08);
 
   user-select: none;
   overscroll-behavior: none;
@@ -25,24 +25,20 @@ mdui-layout {
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #E2E2E5aa;
+    background: rgb(var(--mdui-color-secondary), 0.2);
     border-radius: 1rem;
-    /* 滑块圆角 */
   }
 }
 
-div#settingPage {
+mdui-select,
+mdui-text-field {
+  line-height: 1.375rem;
+  font-family: 'Product Sans';
+  max-width: 16em;
+}
 
-  mdui-select,
-  mdui-text-field {
-    line-height: 1.375rem;
-    font-family: 'Product Sans';
-    max-width: 16em;
-  }
-
-  mdui-text-field::part(container) {
-    border-radius: var(--mdui-shape-corner-medium) var(--mdui-shape-corner-medium) 0 0;
-  }
+mdui-text-field::part(container) {
+  border-radius: var(--mdui-shape-corner-medium) var(--mdui-shape-corner-medium) 0 0;
 }
 
 mdui-tabs::part(container) {
@@ -58,6 +54,7 @@ span[slot="description"] {
 
 mdui-segmented-button-group {
   mdui-segmented-button {
+    width: 0.4rem;
     margin: 0 0.1rem;
 
     border-radius: var(--mdui-shape-corner-medium);
@@ -69,6 +66,7 @@ mdui-segmented-button-group {
   }
 
   mdui-segmented-button[selected] {
+    width: 2.4rem;
     border-radius: var(--mdui-shape-corner-extra-large);
     color: rgb(var(--mdui-color-surface));
     background-color: rgb(var(--mdui-color-primary));
@@ -78,8 +76,6 @@ mdui-segmented-button-group {
 
 /* 主窗口控件 */
 mdui-top-app-bar {
-  height: 3rem;
-  margin-left: 14rem;
 
   align-items: center;
   background-color: #00000000;
@@ -88,10 +84,11 @@ mdui-top-app-bar {
   -webkit-app-region: drag;
 
   mdui-top-app-bar-title {
-    opacity: 0.8;
-    font-size: small;
+    font-size: medium;
     -webkit-app-region: drag;
     user-select: none;
+
+    color: rgb(var(--mdui-color-primary));
 
     font-family: 'Product Sans';
   }
@@ -108,7 +105,7 @@ div.page {
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin: 3rem 0rem 0rem calc(5rem + 14rem);
+  margin: 4rem 1rem 0rem calc(5rem + 14rem);
   padding: 0 3rem;
 
   overflow: auto;
@@ -116,10 +113,11 @@ div.page {
 
   font-family: 'Harmony Sans SC';
 
-  transition: transform 0.3s ease;
-  /* 主内容平移动画 */
+  background-color: rgb(var(--mdui-color-surface));
+  border-radius: var(--mdui-shape-corner-extra-large);
+
+  transition: transform 0.3s ease, width 0.2s;
   transform: translateX(0);
-  /* 初始位置（不偏移） */
 
   div.page-container {
     margin: 1rem 0rem;
@@ -168,7 +166,6 @@ div.time-container {
   mdui-list-item {
     width: 100%;
     font-family: 'Product Sans';
-    color: rgb(var(--mdui-color-primary));
   }
 }
 
@@ -191,18 +188,9 @@ mdui-card.viewCard {
   border-radius: 2rem;
 }
 
-mdui-bottom-app-bar {
-  position: fixed;
-  bottom: 0;
-  margin-left: 14rem;
-
-  background-color: #00000000;
-  box-shadow: none;
-}
-
 mdui-navigation-rail {
   z-index: 100;
-  background-color: rgb(var(--mdui-color-surface));
+  background-color: unset;
 
   mdui-button-icon[slot="bottom"] {
     margin-bottom: 1.2rem;
@@ -211,18 +199,14 @@ mdui-navigation-rail {
 
 div.list-container {
   width: 12rem;
-  height: calc(100vh - 1rem);
+  height: calc(100vh - 4rem);
 
   position: fixed;
   top: 0;
   padding: 0.5rem;
-  margin-left: 5rem;
+  margin: 3rem 0 0 5rem;
 
   font-family: 'Harmony Sans SC';
-
-  border-radius: 0 var(--mdui-shape-corner-large) var(--mdui-shape-corner-large) 0;
-
-  background-color: rgb(var(--mdui-color-surface));
 
   transform: translateX(0);
   /* 初始显示 */
@@ -237,11 +221,11 @@ div.list-container {
   }
 
   div.toolBar {
-    width: 100%;
+    width: calc(100% - 1rem);
+    margin: 0 0.5rem;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background-color: rgba(var(--mdui-color-surface), 0.8);
+    border-radius: var(--mdui-shape-corner-small) var(--mdui-shape-corner-small) var(--mdui-shape-corner-large) var(--mdui-shape-corner-large);
 
     position: absolute;
     bottom: 1rem;
@@ -271,26 +255,40 @@ div.list-container {
     font-family: 'Harmony Sans SC M';
   }
 
-  mdui-button {
-    width: 6rem;
+  mdui-button,
+  mdui-button-icon {
     border-radius: var(--mdui-shape-corner-medium);
 
-    background-color: rgb(var(--mdui-color-surface-container));
+    background-color: rgb(var(--mdui-color-primary), 0.1);
     color: rgb(var(--mdui-color-on-surface));
+
+    transition: all 0.2s;
   }
 
-  mdui-button-icon {
-    background-color: rgb(var(--mdui-color-surface-container));
-    color: rgb(var(--mdui-color-on-surface));
+  mdui-button {
+    width: 6rem;
+  }
+
+  mdui-button:hover {
+    border-radius: var(--mdui-shape-corner-extra-large);
+  }
+
+  mdui-button-icon:hover {
+    border-radius: var(--mdui-shape-corner-extra-large);
   }
 
   div.overviewList {
+    height: calc(100vh - 14rem);
+
+    margin-top: 1.4rem;
     padding: 0 0.4rem;
 
-    max-height: calc(100vh - 18rem);
+    background-color: rgba(var(--mdui-color-surface), 0.8);
+    border-radius: var(--mdui-shape-corner-large) var(--mdui-shape-corner-large) var(--mdui-shape-corner-small) var(--mdui-shape-corner-small);
+
     overflow: auto;
 
-    scrollbar-color: rgb(var(--mdui-color-primary), 0.2) #00000000;
+    scrollbar-color: rgb(var(--mdui-color-secondary), 0.2) #00000000;
   }
 }
 
@@ -299,10 +297,9 @@ div.list-container {
 .loading {
   width: 10.2rem;
 
-  position: fixed;
-  top: 4.8rem;
-  left: 6.4rem;
-  z-index: 999;
+  position: absolute;
+  top: 2rem;
+  left: 1.4rem;
 
   border-radius: var(--mdui-shape-corner-large);
 }
@@ -379,4 +376,20 @@ div.list-container {
 
 div.showList {
   font-family: 'Harmony Sans SC M';
+}
+
+mdui-fab.openBlockBtn {
+  position: fixed;
+  right: 2rem;
+  bottom: 1.5rem;
+
+  border-radius: var(--mdui-shape-corner-large);
+
+  font-family: 'Harmony Sans SC M';
+
+  transition: all 0.2s;
+}
+
+div.margined {
+  margin-left: 2.5rem;
 }
