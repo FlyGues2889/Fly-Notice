@@ -29,10 +29,11 @@ function alert(icon, title, message) {
   });
 }
 
-function notice(message,closeTime) {
+function snackbar(message,closeTime,placement) {
   mdui.snackbar({
     message: message,
     autoCloseDelay: closeTime,
+    placement: placement,
   });
 }
 
@@ -171,8 +172,8 @@ function showListContainer() {
 
     pages.forEach((page) => {
       page.style.transform = "translateX(14rem)";
-      page.style.margin = "4rem 1rem 0rem 5rem";
-      page.style.width = "calc(100vw - 5rem - 14rem - 5rem - 2rem)";
+      page.style.margin = "0rem 0rem 0rem 5rem";
+      page.style.width = "calc(100vw - 5rem - 14rem - 5rem - 1rem)";
     });
     listContainerSwitch.innerHTML =
       '<span class="material-icons-round">menu_open</span>';
@@ -183,7 +184,7 @@ function showListContainer() {
 
     pages.forEach((page) => {
       page.style.transform = "translateX(0)";
-      page.style.margin = "4rem 1rem 0rem 5rem";
+      page.style.margin = "0rem 0rem 0rem 5rem";
       page.style.width = "calc(100vw - 5rem)";
     });
     listContainerSwitch.innerHTML =
@@ -196,7 +197,7 @@ function showListContainer() {
 
 function displayMessages() {
   if (showListElements.length === 0) {
-    notice("错误：没有找到可以显示的消息内容。");
+    snackbar("错误：没有找到可以显示的消息内容。",3000,"bottom");
     return;
   }
 
@@ -327,7 +328,9 @@ addButton.addEventListener("click", function () {
     textField.value = "";
     displayMessages();
 
-    notice("已添加新通知。",1000);
+    snackbar("已添加新通知。",1000,"bottom");
+    
+    openAddDialogButton.removeAttribute("extended");
   }
 });
 

@@ -24,6 +24,10 @@ function toggleScreenSaver() {
     screenSaver.classList.add("active");
     setInterval(updateDateTime, 100);
     handleFullScreen();
+
+    setTimeout(() => {
+      snackbar("<b>息屏显示已启用</b><br><small>点击屏幕正下方按钮退出退出到正常窗口。</small>", 5000, "bottom-end")
+    }, 500)
   }
 }
 
