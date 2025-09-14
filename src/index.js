@@ -18,6 +18,11 @@ const showListElements = document.querySelectorAll("#showList");
 
 const unreadCount = document.getElementById("unreadCount");
 
+// 新增：轮播状态跟踪变量
+let isCarouselRunning = true;
+// 新增：全局变量以便在toggleCarousel中访问
+let lastSwitchSecond = -1;
+
 
 function alert(icon, title, message) {
   mdui.alert({
@@ -29,7 +34,7 @@ function alert(icon, title, message) {
   });
 }
 
-function snackbar(message,closeTime,placement) {
+function snackbar(message, closeTime, placement) {
   mdui.snackbar({
     message: message,
     autoCloseDelay: closeTime,
@@ -140,10 +145,24 @@ function showTime() {
     month + "-" + day + "&nbsp;&nbsp;" + hour + ":" + minute + ":" + seconds;
   document.getElementById("time").innerHTML = current;
 
-  openAddDialogButton.removeAttribute("loading");
+  
 }
 
 let messageInterval;
+
+function toggleCarousel() {
+  isCarouselRunning = !isCarouselRunning;
+    
+  const msgCards = document.querySelectorAll("mdui-card.msgCard");
+  if (msgCards.length === 0) return;
+  
+  if (isCarouselRunning) {
+    snackbar("已继续通知轮播。", 1500, "bottom");
+    lastSwitchSecond = new Date().getSeconds();
+  } else {
+    snackbar("已暂停通知轮播，再次点击以继续", 1500, "bottom");
+  }
+}
 
 function loadSettings() {
   const scrollTime = localStorage.getItem(STORAGE_KEYS.SCROLL_TIME);
@@ -211,7 +230,7 @@ function displayMessages() {
   const scrollTimeSlider = document.getElementById("msgScrollTime");
 
   let currentIndex = 0;
-  let lastSwitchSecond = -1;
+  lastSwitchSecond = -1;
 
   if (messageInterval) {
     clearInterval(messageInterval);
@@ -234,7 +253,6 @@ function displayMessages() {
   showListElements.forEach((el) => (el.textContent = firstMessage));
   overviewItems.forEach((item) => {
     item.removeAttribute("active");
-    item.style.opacity = "0.2";
   });
   if (overviewItems[currentIndex]) {
     overviewItems[currentIndex].setAttribute("active", "");
@@ -253,6 +271,8 @@ function displayMessages() {
   });
 
   messageInterval = setInterval(() => {
+    if (!isCarouselRunning) return;
+    
     const now = new Date();
     const currentSecond = now.getSeconds();
     const scrollTime = parseInt(scrollTimeSlider.value);
@@ -267,7 +287,6 @@ function displayMessages() {
 
       overviewItems.forEach((item) => {
         item.removeAttribute("active");
-        item.style.opacity = "0.2";
       });
       if (overviewItems[currentIndex]) {
         overviewItems[currentIndex].setAttribute("active", "");
@@ -288,7 +307,6 @@ addButton.addEventListener("click", function () {
     newCard.style.marginBottom = "0.5rem";
     newCard.style.width = "100%";
     newCard.style.padding = "1rem";
-    // newCard.clickable = true;
     newCard.variant = "outlined";
     newCard.style.border =
       "0.15rem solid rgba(var(--mdui-color-secondary),0.2)";
@@ -305,7 +323,7 @@ addButton.addEventListener("click", function () {
     const currentFontSize = fontSizeSlider[0].value + "rem";
     newCard.style.fontSize = currentFontSize;
 
-    const overviewMaxLength = 12;
+    const overviewMaxLength = 17;
     let displayText = inputValue;
     if (inputValue.length > overviewMaxLength) {
       displayText = inputValue.substring(0, overviewMaxLength) + "...";
@@ -316,7 +334,6 @@ addButton.addEventListener("click", function () {
     overviewCard.description = displayText;
     overviewCard.style.margin = "0.5rem 0 0 0";
     overviewCard.style.padding = "0 0.25rem";
-    overviewCard.style.opacity = "0.2";
     overviewCard.style.borderRadius = 'var(--mdui-shape-corner-large)';
     overviewList.appendChild(overviewCard);
 
@@ -371,6 +388,7 @@ fontSizeSlider.forEach((slider) => {
     });
   });
 });
+
 window.onload = function () {
   setInterval(showTime, 1000);
   loadSettings();

@@ -24,15 +24,16 @@
 
 <body id="body" class="mdui-theme-auto" style="margin: 0;">
     <mdui-layout style="height: 100vh;" class="content-wrapper">
+        
         <div class="no-disturb-screen" id="no-disturb-screen">
             <div class="time-display" id="time-display">Requesting...</div>
             <div class="count-display" id="count-display"></div>
-
+            
             <div class="showList" id="showList"></div>
-
-            <mdui-fab variant="surface" class="exit-button" id="exit-screensaver">
-                <span slot="icon" class="material-icons-round">fullscreen_exit</span>
-            </mdui-fab>
+            
+            <mdui-button variant="surface" class="exit-button" id="exit-screensaver">
+                <span class="material-icons-round">close</span>
+            </mdui-button>
         </div>
 
         <mdui-navigation-rail contained value="mainPage" id="navigation-rail">
@@ -61,14 +62,12 @@
 
         <div class="list-container">
             <div class="time-container">
-                <mdui-list-item
-                    style="margin-top: 0.5rem;background-color: rgba(var(--mdui-color-surface),0.5);border-radius: var(--mdui-shape-corner-large);"
-                    nonclickable>
-                    <span id="time" style="color: rgb(var(--mdui-color-secondary));">Requesting...</span>
+                <mdui-list-item nonclickable>
+                    <span id="time" style="color: rgb(var(--mdui-color-secondary));">Loading</span>
 
                     <span slot="description" class="showCount">
                         <span id="unreadCount" style="font-family: 'Product Sans';">0</span>
-                        条通知在队列中
+                        条通知
                     </span>
                 </mdui-list-item>
             </div>
@@ -108,15 +107,18 @@
         <div class="page" id="listPage" style="display: none">
             <div class="page-container" style="width: calc(100% - 6rem)">
                 <h1>卡片展示</h1>
-    
+
                 <div class="msgList"></div>
             </div>
         </div>
 
-        <mdui-fab class="openBlockBtn" onclick="openBlockDialog()" extended loading>
-            <span slot="icon" class="material-icons-round">notification_add</span>
-            添加新通知
-        </mdui-fab>
+        <mdui-button class="openBlockBtn" onclick="openBlockDialog()">
+            <span class="material-icons-round">notification_add</span>
+        </mdui-button>
+
+        <mdui-button onclick="toggleCarousel()" class="toggleCarousel">
+            <span class="material-icons-round">playlist_play</span>
+        </mdui-button>
 
         <div class="page" id="settingPage" style="display: none;">
             <div class="page-container">
