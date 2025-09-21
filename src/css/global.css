@@ -416,8 +416,8 @@ div.margined {
     margin: 0 0.2rem;
 
     border-radius: 2rem;
-    background-color: rgb(var(--mdui-color-secondary-container));
-    color: rgb(var(--mdui-color-secondary));
+    background-color: rgb(var(--mdui-color-tertiary-container));
+    color: rgb(var(--mdui-color-tertiary));
     box-shadow: none;
 
     font-family: 'Harmony Sans SC M';
@@ -426,15 +426,15 @@ div.margined {
   }
   .primaryBtn:hover {
     border-radius: var(--mdui-shape-corner-medium);
-    background-color: rgb(var(--mdui-color-secondary));
-    color: rgb(var(--mdui-color-secondary-container));
+    background-color: rgb(var(--mdui-color-tertiary));
+    color: rgb(var(--mdui-color-on-tertiary));
   }
 
   .normalBtn {
     height: 4.2rem;
     width: 2.4rem;
 
-    background-color: rgb(var(--mdui-color-surface-container-high));
+    background-color: rgb(var(--mdui-color-secondary-container));
     color: rgb(var(--mdui-color-secondary));
     box-shadow: none;
 
@@ -446,13 +446,5 @@ div.margined {
   .normalBtn:hover {
     border-radius: var(--mdui-shape-corner-medium);
     border: 0.1rem solid rgba(var(--mdui-color-secondary), 0.15);
-  }
-
-  .deleteMsgBtn {
-    color: rgb(var(--mdui-color-error),0.7);
-  }
-
-  .deleteMsgBtn:hover {
-    border: 0.1rem solid rgba(var(--mdui-color-error),0.15);
   }
 }
