@@ -214,6 +214,10 @@ mdui-navigation-rail {
   mdui-button-icon[slot="bottom"] {
     margin-bottom: 1.2rem;
   }
+
+  mdui-button-icon#list-container-switch {
+    background-color: rgba(var(--mdui-color-surface), 0.7);
+  }
 }
 
 div.list-container {
@@ -397,51 +401,59 @@ div.showList {
   font-family: 'Harmony Sans SC M';
 }
 
-.openBlockBtn {
-  height: 4.2rem;
-
-  position: fixed;
-  right: 4.8rem;
-  bottom: 1.5rem;
-
-  border-radius: var(--mdui-shape-corner-extra-large);
-  background-color: rgb(var(--mdui-color-secondary-container));
-  color: rgb(var(--mdui-color-secondary));
-  box-shadow: none;
-
-  font-family: 'Harmony Sans SC M';
-
-  transition: all 0.1s;
+div.margined {
+  margin-left: 2.5rem;
 }
 
-.openBlockBtn:hover {
-  border-radius: var(--mdui-shape-corner-medium);
-  background-color: rgb(var(--mdui-color-secondary));
-  color: rgb(var(--mdui-color-secondary-container));
-}
-
-.toggleCarousel {
-  height: 4.2rem;
-  width: 2.4rem;
-  padding-left: 3px;
-
+.add-toolbar {
   position: fixed;
   right: 1.5rem;
   bottom: 1.5rem;
 
-  background-color: rgb(var(--mdui-color-surface-container));
-  color: rgb(var(--mdui-color-secondary));
-  box-shadow: none;
+  .primaryBtn {
+    height: 4.2rem;
+    width: 4rem;
+    margin: 0 0.2rem;
 
-  border-radius: var(--mdui-shape-corner-extra-large);
+    border-radius: 2rem;
+    background-color: rgb(var(--mdui-color-secondary-container));
+    color: rgb(var(--mdui-color-secondary));
+    box-shadow: none;
 
-  transition: all 0.1s;
-}
+    font-family: 'Harmony Sans SC M';
 
-.toggleCarousel:hover {
-  border-radius: var(--mdui-shape-corner-medium);
-}
+    transition: all 0.1s;
+  }
+  .primaryBtn:hover {
+    border-radius: var(--mdui-shape-corner-medium);
+    background-color: rgb(var(--mdui-color-secondary));
+    color: rgb(var(--mdui-color-secondary-container));
+  }
 
-div.margined {
-  margin-left: 2.5rem;
+  .normalBtn {
+    height: 4.2rem;
+    width: 2.4rem;
+
+    background-color: rgb(var(--mdui-color-surface-container-high));
+    color: rgb(var(--mdui-color-secondary));
+    box-shadow: none;
+
+    border-radius: 2rem;
+
+    transition: all 0.1s;
+  }
+
+  .normalBtn:hover {
+    border-radius: var(--mdui-shape-corner-medium);
+    border: 0.1rem solid rgba(var(--mdui-color-secondary), 0.15);
+  }
+
+  .deleteMsgBtn {
+    color: rgb(var(--mdui-color-error),0.7);
+  }
+
+  .deleteMsgBtn:hover {
+    border: 0.1rem solid rgba(var(--mdui-color-error),0.15);
+    background-color: rgb(var(--mdui-color-error),0.15);
+  }
 }

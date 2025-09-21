@@ -1,29 +1,50 @@
+// ========================= 1. 核心数据结构：使用数组对象存储所有通知 =========================
+// 通知数组 - 所有通知统一存储在这里
+let notifications = [];
+// 生成唯一ID的工具函数
+const generateUniqueId = () =>
+  `msg_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+
+// ========================= 2. 常量定义 =========================
 const STORAGE_KEYS = {
   SCROLL_TIME: "scrollTime",
   FONT_SIZE: "fontSize",
+  NOTIFICATIONS: "notifications", // 用于本地存储通知数据
 };
+
+// ========================= 3. DOM元素获取 =========================
+// 主界面元素
 const navigationRail = document.getElementById("navigation-rail");
 const pages = document.querySelectorAll(".page");
-
 const textField = document.getElementById("excludeNums");
 const addButton = document.querySelector(".add-button");
 const fontSizeSlider = document.querySelectorAll(".msgFontSize");
 const listContainerSwitch = document.getElementById("list-container-switch");
-const openAddDialogButton = document.querySelector(".openBlockBtn");
-
+const openAddDialogButton = document.querySelector(".openAddDialogBtn");
 const msgList = document.querySelector(".msgList");
 const overviewList = document.querySelector(".overviewList");
 const listContainer = document.querySelector(".list-container");
 const showListElements = document.querySelectorAll("#showList");
-
 const unreadCount = document.getElementById("unreadCount");
+const countDisplay = document.getElementById("count-display");
+const carouselToggleBtn = document.querySelector(".carousel-toggle-btn");
+const deleteBtn = document.querySelector(".deleteMsgBtn");
+const closeEditBtn = document.querySelector(".close-edit-dialog");
+let isDialogClosing = false; // 标记弹窗是否正在关闭
 
-// 新增：轮播状态跟踪变量
+// 轮播相关变量
 let isCarouselRunning = true;
-// 新增：全局变量以便在toggleCarousel中访问
+let messageInterval;
 let lastSwitchSecond = -1;
 
+// 息屏显示相关元素
+const toggleButton = document.getElementById("open-nodisturb");
+const screenSaver = document.getElementById("no-disturb-screen");
+const exitButton = document.getElementById("exit-screensaver");
+const timeDisplay = document.getElementById("time-display");
+const screensaverCountDisplay = document.getElementById("screensaver-count"); // 息屏模式下的通知计数
 
+// ========================= 4. 工具函数 =========================
 function alert(icon, title, message) {
   mdui.alert({
     icon: icon,
@@ -42,15 +63,25 @@ function snackbar(message, closeTime, placement) {
   });
 }
 
-var exitFullscreen = false;
+function showTime() {
+  const date = new Date();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hour = String(date.getHours()).padStart(2, "0");
+  const minute = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+  const current = `${month}-${day}&nbsp;&nbsp;${hour}:${minute}:${seconds}`;
+  document.getElementById("time").innerHTML = current;
+  openAddDialogButton.removeAttribute("loading");
+}
 
-// 全屏事件
+// ========================= 5. 全屏与息屏显示功能 =========================
+let exitFullscreen = false;
+
 function handleFullScreen() {
-  var element = document.documentElement;
-  var btnIcon = document.getElementById("btn-fullscreen"); // 获取按钮的引用
+  const element = document.documentElement;
 
   if (document.fullscreenElement) {
-    // 当前已全屏，退出全屏
     if (document.exitFullscreen) {
       document.exitFullscreen();
     } else if (document.webkitCancelFullScreen) {
@@ -61,7 +92,6 @@ function handleFullScreen() {
       document.msExitFullscreen();
     }
   } else {
-    // 当前未全屏，请求全屏
     if (element.requestFullscreen) {
       element.requestFullscreen();
     } else if (element.webkitRequestFullScreen) {
@@ -69,15 +99,14 @@ function handleFullScreen() {
     } else if (element.mozRequestFullScreen) {
       element.mozRequestFullScreen();
     } else if (element.msRequestFullscreen) {
-      // IE11
       element.msRequestFullscreen();
     }
   }
 }
 
 window.onresize = function () {
-  var isFull = !!document.fullscreenElement; // 使用现代API来检测全屏状态
-  if (isFull == false) {
+  const isFull = !!document.fullscreenElement;
+  if (isFull === false) {
     $("#exitFullScreen").css("display", "none");
     $("#fullScreen").css("display", "");
   } else {
@@ -86,36 +115,67 @@ window.onresize = function () {
   }
 };
 
-function openErrorDialog() {
-  const errorSnackbar = document.querySelector(".errorSnackbar");
-  errorSnackbar.open = true;
-}
+// 切换息屏显示状态
+toggleButton.addEventListener("click", toggleScreenSaver);
+exitButton.addEventListener("click", toggleScreenSaver);
 
-function openBlockDialog() {
-  const blockDialog = document.querySelector(".block-dialog");
-  const closeButton2 = blockDialog.querySelector(".close-block-dialog");
-  blockDialog.open = true;
-  closeButton2.addEventListener("click", () => (blockDialog.open = false));
-}
+function toggleScreenSaver() {
+  if (screenSaver.style.display === "flex") {
+    // 关闭息屏显示
+    screenSaver.classList.remove("active");
+    handleFullScreen();
+    setTimeout(() => {
+      screenSaver.style.display = "none";
+    }, 800);
+  } else {
+    // 开启息屏显示
+    screenSaver.style.display = "flex";
+    void screenSaver.offsetWidth;
+    screenSaver.classList.add("active");
 
-function showSettingsSavedSnackbar() {
-  const settingSnackbar = document.querySelector(".settingsSnackbar");
-  if (settingSnackbar.open) {
-    settingSnackbar.open = false;
+    updateScreensaverCount();
+    setInterval(updateDateTime, 100);
+    handleFullScreen();
+
+    setTimeout(() => {
+      snackbar(
+        "<b>息屏显示已启用</b><br><small>点击屏幕正下方按钮退出到正常窗口。</small>",
+        5000,
+        "bottom-end"
+      );
+    }, 500);
   }
-  settingSnackbar.open = true;
 }
 
+function updateDateTime() {
+  const now = new Date();
+
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  timeDisplay.textContent = `${hours}:${minutes}`;
+}
+
+// 更新息屏模式下的通知数量显示
+function updateScreensaverCount() {
+  if (screensaverCountDisplay) {
+    screensaverCountDisplay.textContent = `通知数量: ${notifications.length}`;
+  }
+}
+
+// ========================= 6. 页面导航 =========================
 function navigate(pageId) {
-  var pages = document.querySelectorAll(".page");
-  for (var i = 0; i < pages.length; i++) {
-    pages[i].style.display = "none";
-  }
+  pages.forEach((page) => {
+    page.style.display = "none";
+  });
   document.getElementById(pageId).style.display = "block";
-  var navigationItems = document.querySelectorAll("mdui-navigation-rail-item");
-  for (var i = 0; i < navigationItems.length; i++) {
-    navigationItems[i].removeAttribute("active");
-  }
+
+  const navigationItems = document.querySelectorAll(
+    "mdui-navigation-rail-item"
+  );
+  navigationItems.forEach((item) => {
+    item.removeAttribute("active");
+  });
+
   if (pageId === "mainPage") {
     document.getElementById("toMain").setAttribute("active", "");
   } else if (pageId === "listPage") {
@@ -129,233 +189,367 @@ document.getElementById("toSettings").onclick = function () {
   navigate("settingPage");
 };
 
-function showTime() {
-  var date = new Date();
-  var month = date.getMonth() + 1;
-  month = month < 10 ? "0" + month : month;
-  var day = date.getDate();
-  day = day < 10 ? "0" + day : day;
-  var hour = date.getHours();
-  hour = hour < 10 ? "0" + hour : hour;
-  var minute = date.getMinutes();
-  minute = minute < 10 ? "0" + minute : minute;
-  var seconds = date.getSeconds();
-  seconds = seconds < 10 ? "0" + seconds : seconds;
-  var current =
-    month + "-" + day + "&nbsp;&nbsp;" + hour + ":" + minute + ":" + seconds;
-  document.getElementById("time").innerHTML = current;
+// ========================= 7. 通知管理核心功能 =========================
+/**
+ * 添加新通知
+ * @param {string} content - 通知内容
+ */
+function addNotification(content) {
+  if (!content.trim()) return;
 
-  
+  // 创建新通知对象
+  const newNotification = {
+    id: generateUniqueId(),
+    content: content,
+    createTime: new Date().toISOString(),
+  };
+
+  // 添加到通知数组
+  notifications.push(newNotification);
+
+  // 保存到本地存储
+  saveNotificationsToLocalStorage();
+
+  // 重新渲染
+  renderNotifications();
+
+  // 如果在息屏模式，更新计数
+  if (screenSaver.style.display === "flex") {
+    updateScreensaverCount();
+  }
+
+  // 提示与重置
+  snackbar("已添加新通知。", 1000, "bottom");
+  textField.value = "";
+  openAddDialogButton.removeAttribute("extended");
+  displayMessages();
 }
 
-let messageInterval;
+/**
+ * 删除通知
+ * @param {string} id - 通知ID
+ */
+function deleteNotification(id) {
+  // 从数组中删除
+  notifications = notifications.filter(
+    (notification) => notification.id !== id
+  );
 
+  // 保存到本地存储
+  saveNotificationsToLocalStorage();
+
+  // 重新渲染
+  renderNotifications();
+
+  // 如果在息屏模式，更新计数
+  if (screenSaver.style.display === "flex") {
+    updateScreensaverCount();
+  }
+
+  // 提示
+  snackbar("通知已删除", 1000, "bottom");
+  displayMessages();
+}
+
+/**
+ * 更新通知内容
+ * @param {string} id - 通知ID
+ * @param {string} newContent - 新内容
+ */
+function updateNotification(id, newContent) {
+  if (!newContent.trim()) return;
+
+  // 找到并更新通知
+  const index = notifications.findIndex(
+    (notification) => notification.id === id
+  );
+  if (index !== -1) {
+    notifications[index].content = newContent;
+    notifications[index].createTime = new Date().toISOString();
+
+    // 保存到本地存储
+    saveNotificationsToLocalStorage();
+
+    // 重新渲染
+    renderNotifications();
+
+    // 提示
+    snackbar("通知已更新", 1000, "bottom");
+    displayMessages();
+  }
+}
+
+/**
+ * 渲染所有通知到DOM
+ */
+function renderNotifications() {
+  // 清空现有内容
+  msgList.innerHTML = "";
+  overviewList.innerHTML = "";
+
+  // 更新计数
+  const notificationCount = notifications.length;
+  unreadCount.textContent = notificationCount;
+  countDisplay.textContent = `${notificationCount} 条通知在队列中`;
+
+  // 无通知时显示空状态
+  if (notificationCount === 0) {
+    showListElements.forEach((el) => {
+      el.innerHTML =
+        '<span class="material-icons-outlined" style="font-size: 3.2rem;">notifications_off</span>';
+      el.style.opacity = "0.2";
+      el.style.flexDirection = "column";
+    });
+    return;
+  }
+
+  // 有通知时渲染
+  const currentFontSize = fontSizeSlider[0].value + "rem";
+
+  notifications.forEach((notification) => {
+    // 渲染主通知卡片
+    const card = document.createElement("mdui-card");
+    card.className = "msgCard";
+    card.dataset.id = notification.id; // 存储ID用于操作
+    card.style.marginBottom = "0.5rem";
+    card.style.width = "100%";
+    card.style.padding = "1rem 1rem 2.4rem 1rem";
+    card.variant = "outlined";
+    card.style.border = "0.15rem solid rgba(var(--mdui-color-secondary),0.2)";
+    card.style.backgroundColor =
+      "rgba(var(--mdui-color-surface-container),0.3)";
+    card.style.borderRadius = "var(--mdui-shape-corner-large)";
+    card.style.fontSize = currentFontSize;
+
+    // 卡片内容
+    const cardContent = document.createElement("mdui-card-content");
+    cardContent.style.whiteSpace = "pre-wrap";
+    cardContent.style.overflowWrap = "break-word";
+    cardContent.textContent = notification.content;
+
+    // 卡片操作按钮
+    const cardActions = document.createElement("mdui-card-actions");
+    cardActions.style.justifyContent = "flex-end";
+    cardActions.style.gap = "0.5rem";
+
+    // 编辑按钮
+    const editBtn = document.createElement("mdui-button-icon");
+    editBtn.innerHTML = '<span class="material-icons-outlined">edit</span>';
+    editBtn.style.position = "absolute";
+    editBtn.style.right = "3.1rem";
+    editBtn.style.bottom = "0";
+    editBtn.style.color = "rgba(var(--mdui-color-secondary),0.5)";
+    editBtn.addEventListener("click", () => {
+      if (isCarouselRunning) {
+        toggleCarousel();
+      }
+
+      const editDialog = document.querySelector(".edit-dialog");
+      const editTextField = document.getElementById("editMsgContent");
+
+      currentPlayingNotifyId = notification.id;
+      editTextField.value = notification.content;
+
+      isDialogClosing = false;
+
+      editDialog.open = true;
+    });
+
+    // 删除按钮
+    const deleteBtn = document.createElement("mdui-button-icon");
+    deleteBtn.innerHTML = '<span class="material-icons-outlined">delete</span>';
+    deleteBtn.style.position = "absolute";
+    deleteBtn.style.right = "1rem";
+    deleteBtn.style.bottom = "0";
+    deleteBtn.style.color = "rgba(var(--mdui-color-secondary),0.5)";
+    deleteBtn.addEventListener("click", () => {
+      deleteNotification(notification.id);
+    });
+
+    cardActions.appendChild(editBtn);
+    cardActions.appendChild(deleteBtn);
+    card.appendChild(cardContent);
+    card.appendChild(cardActions);
+    msgList.appendChild(card);
+
+    // 渲染侧边栏概览项
+    const overviewMaxLength = 17;
+    let displayText = notification.content;
+    if (displayText.length > overviewMaxLength) {
+      displayText = displayText.substring(0, overviewMaxLength) + "...";
+    }
+
+    const overviewItem = document.createElement("mdui-list-item");
+    overviewItem.dataset.id = notification.id;
+    overviewItem.description = displayText;
+    overviewItem.style.margin = "0.5rem 0 0 0";
+    overviewItem.style.padding = "0 0.25rem";
+    overviewItem.style.borderRadius = "var(--mdui-shape-corner-large)";
+    overviewList.appendChild(overviewItem);
+  });
+
+  // 更新显示区域
+  showListElements.forEach((el) => {
+    el.style.opacity = "1";
+    el.style.flexDirection = "row";
+    el.textContent = notifications[0].content;
+  });
+}
+
+// ========================= 8. 本地存储操作 =========================
+/**
+ * 保存通知到本地存储
+ */
+function saveNotificationsToLocalStorage() {
+  localStorage.setItem(
+    STORAGE_KEYS.NOTIFICATIONS,
+    JSON.stringify(notifications)
+  );
+}
+
+/**
+ * 从本地存储加载通知
+ */
+function loadNotificationsFromLocalStorage() {
+  const saved = localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS);
+  if (saved) {
+    try {
+      notifications = JSON.parse(saved);
+    } catch (e) {
+      console.error("错误：加载通知失败。", e);
+      notifications = [];
+    }
+  }
+}
+
+// ========================= 9. 轮播控制功能 =========================
 function toggleCarousel() {
   isCarouselRunning = !isCarouselRunning;
-    
-  const msgCards = document.querySelectorAll("mdui-card.msgCard");
-  if (msgCards.length === 0) return;
-  
+
+  if (carouselToggleBtn) {
+    // 先判断按钮是否存在，避免报错
+    if (isCarouselRunning) {
+      carouselToggleBtn.innerHTML =
+        '<span class="material-icons-outlined">lock</span>';
+    } else {
+      carouselToggleBtn.innerHTML =
+        '<span class="material-icons-outlined">no_encryption</span>';
+    }
+  }
+
+  if (notifications.length > 0) {
+    snackbar(
+      isCarouselRunning ? "已继续通知轮播" : "已暂停通知轮播",
+      1500,
+      "bottom"
+    );
+  }
+
   if (isCarouselRunning) {
-    snackbar("已继续通知轮播。", 1500, "bottom");
     lastSwitchSecond = new Date().getSeconds();
-  } else {
-    snackbar("已暂停通知轮播，再次点击以继续", 1500, "bottom");
-  }
-}
-
-function loadSettings() {
-  const scrollTime = localStorage.getItem(STORAGE_KEYS.SCROLL_TIME);
-  if (scrollTime) {
-    document.getElementById("msgScrollTime").value = scrollTime;
-  }
-  const fontSize = localStorage.getItem(STORAGE_KEYS.FONT_SIZE);
-  if (fontSize) {
-    fontSizeSlider.forEach((slider) => {
-      slider.value = fontSize;
-    });
-    initFontSize();
-  }
-}
-
-function showListContainer() {
-  const isHidden =
-    listContainer.style.display === "none" ||
-    listContainer.style.transform === "translateX(-100%)";
-  if (isHidden) {
-    // 显示侧边栏
-    listContainer.style.display = "block";
-    void listContainer.offsetWidth;
-    listContainer.style.transform = "translateX(0)";
-    listContainer.style.opacity = "1";
-
-    pages.forEach((page) => {
-      page.style.transform = "translateX(14rem)";
-      page.style.margin = "0rem 0rem 0rem 5rem";
-      page.style.width = "calc(100vw - 5rem - 14rem - 5rem - 1rem)";
-    });
-    listContainerSwitch.innerHTML =
-      '<span class="material-icons-round">menu_open</span>';
-  } else {
-    // 隐藏侧边栏
-    listContainer.style.transform = "translateX(-100%)";
-    listContainer.style.opacity = "0";
-
-    pages.forEach((page) => {
-      page.style.transform = "translateX(0)";
-      page.style.margin = "0rem 0rem 0rem 5rem";
-      page.style.width = "calc(100vw - 5rem)";
-    });
-    listContainerSwitch.innerHTML =
-      '<span class="material-icons-round">menu</span>';
-    setTimeout(() => {
-      listContainer.style.display = "none";
-    }, 300);
   }
 }
 
 function displayMessages() {
+  if (screenSaver.style.display === "flex") return;
+
   if (showListElements.length === 0) {
-    snackbar("错误：没有找到可以显示的消息内容。",3000,"bottom");
+    snackbar("错误：没有找到可以显示的消息内容。", 3000, "bottom");
     return;
   }
 
-  showListElements.forEach((el) => {
-    el.style.opacity = "1";
-    el.style.flexDirection = "row";
-  });
-
-  const msgCards = document.querySelectorAll("mdui-card.msgCard");
-  const overviewItems = overviewList.querySelectorAll("mdui-list-item");
-  const scrollTimeSlider = document.getElementById("msgScrollTime");
-
-  let currentIndex = 0;
-  lastSwitchSecond = -1;
-
+  // 清除现有定时器
   if (messageInterval) {
     clearInterval(messageInterval);
     messageInterval = null;
   }
 
-  if (msgCards.length === 0) {
+  // 无通知时处理
+  if (notifications.length === 0) {
     showListElements.forEach((el) => {
       el.innerHTML =
-        '<span class="material-icons-round" style="font-size: 3.2rem;">notifications_off</span>';
+        '<span class="material-icons-outlined" style="font-size: 3.2rem;">notifications_off</span>';
       el.style.opacity = "0.2";
       el.style.flexDirection = "column";
     });
-    overviewItems.forEach((item) => item.removeAttribute("active"));
+    document.querySelectorAll("mdui-list-item").forEach((item) => {
+      item.removeAttribute("active");
+    });
     return;
   }
 
-  const firstMessage =
-    msgCards[currentIndex].querySelector("mdui-card-content").textContent;
-  showListElements.forEach((el) => (el.textContent = firstMessage));
+  // 初始化轮播状态
+  let currentIndex = 0;
+  const overviewItems = overviewList.querySelectorAll("mdui-list-item");
+  const scrollTimeSlider = document.getElementById("msgScrollTime");
+
+  // 显示第一条通知
+  showListElements.forEach((el) => {
+    el.textContent = notifications[currentIndex].content;
+  });
+
+  // 更新侧边栏激活状态
   overviewItems.forEach((item) => {
     item.removeAttribute("active");
   });
   if (overviewItems[currentIndex]) {
     overviewItems[currentIndex].setAttribute("active", "");
-    overviewItems[currentIndex].style.opacity = "1";
   }
-  currentIndex = (currentIndex + 1) % msgCards.length;
+
+  // 准备下一条索引
+  currentIndex = (currentIndex + 1) % notifications.length;
   lastSwitchSecond = new Date().getSeconds();
 
+  // 保存初始滚动时间
   const initialScrollTime = parseInt(scrollTimeSlider.value);
   localStorage.setItem(STORAGE_KEYS.SCROLL_TIME, initialScrollTime);
 
+  // 监听滚动时间变化
   scrollTimeSlider.addEventListener("input", () => {
     const newScrollTime = parseInt(scrollTimeSlider.value);
     localStorage.setItem(STORAGE_KEYS.SCROLL_TIME, newScrollTime);
     lastSwitchSecond = new Date().getSeconds();
   });
 
+  // 启动轮播定时器
   messageInterval = setInterval(() => {
+    // 如果轮播已停止，则不执行切换
     if (!isCarouselRunning) return;
-    
+
     const now = new Date();
     const currentSecond = now.getSeconds();
     const scrollTime = parseInt(scrollTimeSlider.value);
     const secondDiff = (currentSecond - lastSwitchSecond + 60) % 60;
 
     if (secondDiff >= scrollTime) {
-      const messageText =
-        msgCards[currentIndex].querySelector("mdui-card-content").textContent;
+      // 更新显示内容
       showListElements.forEach((el) => {
-        el.textContent = messageText;
+        el.textContent = notifications[currentIndex].content;
       });
 
+      // 更新侧边栏激活状态
       overviewItems.forEach((item) => {
         item.removeAttribute("active");
       });
       if (overviewItems[currentIndex]) {
         overviewItems[currentIndex].setAttribute("active", "");
-        overviewItems[currentIndex].style.opacity = "1";
       }
 
-      currentIndex = (currentIndex + 1) % msgCards.length;
+      // 新增：更新当前播放的通知ID（关键：确保点击修改时能定位到当前通知）
+      currentPlayingNotifyId = notifications[currentIndex].id;
+
+      // 计算下一个索引
+      currentIndex = (currentIndex + 1) % notifications.length;
       lastSwitchSecond = currentSecond;
     }
   }, 100);
 }
 
-addButton.addEventListener("click", function () {
-  const inputValue = textField.value;
-  if (inputValue.trim() !== "") {
-    const newCard = document.createElement("mdui-card");
-    newCard.className = "msgCard";
-    newCard.style.marginBottom = "0.5rem";
-    newCard.style.width = "100%";
-    newCard.style.padding = "1rem";
-    newCard.variant = "outlined";
-    newCard.style.border =
-      "0.15rem solid rgba(var(--mdui-color-secondary),0.2)";
-    newCard.style.backgroundColor = "rgba(var(--mdui-color-surface-container),0.2)";
-
-    const cardContent = document.createElement("mdui-card-content");
-    cardContent.style.whiteSpace = "pre-wrap";
-    cardContent.style.overflowWrap = "break-word";
-    const textNode = document.createTextNode(inputValue);
-    cardContent.appendChild(textNode);
-    newCard.appendChild(cardContent);
-    msgList.appendChild(newCard);
-
-    const currentFontSize = fontSizeSlider[0].value + "rem";
-    newCard.style.fontSize = currentFontSize;
-
-    const overviewMaxLength = 17;
-    let displayText = inputValue;
-    if (inputValue.length > overviewMaxLength) {
-      displayText = inputValue.substring(0, overviewMaxLength) + "...";
-    }
-
-    // 在侧边栏的通知列表添加对应通知
-    const overviewCard = document.createElement("mdui-list-item");
-    overviewCard.description = displayText;
-    overviewCard.style.margin = "0.5rem 0 0 0";
-    overviewCard.style.padding = "0 0.25rem";
-    overviewCard.style.borderRadius = 'var(--mdui-shape-corner-large)';
-    overviewList.appendChild(overviewCard);
-
-    const cardCount = msgList.querySelectorAll("mdui-card").length;
-    unreadCount.textContent = cardCount;
-    const countDisplay = document.getElementById("count-display");
-    countDisplay.textContent = cardCount + " 条通知在队列中";
-
-    textField.value = "";
-    displayMessages();
-
-    snackbar("已添加新通知。",1000,"bottom");
-    
-    openAddDialogButton.removeAttribute("extended");
-  }
-});
-
+// ========================= 10. 字体大小设置 =========================
 function initFontSize() {
   const currentFontSize = fontSizeSlider[0].value + "rem";
   const msgCards = document.querySelectorAll("mdui-card.msgCard");
   const viewCard = document.querySelector("mdui-card.viewCard");
-  const showListElements = document.querySelectorAll("#showList");
 
   msgCards.forEach((card) => {
     card.style.fontSize = currentFontSize;
@@ -368,11 +562,57 @@ function initFontSize() {
   });
 }
 
+// ========================= 11. 侧边栏控制 =========================
+function showListContainer() {
+  const isHidden =
+    listContainer.style.display === "none" ||
+    listContainer.style.transform === "translateX(-100%)";
+
+  if (isHidden) {
+    // 显示侧边栏
+    listContainer.style.display = "block";
+    void listContainer.offsetWidth; // 触发重绘
+    listContainer.style.transform = "translateX(0)";
+    listContainer.style.opacity = "1";
+
+    pages.forEach((page) => {
+      page.style.transform = "translateX(14rem)";
+      page.style.margin = "0rem 0rem 0rem 5rem";
+      page.style.width = "calc(100vw - 5rem - 14rem - 5rem - 1rem)";
+    });
+    listContainerSwitch.innerHTML =
+      '<span class="material-icons-outlined">menu_open</span>';
+  } else {
+    // 隐藏侧边栏
+    listContainer.style.transform = "translateX(-100%)";
+    listContainer.style.opacity = "0";
+
+    pages.forEach((page) => {
+      page.style.transform = "translateX(0)";
+      page.style.margin = "0rem 0rem 0rem 5rem";
+      page.style.width = "calc(100vw - 5rem)";
+    });
+    listContainerSwitch.innerHTML =
+      '<span class="material-icons-outlined">menu</span>';
+    setTimeout(() => {
+      listContainer.style.display = "none";
+    }, 300);
+  }
+}
+
+// ========================= 12. 事件监听与初始化 =========================
+// 添加通知按钮事件
+addButton.addEventListener("click", () => {
+  addNotification(textField.value);
+});
+
+// 字体大小滑块事件
 fontSizeSlider.forEach((slider) => {
   slider.addEventListener("input", function () {
-    let fontSizeValue = this.value + "rem";
+    const fontSizeValue = this.value + "rem";
     const currentValue = this.value;
     localStorage.setItem(STORAGE_KEYS.FONT_SIZE, currentValue);
+
     const msgCards = document.querySelectorAll("mdui-card.msgCard");
     const viewCard = document.querySelector("mdui-card.viewCard");
     const showListElements = document.querySelectorAll("#showList");
@@ -389,9 +629,208 @@ fontSizeSlider.forEach((slider) => {
   });
 });
 
+// 页面加载初始化
 window.onload = function () {
+  // 初始化时间显示
   setInterval(showTime, 1000);
+  showTime();
+
+  // 加载设置
   loadSettings();
+
+  // 加载通知并渲染
+  loadNotificationsFromLocalStorage();
+  renderNotifications();
+
+  // 初始化字体大小
   initFontSize();
+
+  // 启动轮播
   displayMessages();
+
+  initEditDialog();
+  initDeleteButton();
 };
+
+// 加载配置设置
+function loadSettings() {
+  const scrollTime = localStorage.getItem(STORAGE_KEYS.SCROLL_TIME);
+  if (scrollTime) {
+    document.getElementById("msgScrollTime").value = scrollTime;
+  }
+
+  const fontSize = localStorage.getItem(STORAGE_KEYS.FONT_SIZE);
+  if (fontSize) {
+    fontSizeSlider.forEach((slider) => {
+      slider.value = fontSize;
+    });
+  }
+}
+
+// 其他对话框功能
+function openErrorDialog() {
+  const errorSnackbar = document.querySelector(".errorSnackbar");
+  errorSnackbar.open = true;
+}
+
+function openAddDialog() {
+  const blockDialog = document.querySelector(".add-dialog");
+  const closeButton2 = blockDialog.querySelector(".close-add-dialog");
+  blockDialog.open = true;
+  closeButton2.addEventListener("click", () => (blockDialog.open = false));
+}
+
+// ========================= 新增：修改当前播放通知相关功能 =========================
+// 1. 全局变量：记录当前正在播放的通知ID（用于后续精准修改）
+let currentPlayingNotifyId = null;
+
+/**
+ * 2. 打开修改弹窗（暂停轮播 + 填充当前播放内容）
+ */
+function openEditDialog() {
+  // 若没有通知，直接提示并返回
+  if (notifications.length === 0) {
+    snackbar("暂无通知可修改。", 1500, "bottom");
+    return;
+  }
+
+  // 暂停轮播
+  if (isCarouselRunning) {
+    toggleCarousel();
+  }
+
+  // 获取当前播放的通知内容和ID
+  const editDialog = document.querySelector(".edit-dialog");
+  const editTextField = document.getElementById("editMsgContent");
+  // 从通知数组中匹配当前显示的内容（避免直接操作DOM内容，确保数据一致性）
+  const currentContent = showListElements[0]?.textContent.trim();
+  const currentNotify = notifications.find(
+    (notify) => notify.content.trim() === currentContent
+  );
+
+  if (currentNotify) {
+    // 记录当前播放通知的ID（关键：用于后续修改）
+    currentPlayingNotifyId = currentNotify.id;
+    // 填充弹窗输入框
+    editTextField.value = currentNotify.content;
+  } else {
+    // 异常情况：未匹配到当前通知（如内容被手动修改），填充第一个通知
+    currentPlayingNotifyId = notifications[0].id;
+    editTextField.value = notifications[0].content;
+  }
+
+  // 打开弹窗（MDUI对话框标准调用方式）
+  editDialog.open = true;
+}
+
+function initEditDialog() {
+  const editDialog = document.querySelector(".edit-dialog");
+  const editTextField = document.getElementById("editMsgContent");
+
+  // 点击“完成”按钮触发修改
+  closeEditBtn.addEventListener("click", () => {
+    const newContent = editTextField.value.trim();
+    if (!newContent) {
+      snackbar("错误：通知内容不能为空。", 1500, "bottom");
+      return;
+    }
+
+    // 标记弹窗开始关闭
+    isDialogClosing = true;
+
+    // 调用统一修改接口
+    if (currentPlayingNotifyId) {
+      updateNotification(currentPlayingNotifyId, newContent);
+    }
+
+    // 关闭弹窗 + 清空输入框
+    editDialog.open = false;
+    editTextField.value = "";
+
+    // 恢复轮播（仅在需要时执行一次）
+    if (!isCarouselRunning) {
+      setTimeout(() => {
+        toggleCarousel();
+        isDialogClosing = false; // 重置标记
+      }, 300);
+    } else {
+      isDialogClosing = false; // 重置标记
+    }
+  });
+
+  // 弹窗关闭事件（处理点击外部或其他关闭方式）
+  editDialog.addEventListener("close", () => {
+    // 如果是通过完成按钮关闭的，这里不再处理
+    if (isDialogClosing) {
+      isDialogClosing = false;
+      return;
+    }
+
+    // 清空输入框
+    editTextField.value = "";
+
+    // 恢复轮播（仅在需要时执行）
+    if (!isCarouselRunning) {
+      setTimeout(() => {
+        toggleCarousel();
+      }, 300);
+    }
+  });
+}
+
+function deleteCurrentNotification() {
+  if (notifications.length === 0) {
+    snackbar("没有通知可删除。", 1500, "bottom");
+    return;
+  }
+
+  // 检查是否有当前播放的通知ID
+  if (!currentPlayingNotifyId) {
+    // 如果没有记录ID，尝试通过内容匹配
+    const currentContent = showListElements[0]?.textContent.trim();
+    const currentNotify = notifications.find(
+      (notify) => notify.content.trim() === currentContent
+    );
+    if (currentNotify) {
+      currentPlayingNotifyId = currentNotify.id;
+    } else {
+      // 如果也无法匹配内容，默认删除第一个通知
+      currentPlayingNotifyId = notifications[0].id;
+    }
+  }
+
+  mdui.confirm({
+    icon: "warning",
+    headline: "确认删除",
+    description: "是否删除当前正在播放的通知？删除后的通知将无法找回。",
+    confirmText: "删除",
+    cancelText: "取消",
+    onConfirm: () => {
+      // 暂停轮播
+      const wasRunning = isCarouselRunning;
+      if (wasRunning) {
+        toggleCarousel();
+      }
+
+      // 执行删除
+      deleteNotification(currentPlayingNotifyId);
+
+      // 重置当前播放ID
+      currentPlayingNotifyId = null;
+
+      // 如果之前是运行状态，恢复轮播
+      if (wasRunning && notifications.length > 0) {
+        setTimeout(() => {
+          toggleCarousel();
+        }, 300);
+      }
+    },
+  });
+}
+
+// 初始化删除按钮事件
+function initDeleteButton() {
+  if (deleteBtn) {
+    deleteBtn.addEventListener("click", deleteCurrentNotification);
+  }
+}
