@@ -13,15 +13,17 @@
     <link rel="stylesheet" href="css/font.css">
     <link rel="stylesheet" href="css/mdui.css">
     <link rel="stylesheet" href="css/theme.css">
-    <link rel="stylesheet" type="text/css" href="./material-symbols/filled.css">
-    <link rel="stylesheet" type="text/css" href="./material-symbols/outlined.css">
+    <link rel="stylesheet" href="./fonts/material-symbols/index.css">
 
     <script src="tauri.js"></script>
     <script defer src="index.js"></script>
 </head>
 
 <body id="body" class="mdui-theme-auto" style="margin: 0;">
-    <mdui-layout style="height: 100vh;" class="content-wrapper">
+    <mdui-layout style="height: 100vh;">
+        <div class="loadingLayer" id="loading-layer">
+            <mdui-circular-progress></mdui-circular-progress>
+        </div>
         
         <div class="no-disturb-screen" id="no-disturb-screen">
             <div class="time-display" id="time-display">Requesting...</div>
@@ -30,32 +32,32 @@
             <div class="showList" id="showList"></div>
             
             <mdui-button variant="surface" class="exit-button" id="exit-screensaver">
-                <span class="material-icons-outlined">close</span>
+                <span class="material-symbols-rounded">close</span>
             </mdui-button>
         </div>
 
         <mdui-navigation-rail contained value="mainPage" id="navigation-rail">
             <mdui-button-icon slot="top" id="list-container-switch" onclick="showListContainer()">
-                <span class="material-icons-outlined">menu_open</span>
+                <span class="material-symbols-rounded">menu_open</span>
             </mdui-button-icon>
 
             <mdui-navigation-rail-item id="toMain" value="mainPage" href="javascript:void(0);"
                 onclick="navigate('mainPage')">
-                <span slot="icon" class="material-icons-outlined">smart_display</span>
-                <span slot="active-icon" class="material-icons">smart_display</span>
+                <span slot="icon" class="material-symbols-rounded">smart_display</span>
+                <span slot="active-icon" class="material-symbols-rounded-fill">smart_display</span>
             </mdui-navigation-rail-item>
             <mdui-navigation-rail-item id="toList" value="listPage" href="javascript:void(0);"
                 onclick="navigate('listPage')">
-                <span slot="icon" class="material-icons-outlined">featured_play_list</span>
-                <span slot="active-icon" class="material-icons">featured_play_list</span>
+                <span slot="icon" class="material-symbols-rounded">featured_play_list</span>
+                <span slot="active-icon" class="material-symbols-rounded-fill">featured_play_list</span>
             </mdui-navigation-rail-item>
 
             <mdui-button-icon slot="bottom" id="open-nodisturb" style="margin: 0;">
-                <span class="material-icons-outlined">fit_screen</span>
+                <span class="material-symbols-rounded">fit_screen</span>
             </mdui-button-icon>
             <mdui-button-icon slot="bottom" id="toSettings" href="javascript:void(0);"
                 onclick="navigate('settingPage')">
-                <span class="material-icons-outlined">settings</span>
+                <span class="material-symbols-rounded">settings</span>
             </mdui-button-icon>
 
         </mdui-navigation-rail>
@@ -63,7 +65,8 @@
         <div class="list-container">
             <div class="time-container">
                 <mdui-list-item nonclickable>
-                    <span id="time" style="color: rgb(var(--mdui-color-secondary));">Loading</span>
+                    <span slot="icon" class="material-symbols-rounded">notifications_active</span>
+                    <span id="time">Loading</span>
 
                     <span slot="description" class="showCount">
                         <span id="unreadCount" style="font-family: 'Product Sans';">0</span>
@@ -76,7 +79,7 @@
 
             <div class="toolBar">
                 <mdui-list-item nonclickable>
-                    <span slot="icon" class="material-icons-outlined">text_fields</span>
+                    <span slot="icon" class="material-symbols-rounded">text_fields</span>
                     <mdui-slider nolabel slot="end-icon" class="msgFontSize" value="1" min="1" max="5" step="0.1"
                         style="width: 7.2rem;"></mdui-slider>
                 </mdui-list-item>
@@ -89,13 +92,13 @@
             <div style="flex-grow: 1"></div>
 
             <mdui-button-icon id="titlebar-minimize" class="windowBtn">
-                <span class="material-icons-outlined">minimize</span>
+                <span class="material-symbols-rounded">minimize</span>
             </mdui-button-icon>
             <mdui-button-icon id="titlebar-maximize" class="windowBtn">
-                <span class="material-icons-outlined" style="font-size: 1.4rem;">crop_square</span>
+                <span class="material-symbols-rounded" style="font-size: 1.4rem;">crop_square</span>
             </mdui-button-icon>
             <mdui-button-icon id="titlebar-close" class="windowBtn">
-                <span class="material-icons-outlined">close</span>
+                <span class="material-symbols-rounded">close</span>
             </mdui-button-icon>
         </mdui-top-app-bar>
 
@@ -114,19 +117,19 @@
 
         <div class="add-toolbar">
             <mdui-button class="deleteMsgBtn normalBtn">
-                <span class="material-icons-outlined">delete</span>
+                <span class="material-symbols-rounded">delete</span>
             </mdui-button>
 
             <mdui-button onclick="openEditDialog()" class="editContentBtn normalBtn">
-                <span class="material-icons-outlined">edit</span>
+                <span class="material-symbols-rounded">edit</span>
             </mdui-button>
 
             <mdui-button onclick="toggleCarousel()" class="carousel-toggle-btn normalBtn">
-                <span class="material-icons-outlined">lock</span>
+                <span class="material-symbols-rounded">lock</span>
             </mdui-button>
             
             <mdui-button class="openAddDialogBtn primaryBtn" onclick="openAddDialog()">
-                <span class="material-icons">notification_add</span>
+                <span class="material-symbols-rounded-fill">notification_add</span>
             </mdui-button>
         </div>
 
@@ -152,7 +155,7 @@
                 <mdui-list>
                     <mdui-list-subheader>通用</mdui-list-subheader>
                     <mdui-list-item nonclickable class="topList">
-                        <span slot="icon" class="material-icons-outlined">featured_play_list</span>
+                        <span slot="icon" class="material-symbols-rounded">featured_play_list</span>
                         通知卡片样式
                         <span slot="description">设置并预览通知卡片的样式</span>
                     </mdui-list-item>
@@ -165,7 +168,7 @@
                     </div>
 
                     <mdui-list-item nonclickable style="text-align: left;" class="bottomList">
-                        <span slot="icon" class="material-icons-outlined">timer</span>
+                        <span slot="icon" class="material-symbols-rounded">timer</span>
                         通知滚动时间
                         <span slot="description">显示每条通知的时间间隔</span>
                         <mdui-text-field slot="end-icon" id="msgScrollTime" suffix="s" value="10"></mdui-text-field>
@@ -173,34 +176,34 @@
 
                     <mdui-list-subheader>个性化</mdui-list-subheader>
                     <mdui-list-item nonclickable>
-                        <span slot="icon" class="material-icons-outlined">color_lens</span>
+                        <span slot="icon" class="material-symbols-rounded">color_lens</span>
                         主题
                         <span slot="description">切换应用程序主题</span>
 
                         <mdui-segmented-button-group slot="end-icon" style="width: 16rem" selects="single" value="auto">
                             <mdui-segmented-button value="auto" class="leftBtn"
                                 onclick="javascript:document.querySelector('#body').className = 'mdui-theme-auto';">
-                                <span class="material-icons-outlined" style="transform: scale(0.7);">brightness_auto</span>
+                                <span class="material-symbols-rounded-fill" style="transform: scale(0.7);">brightness_auto</span>
                             </mdui-segmented-button>
                             <mdui-segmented-button value="light"
                                 onclick="javascript:document.querySelector('#body').className = 'mdui-theme-light';">
-                                <span class="material-icons-outlined" style="transform: scale(0.7);">wb_sunny</span>
+                                <span class="material-symbols-rounded-fill" style="transform: scale(0.7);">wb_sunny</span>
                             </mdui-segmented-button>
                             <mdui-segmented-button value="dark" class="rightBtn"
                                 onclick="javascript:document.querySelector('#body').className = 'mdui-theme-dark';">
-                                <span class="material-icons-outlined" style="transform: scale(0.7);">brightness_2</span>
+                                <span class="material-symbols-rounded-fill" style="transform: scale(0.7);">brightness_2</span>
                             </mdui-segmented-button>
                         </mdui-segmented-button-group>
 
                     </mdui-list-item>
                     <mdui-list-subheader>关于</mdui-list-subheader>
                     <mdui-list-item rounded nonclickable>
-                        <span slot="icon" class="material-icons-outlined">info</span>
+                        <span slot="icon" class="material-symbols-rounded">info</span>
                         关于 FlyNotice
                         <span slot="description">版本 1.2.0</span>
                     </mdui-list-item>
                     <mdui-list-item rounded nonclickable>
-                        <span slot="icon" class="material-icons-outlined">inventory_2</span>
+                        <span slot="icon" class="material-symbols-rounded">inventory_2</span>
                         使用开源库
                         <span slot="description">
                             MDUI - Material Symbols
@@ -212,8 +215,8 @@
     </mdui-layout>
 
     <mdui-dialog close-on-overlay-click headline="添加新通知" class="add-dialog">
-        <span slot="icon" class="material-icons-outlined">notification_add</span>
-        <mdui-text-field rows="3" clearable autosize label="通知内容" type="input" id="excludeNums" value=""
+        <span slot="icon" class="material-symbols-rounded">notification_add</span>
+        <mdui-text-field rows="3" clearable autosize label="通知内容" type="input" id="excludeNums" value="" variant="outlined"
             style="width: 50vw;max-width: 32rem;margin-top: 0.8rem;font-family: 'HarmonyOS Sans SC';">
         </mdui-text-field>
 
@@ -221,8 +224,8 @@
     </mdui-dialog>
 
     <mdui-dialog close-on-overlay-click headline="修改通知内容" class="edit-dialog">
-        <span slot="icon" class="material-icons-outlined">edit</span>
-        <mdui-text-field rows="3" clearable autosize label="通知内容" type="input" id="editMsgContent" value=""
+        <span slot="icon" class="material-symbols-rounded">edit</span>
+        <mdui-text-field rows="3" clearable autosize label="通知内容" type="input" id="editMsgContent" value="" variant="outlined"
             style="width: 50vw;max-width: 32rem;margin-top: 0.8rem;font-family: 'HarmonyOS Sans SC';">
         </mdui-text-field>
 

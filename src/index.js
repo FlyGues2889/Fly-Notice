@@ -14,6 +14,7 @@ const STORAGE_KEYS = {
 
 // ========================= 3. DOM元素获取 =========================
 // 主界面元素
+const loadingLayer = document.getElementById("loading-layer");
 const navigationRail = document.getElementById("navigation-rail");
 const pages = document.querySelectorAll(".page");
 const textField = document.getElementById("excludeNums");
@@ -296,7 +297,7 @@ function renderNotifications() {
   if (notificationCount === 0) {
     showListElements.forEach((el) => {
       el.innerHTML =
-        '<span class="material-icons-outlined" style="font-size: 3.2rem;">notifications_off</span>';
+        '<span class="material-symbols-rounded" style="font-size: 3.2rem;">notifications_off</span>';
       el.style.opacity = "0.2";
       el.style.flexDirection = "column";
     });
@@ -334,7 +335,7 @@ function renderNotifications() {
 
     // 编辑按钮
     const editBtn = document.createElement("mdui-button-icon");
-    editBtn.innerHTML = '<span class="material-icons-outlined">edit</span>';
+    editBtn.innerHTML = '<span class="material-symbols-rounded">edit</span>';
     editBtn.style.position = "absolute";
     editBtn.style.right = "3.1rem";
     editBtn.style.bottom = "0";
@@ -357,7 +358,8 @@ function renderNotifications() {
 
     // 删除按钮
     const deleteBtn = document.createElement("mdui-button-icon");
-    deleteBtn.innerHTML = '<span class="material-icons-outlined">delete</span>';
+    deleteBtn.innerHTML =
+      '<span class="material-symbols-rounded">delete</span>';
     deleteBtn.style.position = "absolute";
     deleteBtn.style.right = "1rem";
     deleteBtn.style.bottom = "0";
@@ -373,7 +375,7 @@ function renderNotifications() {
     msgList.appendChild(card);
 
     // 渲染侧边栏概览项
-    const overviewMaxLength = 17;
+    const overviewMaxLength = 16;
     let displayText = notification.content;
     if (displayText.length > overviewMaxLength) {
       displayText = displayText.substring(0, overviewMaxLength) + "...";
@@ -430,10 +432,10 @@ function toggleCarousel() {
     // 先判断按钮是否存在，避免报错
     if (isCarouselRunning) {
       carouselToggleBtn.innerHTML =
-        '<span class="material-icons-outlined">lock</span>';
+        '<span class="material-symbols-rounded">lock</span>';
     } else {
       carouselToggleBtn.innerHTML =
-        '<span class="material-icons-outlined">no_encryption</span>';
+        '<span class="material-symbols-rounded">no_encryption</span>';
     }
   }
 
@@ -468,7 +470,7 @@ function displayMessages() {
   if (notifications.length === 0) {
     showListElements.forEach((el) => {
       el.innerHTML =
-        '<span class="material-icons-outlined" style="font-size: 3.2rem;">notifications_off</span>';
+        '<span class="material-symbols-rounded" style="font-size: 3.2rem;font-weight:600">notifications_off</span>';
       el.style.opacity = "0.2";
       el.style.flexDirection = "column";
     });
@@ -581,7 +583,7 @@ function showListContainer() {
       page.style.width = "calc(100vw - 5rem - 14rem - 5rem - 1rem)";
     });
     listContainerSwitch.innerHTML =
-      '<span class="material-icons-outlined">menu_open</span>';
+      '<span class="material-symbols-rounded">menu_open</span>';
   } else {
     // 隐藏侧边栏
     listContainer.style.transform = "translateX(-100%)";
@@ -593,7 +595,7 @@ function showListContainer() {
       page.style.width = "calc(100vw - 5rem)";
     });
     listContainerSwitch.innerHTML =
-      '<span class="material-icons-outlined">menu</span>';
+      '<span class="material-symbols-rounded">menu</span>';
     setTimeout(() => {
       listContainer.style.display = "none";
     }, 300);
@@ -650,6 +652,8 @@ window.onload = function () {
 
   initEditDialog();
   initDeleteButton();
+
+  loadingLayer.style.display = "none";
 };
 
 // 加载配置设置
@@ -799,33 +803,11 @@ function deleteCurrentNotification() {
     }
   }
 
-  mdui.confirm({
-    icon: "warning",
-    headline: "确认删除",
-    description: "是否删除当前正在播放的通知？删除后的通知将无法找回。",
-    confirmText: "删除",
-    cancelText: "取消",
-    onConfirm: () => {
-      // 暂停轮播
-      const wasRunning = isCarouselRunning;
-      if (wasRunning) {
-        toggleCarousel();
-      }
+  // 执行删除
+  deleteNotification(currentPlayingNotifyId);
 
-      // 执行删除
-      deleteNotification(currentPlayingNotifyId);
-
-      // 重置当前播放ID
-      currentPlayingNotifyId = null;
-
-      // 如果之前是运行状态，恢复轮播
-      if (wasRunning && notifications.length > 0) {
-        setTimeout(() => {
-          toggleCarousel();
-        }, 300);
-      }
-    },
-  });
+  // 重置当前播放ID
+  currentPlayingNotifyId = null;
 }
 
 // 初始化删除按钮事件
