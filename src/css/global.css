@@ -172,7 +172,7 @@ div.loadingLayer {
   z-index: 100;
 
   background-color: rgb(var(--mdui-color-surface));
-  
+
   position: fixed;
   top: 0;
   left: 0;
@@ -207,12 +207,14 @@ div.time-container {
     background-color: rgba(var(--mdui-color-surface), 0.75);
     border-radius: var(--mdui-shape-corner-large);
   }
+
   span#time {
     color: rgb(var(--mdui-color-secondary));
     font-size: 0.9rem;
   }
+
   span[slot="icon"] {
-    color: rgba(var(--mdui-color-secondary),0.5);
+    color: rgba(var(--mdui-color-secondary), 0.5);
   }
 }
 
@@ -303,7 +305,7 @@ div.list-container {
   }
 
   mdui-list-item[active] {
-    border: rgb(var(--mdui-color-secondary),0.5) solid 0.1rem;
+    border: rgb(var(--mdui-color-secondary), 0.5) solid 0.1rem;
     background-color: unset;
 
     border-radius: var(--mdui-shape-corner-extra-large);
@@ -366,25 +368,16 @@ div.list-container {
   top: 0;
   left: 0;
 
-  background-color: black;
+  background-color: rgb(var(--mdui-color-surface-container-dark));
   color: white;
 
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.28, 0.02, 0.45, 0.98);
 
-  div.showList {
-    max-width: calc(100vw - 10vh);
-    max-height: calc(100vh - 16rem);
-    margin-top: 3rem;
-  }
-
   .time-display {
     position: absolute;
-    top: 5vh;
-    left: 5vh;
+    top: 2vh;
+    left: 4vh;
 
     font-family: 'Product Sans';
     font-size: 10vh;
@@ -394,8 +387,8 @@ div.list-container {
 
   .count-display {
     position: absolute;
-    top: calc(5vh + 10vh + 1vh);
-    left: calc(5vh + 1rem);
+    top: calc(2vh + 10vh + 1vh);
+    left: 5vh;
 
     font-family: 'Product Sans';
     font-size: 2vh;
@@ -403,15 +396,37 @@ div.list-container {
     opacity: 0.7;
   }
 
+  .disturb-container {
+    width: 100vw;
+    height: calc(100vh - 20vh);
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    display: flex;
+    align-items: flex-start;
+
+    background-color: black;
+    border-radius: 4vh 4vh 0 0;
+
+    div.showList {
+      margin: 2rem;
+      max-height: calc(100vh - 20vh - 4rem);
+    }
+
+  }
+
   .exit-button {
-    width: 5.2rem;
+    width: 3.6rem;
     height: 3.6rem;
 
     position: absolute;
-    bottom: 50px;
+    bottom: 2rem;
+    right: 2rem;
 
-    background-color: rgb(var(--mdui-color-surface-container-high-dark));
-    color: rgb(var(--mdui-color-primary-dark));
+    background-color: rgb(var(--mdui-color-tertiary-container-dark));
+    color: rgb(var(--mdui-color-tertiary-dark));
     border-radius: var(--mdui-shape-corner-extra-large);
 
     cursor: pointer;

@@ -121,7 +121,7 @@ toggleButton.addEventListener("click", toggleScreenSaver);
 exitButton.addEventListener("click", toggleScreenSaver);
 
 function toggleScreenSaver() {
-  if (screenSaver.style.display === "flex") {
+  if (screenSaver.style.display === "block") {
     // 关闭息屏显示
     screenSaver.classList.remove("active");
     handleFullScreen();
@@ -130,7 +130,7 @@ function toggleScreenSaver() {
     }, 800);
   } else {
     // 开启息屏显示
-    screenSaver.style.display = "flex";
+    screenSaver.style.display = "block";
     void screenSaver.offsetWidth;
     screenSaver.classList.add("active");
 
@@ -142,7 +142,7 @@ function toggleScreenSaver() {
       snackbar(
         "<b>息屏显示已启用</b><br><small>点击屏幕正下方按钮退出到正常窗口。</small>",
         5000,
-        "bottom-end"
+        "top-end"
       );
     }, 500);
   }
