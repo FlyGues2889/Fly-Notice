@@ -19,6 +19,7 @@ const navigationRail = document.getElementById("navigation-rail");
 const pages = document.querySelectorAll(".page");
 const textField = document.getElementById("excludeNums");
 const addButton = document.querySelector(".add-button");
+const checkImportant = document.getElementById("check-important-msg");
 const fontSizeSlider = document.querySelectorAll(".msgFontSize");
 const listContainerSwitch = document.getElementById("list-container-switch");
 const openAddDialogButton = document.querySelector(".openAddDialogBtn");
@@ -31,6 +32,8 @@ const countDisplay = document.getElementById("count-display");
 const carouselToggleBtn = document.querySelector(".carousel-toggle-btn");
 const deleteBtn = document.querySelector(".deleteMsgBtn");
 const closeEditBtn = document.querySelector(".close-edit-dialog");
+// 新增：获取修改弹窗中的重要性复选框
+const changeImportantCheck = document.getElementById("change-important-msg");
 let isDialogClosing = false; // 标记弹窗是否正在关闭
 
 // 轮播相关变量
@@ -198,11 +201,15 @@ document.getElementById("toSettings").onclick = function () {
 function addNotification(content) {
   if (!content.trim()) return;
 
-  // 创建新通知对象
+  // 获取重要性复选框状态
+  const isImportant = document.getElementById("check-important-msg").checked;
+
+  // 创建新通知对象，增加isImportant属性
   const newNotification = {
     id: generateUniqueId(),
     content: content,
     createTime: new Date().toISOString(),
+    isImportant: isImportant, // 记录是否为重要通知
   };
 
   // 添加到通知数组
@@ -222,6 +229,8 @@ function addNotification(content) {
   // 提示与重置
   snackbar("已添加新通知。", 1000, "bottom");
   textField.value = "";
+  // 重置复选框状态
+  document.getElementById("check-important-msg").checked = false;
   openAddDialogButton.removeAttribute("extended");
   displayMessages();
 }
@@ -253,11 +262,12 @@ function deleteNotification(id) {
 }
 
 /**
- * 更新通知内容
+ * 更新通知内容（支持更新重要性状态）
  * @param {string} id - 通知ID
  * @param {string} newContent - 新内容
+ * @param {boolean} newIsImportant - 新的重要性状态
  */
-function updateNotification(id, newContent) {
+function updateNotification(id, newContent, newIsImportant) {
   if (!newContent.trim()) return;
 
   // 找到并更新通知
@@ -267,6 +277,8 @@ function updateNotification(id, newContent) {
   if (index !== -1) {
     notifications[index].content = newContent;
     notifications[index].createTime = new Date().toISOString();
+    // 更新重要性状态
+    notifications[index].isImportant = newIsImportant;
 
     // 保存到本地存储
     saveNotificationsToLocalStorage();
@@ -280,9 +292,6 @@ function updateNotification(id, newContent) {
   }
 }
 
-/**
- * 渲染所有通知到DOM
- */
 function renderNotifications() {
   // 清空现有内容
   msgList.innerHTML = "";
@@ -295,30 +304,56 @@ function renderNotifications() {
 
   // 无通知时显示空状态
   if (notificationCount === 0) {
+    // 为msgList添加空状态图标
+    const emptyState = document.createElement("div");
+    emptyState.style.display = "flex";
+    emptyState.style.justifyContent = "center";
+    emptyState.style.alignItems = "center";
+    emptyState.style.height = "200px"; // 设置合适的高度
+    emptyState.style.opacity = "0.2";
+    
+    emptyState.innerHTML = '<span class="material-symbols-rounded" style="font-size: 3.2rem;font-weight: 600;position: absolute;top: 50%;left: 50%;transform: translate(calc(-50% - 1rem), calc(-50% - 1rem));">notifications_off</span>';
+    msgList.appendChild(emptyState);
+
+    // 其他区域的空状态处理
     showListElements.forEach((el) => {
       el.innerHTML =
         '<span class="material-symbols-rounded" style="font-size: 3.2rem;">notifications_off</span>';
       el.style.opacity = "0.2";
       el.style.flexDirection = "column";
+      // 重置颜色
+      el.style.color = "";
     });
     return;
   }
 
   // 有通知时渲染
   const currentFontSize = fontSizeSlider[0].value + "rem";
+  const primaryColor = "rgb(var(--mdui-color-primary))";
 
   notifications.forEach((notification) => {
     // 渲染主通知卡片
     const card = document.createElement("mdui-card");
     card.className = "msgCard";
-    card.dataset.id = notification.id; // 存储ID用于操作
-    card.style.marginBottom = "0.5rem";
-    card.style.width = "100%";
+    card.dataset.id = notification.id;
+    card.style.margin = "0.25rem 0.25rem 0 0 ";
+    card.style.width = "calc(100% - 1.5rem - 0.25rem)";
     card.style.padding = "1rem 1rem 2.4rem 1rem";
+    card.style.fontFamily = "Harmony Sans SC M";
     card.variant = "outlined";
-    card.style.border = "0.15rem solid rgba(var(--mdui-color-secondary),0.2)";
-    card.style.backgroundColor =
-      "rgba(var(--mdui-color-surface-container),0.3)";
+
+    if (notification.isImportant) {
+      card.style.border = `0.15rem solid rgba(var(--mdui-color-primary),0.2)`;
+      card.style.color = primaryColor;
+      card.style.backgroundColor =
+        "rgba(var(--mdui-color-primary-container),0.1)";
+    } else {
+      card.style.border = "0.15rem solid rgba(var(--mdui-color-secondary),0.2)";
+      card.style.color = "";
+      card.style.backgroundColor =
+        "rgba(var(--mdui-color-surface-container),0.3)";
+    }
+
     card.style.borderRadius = "var(--mdui-shape-corner-large)";
     card.style.fontSize = currentFontSize;
 
@@ -350,9 +385,10 @@ function renderNotifications() {
 
       currentPlayingNotifyId = notification.id;
       editTextField.value = notification.content;
+      // 同步当前通知的重要性状态到修改弹窗
+      changeImportantCheck.checked = notification.isImportant;
 
       isDialogClosing = false;
-
       editDialog.open = true;
     });
 
@@ -368,6 +404,18 @@ function renderNotifications() {
       deleteNotification(notification.id);
     });
 
+    // 重要通知标注按钮
+    const importantMark = document.createElement("mdui-button-icon");
+    importantMark.innerHTML =
+      '<span class="material-symbols-rounded-fill">flag</span>';
+    importantMark.style.position = "absolute";
+    importantMark.style.left = "1rem";
+    importantMark.style.bottom = "0";
+    importantMark.style.color = "rgba(var(--mdui-color-primary),0.5)";
+
+    if (notification.isImportant) {
+      cardActions.appendChild(importantMark);
+    }
     cardActions.appendChild(editBtn);
     cardActions.appendChild(deleteBtn);
     card.appendChild(cardContent);
@@ -387,14 +435,23 @@ function renderNotifications() {
     overviewItem.style.margin = "0.5rem 0 0 0";
     overviewItem.style.padding = "0 0.25rem";
     overviewItem.style.borderRadius = "var(--mdui-shape-corner-large)";
+    if (notification.isImportant) {
+      overviewItem.style.color = primaryColor;
+    }
     overviewList.appendChild(overviewItem);
   });
 
-  // 更新显示区域
+  // 更新显示区域，应用重要通知颜色
   showListElements.forEach((el) => {
     el.style.opacity = "1";
     el.style.flexDirection = "row";
     el.textContent = notifications[0].content;
+    // 应用重要通知颜色
+    if (notifications[0].isImportant) {
+      el.style.color = "rgb(var(--mdui-color-primary))";
+    } else {
+      el.style.color = ""; // 使用默认颜色
+    }
   });
 }
 
@@ -473,6 +530,7 @@ function displayMessages() {
         '<span class="material-symbols-rounded" style="font-size: 3.2rem;font-weight:600">notifications_off</span>';
       el.style.opacity = "0.2";
       el.style.flexDirection = "column";
+      el.style.color = ""; // 重置颜色
     });
     document.querySelectorAll("mdui-list-item").forEach((item) => {
       item.removeAttribute("active");
@@ -488,6 +546,12 @@ function displayMessages() {
   // 显示第一条通知
   showListElements.forEach((el) => {
     el.textContent = notifications[currentIndex].content;
+    // 应用重要通知颜色
+    if (notifications[currentIndex].isImportant) {
+      el.style.color = "rgb(var(--mdui-color-primary))";
+    } else {
+      el.style.color = ""; // 使用默认颜色
+    }
   });
 
   // 更新侧边栏激活状态
@@ -527,6 +591,12 @@ function displayMessages() {
       // 更新显示内容
       showListElements.forEach((el) => {
         el.textContent = notifications[currentIndex].content;
+        // 应用重要通知颜色
+        if (notifications[currentIndex].isImportant) {
+          el.style.color = "rgb(var(--mdui-color-primary))";
+        } else {
+          el.style.color = ""; // 使用默认颜色
+        }
       });
 
       // 更新侧边栏激活状态
@@ -537,7 +607,7 @@ function displayMessages() {
         overviewItems[currentIndex].setAttribute("active", "");
       }
 
-      // 新增：更新当前播放的通知ID（关键：确保点击修改时能定位到当前通知）
+      // 更新当前播放的通知ID
       currentPlayingNotifyId = notifications[currentIndex].id;
 
       // 计算下一个索引
@@ -684,12 +754,12 @@ function openAddDialog() {
   closeButton2.addEventListener("click", () => (blockDialog.open = false));
 }
 
-// ========================= 新增：修改当前播放通知相关功能 =========================
-// 1. 全局变量：记录当前正在播放的通知ID（用于后续精准修改）
+// ========================= 13. 修改当前播放通知相关功能 =========================
+// 全局变量：记录当前正在播放的通知ID
 let currentPlayingNotifyId = null;
 
 /**
- * 2. 打开修改弹窗（暂停轮播 + 填充当前播放内容）
+ * 打开修改弹窗（暂停轮播 + 填充当前播放内容）
  */
 function openEditDialog() {
   // 若没有通知，直接提示并返回
@@ -706,24 +776,27 @@ function openEditDialog() {
   // 获取当前播放的通知内容和ID
   const editDialog = document.querySelector(".edit-dialog");
   const editTextField = document.getElementById("editMsgContent");
-  // 从通知数组中匹配当前显示的内容（避免直接操作DOM内容，确保数据一致性）
+  // 从通知数组中匹配当前显示的内容
   const currentContent = showListElements[0]?.textContent.trim();
   const currentNotify = notifications.find(
     (notify) => notify.content.trim() === currentContent
   );
 
   if (currentNotify) {
-    // 记录当前播放通知的ID（关键：用于后续修改）
+    // 记录当前播放通知的ID
     currentPlayingNotifyId = currentNotify.id;
     // 填充弹窗输入框
     editTextField.value = currentNotify.content;
+    // 同步重要性状态
+    changeImportantCheck.checked = currentNotify.isImportant;
   } else {
-    // 异常情况：未匹配到当前通知（如内容被手动修改），填充第一个通知
+    // 异常情况：未匹配到当前通知，填充第一个通知
     currentPlayingNotifyId = notifications[0].id;
     editTextField.value = notifications[0].content;
+    changeImportantCheck.checked = notifications[0].isImportant;
   }
 
-  // 打开弹窗（MDUI对话框标准调用方式）
+  // 打开弹窗
   editDialog.open = true;
 }
 
@@ -739,19 +812,23 @@ function initEditDialog() {
       return;
     }
 
+    // 获取新的重要性状态
+    const newIsImportant = changeImportantCheck.checked;
+
     // 标记弹窗开始关闭
     isDialogClosing = true;
 
-    // 调用统一修改接口
+    // 调用统一修改接口（传入新的重要性状态）
     if (currentPlayingNotifyId) {
-      updateNotification(currentPlayingNotifyId, newContent);
+      updateNotification(currentPlayingNotifyId, newContent, newIsImportant);
     }
 
     // 关闭弹窗 + 清空输入框
     editDialog.open = false;
     editTextField.value = "";
+    changeImportantCheck.checked = false;
 
-    // 恢复轮播（仅在需要时执行一次）
+    // 恢复轮播
     if (!isCarouselRunning) {
       setTimeout(() => {
         toggleCarousel();
@@ -762,7 +839,7 @@ function initEditDialog() {
     }
   });
 
-  // 弹窗关闭事件（处理点击外部或其他关闭方式）
+  // 弹窗关闭事件
   editDialog.addEventListener("close", () => {
     // 如果是通过完成按钮关闭的，这里不再处理
     if (isDialogClosing) {
@@ -770,10 +847,11 @@ function initEditDialog() {
       return;
     }
 
-    // 清空输入框
+    // 清空输入框和复选框
     editTextField.value = "";
+    changeImportantCheck.checked = false;
 
-    // 恢复轮播（仅在需要时执行）
+    // 恢复轮播
     if (!isCarouselRunning) {
       setTimeout(() => {
         toggleCarousel();

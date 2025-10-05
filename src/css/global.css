@@ -6,7 +6,7 @@ mdui-layout {
   width: 100vw;
   height: 100vh;
 
-  font-family: 'HarmonyOSSans SC M', sans-serif;
+  font-family: 'Harmony Sans SC M', sans-serif;
 
   user-select: none;
   overscroll-behavior: none;
@@ -109,7 +109,8 @@ mdui-top-app-bar {
 
     color: rgb(var(--mdui-color-primary));
 
-    font-family: 'Product Sans';
+    font-family: 'Nunito';
+    font-weight: 700;
   }
 
   mdui-button-icon {
@@ -368,8 +369,8 @@ div.list-container {
   top: 0;
   left: 0;
 
-  background-color: rgb(var(--mdui-color-surface-container-dark));
-  color: white;
+  background-color: rgb(var(--mdui-color-surface-container));
+  color: rgb(var(--mdui-color-on-surface));
 
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.28, 0.02, 0.45, 0.98);
@@ -379,8 +380,9 @@ div.list-container {
     top: 2vh;
     left: 4vh;
 
-    font-family: 'Product Sans';
+    font-family: 'Nunito';
     font-size: 10vh;
+    font-weight: 700;
 
     opacity: 0.7;
   }
@@ -407,7 +409,7 @@ div.list-container {
     display: flex;
     align-items: flex-start;
 
-    background-color: black;
+    background-color: rgb(var(--mdui-color-surface));
     border-radius: 4vh 4vh 0 0;
 
     div.showList {
@@ -418,15 +420,15 @@ div.list-container {
   }
 
   .exit-button {
-    width: 3.6rem;
-    height: 3.6rem;
+    width: 4.2rem;
+    height: 4.2rem;
 
     position: absolute;
     bottom: 2rem;
     right: 2rem;
 
-    background-color: rgb(var(--mdui-color-tertiary-container-dark));
-    color: rgb(var(--mdui-color-tertiary-dark));
+    background-color: rgb(var(--mdui-color-tertiary-container));
+    color: rgb(var(--mdui-color-tertiary));
     border-radius: var(--mdui-shape-corner-extra-large);
 
     cursor: pointer;
