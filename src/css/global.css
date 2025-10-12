@@ -127,7 +127,7 @@ div.page {
   padding: 0 3rem;
 
   overflow: auto;
-  min-height: 600px;
+  min-height: 472px;
 
   font-family: 'Harmony Sans SC';
 
@@ -285,7 +285,7 @@ div.list-container {
     border-radius: var(--mdui-shape-corner-small) var(--mdui-shape-corner-small) var(--mdui-shape-corner-large) var(--mdui-shape-corner-large);
 
     position: absolute;
-    bottom: 1.6rem;
+    bottom: 1.5rem;
     left: 0;
 
     mdui-collapse {

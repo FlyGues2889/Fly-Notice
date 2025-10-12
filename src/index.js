@@ -20,7 +20,8 @@ const pages = document.querySelectorAll(".page");
 const textField = document.getElementById("excludeNums");
 const addButton = document.querySelector(".add-button");
 const checkImportant = document.getElementById("check-important-msg");
-const fontSizeSlider = document.querySelectorAll(".msgFontSize");
+// 替换mdui-slider为自定义滑块
+const customSliders = document.querySelectorAll(".slideBtn"); // 获取所有自定义滑块
 const listContainerSwitch = document.getElementById("list-container-switch");
 const openAddDialogButton = document.querySelector(".openAddDialogBtn");
 const msgList = document.querySelector(".msgList");
@@ -311,8 +312,9 @@ function renderNotifications() {
     emptyState.style.alignItems = "center";
     emptyState.style.height = "200px"; // 设置合适的高度
     emptyState.style.opacity = "0.2";
-    
-    emptyState.innerHTML = '<span class="material-symbols-rounded" style="font-size: 3.2rem;font-weight: 600;position: absolute;top: 50%;left: 50%;transform: translate(calc(-50% - 1rem), calc(-50% - 1rem));">notifications_off</span>';
+
+    emptyState.innerHTML =
+      '<span class="material-symbols-rounded" style="font-size: 3.2rem;font-weight: 600;position: absolute;top: 50%;left: 50%;transform: translate(calc(-50% - 1rem), calc(-50% - 1rem));">notifications_off</span>';
     msgList.appendChild(emptyState);
 
     // 其他区域的空状态处理
@@ -328,7 +330,8 @@ function renderNotifications() {
   }
 
   // 有通知时渲染
-  const currentFontSize = fontSizeSlider[0].value + "rem";
+  const savedFontSize = localStorage.getItem(STORAGE_KEYS.FONT_SIZE) || 1;
+  const currentFontSize = savedFontSize + "rem";
   const primaryColor = "rgb(var(--mdui-color-primary))";
 
   notifications.forEach((notification) => {
@@ -617,20 +620,154 @@ function displayMessages() {
   }, 100);
 }
 
-// ========================= 10. 字体大小设置 =========================
+// ========================= 10. 字体大小设置（适配自定义滑块） =========================
+function initCustomSliders() {
+  const savedFontSize =
+    parseFloat(localStorage.getItem(STORAGE_KEYS.FONT_SIZE)) || 1;
+
+  // 初始化所有滑块
+  customSliders.forEach((slider) => {
+    // 设置滑块初始位置
+    const percent = ((savedFontSize - 1) / (5 - 1)) * 100;
+    slider.style.setProperty("--active-width", `${percent}%`);
+
+    // 为每个滑块添加事件监听
+    initSliderEvents(slider);
+  });
+
+  // 应用初始字体大小
+  updateFontSizeDisplay(savedFontSize);
+}
+// 为滑块添加事件处理
+function initSliderEvents(slider) {
+  const controlBtn = slider.querySelector(".control-btn");
+  let isDragging = false;
+
+  // 计算滑块值的辅助函数
+  function getValueFromSlider(sliderEl) {
+    const percent = parseFloat(
+      getComputedStyle(sliderEl).getPropertyValue("--active-width")
+    );
+    // 将0-100%转换为1-5的范围
+    return 1 + (percent / 100) * 4;
+  }
+
+  // 计算滑块百分比的辅助函数
+  function getPercentFromValue(value) {
+    // 将1-5转换为0-100%
+    return ((value - 1) / 4) * 100;
+  }
+
+  // 计算点击位置对应的百分比
+  function calculatePercent(event) {
+    const rect = slider.getBoundingClientRect();
+    let clientX;
+
+    if (event.type.startsWith("touch")) {
+      clientX = event.touches[0].clientX;
+    } else {
+      clientX = event.clientX;
+    }
+
+    let percent = ((clientX - rect.left) / rect.width) * 100;
+    percent = Math.max(0, Math.min(100, percent));
+
+    // 应用步长0.1
+    const value = 1 + (percent / 100) * 4;
+    const steppedValue = Math.round(value / 0.1) * 0.1;
+    return getPercentFromValue(steppedValue);
+  }
+
+  // 开始拖拽
+  function startDrag(event) {
+    isDragging = true;
+    slider.classList.add("dragging");
+    event.preventDefault();
+  }
+
+  // 拖拽过程
+  function drag(event) {
+    if (!isDragging) return;
+
+    const newPercent = calculatePercent(event);
+    slider.style.setProperty("--active-width", `${newPercent}%`);
+
+    // 更新字体大小
+    const currentValue = getValueFromSlider(slider);
+    updateFontSizeDisplay(currentValue);
+  }
+
+  // 结束拖拽
+  function endDrag() {
+    isDragging = false;
+    slider.classList.remove("dragging");
+
+    // 保存设置
+    const currentValue = getValueFromSlider(slider);
+    localStorage.setItem(STORAGE_KEYS.FONT_SIZE, currentValue.toString());
+  }
+
+  // 点击滑块
+  function handleClick(event) {
+    if (isDragging) return;
+
+    const newPercent = calculatePercent(event);
+    slider.style.setProperty("--active-width", `${newPercent}%`);
+
+    // 更新字体大小
+    const currentValue = getValueFromSlider(slider);
+    updateFontSizeDisplay(currentValue);
+    localStorage.setItem(STORAGE_KEYS.FONT_SIZE, currentValue.toString());
+  }
+
+  // 绑定事件
+  controlBtn.addEventListener("mousedown", startDrag);
+  controlBtn.addEventListener("touchstart", startDrag);
+  document.addEventListener("mousemove", drag);
+  document.addEventListener("touchmove", drag);
+  document.addEventListener("mouseup", endDrag);
+  document.addEventListener("touchend", endDrag);
+  slider.addEventListener("click", handleClick);
+  slider.addEventListener("click", (e) => e.stopPropagation());
+}
+
+// 初始化字体大小
 function initFontSize() {
-  const currentFontSize = fontSizeSlider[0].value + "rem";
+  // 从本地存储获取字体大小
+  const savedFontSize =
+    parseFloat(localStorage.getItem(STORAGE_KEYS.FONT_SIZE)) || 1;
+  const fontSizeValue = savedFontSize + "rem";
+
   const msgCards = document.querySelectorAll("mdui-card.msgCard");
   const viewCard = document.querySelector("mdui-card.viewCard");
+  const showListElements = document.querySelectorAll("#showList");
 
   msgCards.forEach((card) => {
-    card.style.fontSize = currentFontSize;
+    card.style.fontSize = fontSizeValue;
   });
   if (viewCard) {
-    viewCard.style.fontSize = currentFontSize;
+    viewCard.style.fontSize = fontSizeValue;
   }
   showListElements.forEach((el) => {
-    el.style.fontSize = currentFontSize;
+    el.style.fontSize = fontSizeValue;
+  });
+}
+// 更新字体大小显示
+function updateFontSizeDisplay(value) {
+  const fontSizeValue = value + "rem";
+
+  const msgCards = document.querySelectorAll("mdui-card.msgCard");
+  const viewCard = document.querySelector("mdui-card.viewCard");
+  const showListElements = document.querySelectorAll("#showList");
+
+  msgCards.forEach((card) => {
+    card.style.fontSize = fontSizeValue;
+  });
+  if (viewCard) {
+    viewCard.style.fontSize = fontSizeValue;
+  }
+  showListElements.forEach((el) => {
+    el.style.fontSize = fontSizeValue;
   });
 }
 
@@ -678,29 +815,6 @@ addButton.addEventListener("click", () => {
   addNotification(textField.value);
 });
 
-// 字体大小滑块事件
-fontSizeSlider.forEach((slider) => {
-  slider.addEventListener("input", function () {
-    const fontSizeValue = this.value + "rem";
-    const currentValue = this.value;
-    localStorage.setItem(STORAGE_KEYS.FONT_SIZE, currentValue);
-
-    const msgCards = document.querySelectorAll("mdui-card.msgCard");
-    const viewCard = document.querySelector("mdui-card.viewCard");
-    const showListElements = document.querySelectorAll("#showList");
-
-    msgCards.forEach((card) => {
-      card.style.fontSize = fontSizeValue;
-    });
-    if (viewCard) {
-      viewCard.style.fontSize = fontSizeValue;
-    }
-    showListElements.forEach((el) => {
-      el.style.fontSize = fontSizeValue;
-    });
-  });
-});
-
 // 页面加载初始化
 window.onload = function () {
   // 初始化时间显示
@@ -709,6 +823,9 @@ window.onload = function () {
 
   // 加载设置
   loadSettings();
+
+  // 初始化自定义滑块
+  initCustomSliders();
 
   // 加载通知并渲染
   loadNotificationsFromLocalStorage();
@@ -735,12 +852,13 @@ function loadSettings() {
 
   const fontSize = localStorage.getItem(STORAGE_KEYS.FONT_SIZE);
   if (fontSize) {
-    fontSizeSlider.forEach((slider) => {
-      slider.value = fontSize;
+    const fontSizeValue = parseFloat(fontSize);
+    const percent = ((fontSizeValue - 1) / (5 - 1)) * 100;
+    customSliders.forEach((slider) => {
+      slider.style.setProperty("--active-width", `${percent}%`);
     });
   }
 }
-
 // 其他对话框功能
 function openErrorDialog() {
   const errorSnackbar = document.querySelector(".errorSnackbar");

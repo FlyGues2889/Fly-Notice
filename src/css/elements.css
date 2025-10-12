@@ -1,0 +1,54 @@
+.slideBtn {
+    --active-width: 0%;
+    --active-color: rgb(var(--mdui-color-primary));
+    --bkg-height: 0.8rem;
+
+
+    max-width: 16rem;
+    min-width: 6.4rem;
+    height: 2.6rem;
+
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    cursor: pointer;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.active-bkg {
+    width: calc(var(--active-width) - 0.2rem);
+    height: var(--bkg-height);
+    background-color: var(--active-color);
+    border-radius: 0.5rem 0.2rem 0.2rem 0.5rem;
+    transition: width 0.1s ease;
+}
+
+.control-btn {
+    width: 0.2rem;
+    height: 2.2rem;
+    margin: 0 0.2rem;
+    background-color: var(--active-color);
+    border-radius: 1rem;
+    cursor: grab;
+    transition: background-color 0.1s ease;
+}
+
+.control-btn:active {
+    height: 2.6rem;
+    
+    cursor: grabbing;
+}
+
+.unactive-bkg {
+    flex-grow: 1;
+    width: calc(100% - var(--active-width) - 0.2rem);
+    height: var(--bkg-height);
+    background-color: #00000014;
+    border-radius: 0.2rem 0.5rem 0.5rem 0.2rem;
+    transition: width 0.1s ease;
+}
