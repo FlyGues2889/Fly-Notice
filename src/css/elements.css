@@ -1,6 +1,6 @@
 .slideBtn {
     --active-width: 0%;
-    --active-color: rgb(var(--mdui-color-primary));
+    --active-color: rgb(var(--mdui-color-secondary));
     --bkg-height: 0.8rem;
 
 

@@ -120,13 +120,22 @@
         </div>
 
         <div class="add-toolbar">
-            <mdui-button class="deleteMsgBtn normalBtn">
-                <span class="material-symbols-rounded">delete</span>
-            </mdui-button>
-
-            <mdui-button onclick="openEditDialog()" class="editContentBtn normalBtn">
-                <span class="material-symbols-rounded">edit</span>
-            </mdui-button>
+            <mdui-dropdown placement="top-end">
+                <mdui-button slot="trigger" class="normalBtn">
+                    <span class="material-symbols-rounded">more_vert</span>
+                </mdui-button>
+                <mdui-menu>
+                    <mdui-menu-item onclick="openEditDialog()">
+                        <span slot="icon" class="material-symbols-rounded">edit</span>
+                        修改显示的内容
+                    </mdui-menu-item>
+                    <mdui-divider middle></mdui-divider>
+                    <mdui-menu-item onclick="deleteCurrentNotification()">
+                        <span slot="icon" class="material-symbols-rounded">delete</span>
+                        删除显示的通知
+                    </mdui-menu-item>
+                </mdui-menu>
+            </mdui-dropdown>
 
             <mdui-button onclick="toggleCarousel()" class="carousel-toggle-btn normalBtn">
                 <span class="material-symbols-rounded">lock</span>
@@ -167,8 +176,6 @@
                     <div class="margined">
                         <mdui-list-item nonclickable>
                             卡片内容文字大小
-                            <!-- <mdui-slider nolabel slot="end-icon" class="msgFontSize" value="1" min="1" max="5"
-                                step="0.1" style="width: 12rem;"></mdui-slider> -->
                             <div class="slideBtn" slot="end-icon" style="width: 12rem;">
                                 <div class="active-bkg">&nbsp;</div>
                                 <div class="control-btn">&nbsp;</div>

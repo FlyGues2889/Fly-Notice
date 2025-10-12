@@ -144,7 +144,7 @@ function toggleScreenSaver() {
 
     setTimeout(() => {
       snackbar(
-        "<b>息屏显示已启用</b><br><small>点击屏幕正下方按钮退出到正常窗口。</small>",
+        "<b>息屏显示已启用</b><br><small>点击屏幕正下方按钮退出到正常窗口</small>",
         5000,
         "top-end"
       );
@@ -228,7 +228,7 @@ function addNotification(content) {
   }
 
   // 提示与重置
-  snackbar("已添加新通知。", 1000, "bottom");
+  snackbar("已添加新通知", 1000, "bottom");
   textField.value = "";
   // 重置复选框状态
   document.getElementById("check-important-msg").checked = false;
@@ -334,7 +334,7 @@ function renderNotifications() {
   const currentFontSize = savedFontSize + "rem";
   const primaryColor = "rgb(var(--mdui-color-primary))";
 
-  notifications.forEach((notification) => {
+  notifications.forEach((notification, index) => {
     // 渲染主通知卡片
     const card = document.createElement("mdui-card");
     card.className = "msgCard";
@@ -434,6 +434,7 @@ function renderNotifications() {
 
     const overviewItem = document.createElement("mdui-list-item");
     overviewItem.dataset.id = notification.id;
+    overviewItem.dataset.index = index; // 存储当前通知的索引
     overviewItem.description = displayText;
     overviewItem.style.margin = "0.5rem 0 0 0";
     overviewItem.style.padding = "0 0.25rem";
@@ -441,6 +442,12 @@ function renderNotifications() {
     if (notification.isImportant) {
       overviewItem.style.color = primaryColor;
     }
+
+    overviewItem.addEventListener("click", () => {
+      // 跳转到对应通知
+      jumpToNotification(index);
+    });
+
     overviewList.appendChild(overviewItem);
   });
 
@@ -456,6 +463,55 @@ function renderNotifications() {
       el.style.color = ""; // 使用默认颜色
     }
   });
+
+  // 新增：跳转到指定索引的通知并重新计时
+  function jumpToNotification(index) {
+    if (index < 0 || index >= notifications.length) return;
+
+    // 更新当前播放索引
+    currentIndex = index;
+
+    // 显示选中的通知
+    showListElements.forEach((el) => {
+      el.textContent = notifications[currentIndex].content;
+      // 应用重要通知颜色
+      if (notifications[currentIndex].isImportant) {
+        el.style.color = "rgb(var(--mdui-color-primary))";
+      } else {
+        el.style.color = "";
+      }
+    });
+
+    // 更新侧边栏激活状态
+    const overviewItems = overviewList.querySelectorAll("mdui-list-item");
+    overviewItems.forEach((item) => {
+      item.removeAttribute("active");
+    });
+    if (overviewItems[currentIndex]) {
+      overviewItems[currentIndex].setAttribute("active", "");
+    }
+
+    // 更新当前播放的通知ID
+    currentPlayingNotifyId = notifications[currentIndex].id;
+
+    // 重新计时（重置轮播计时器）
+    lastSwitchSecond = new Date().getSeconds();
+
+    // 准备下一条索引
+    currentIndex = (currentIndex + 1) % notifications.length;
+
+    // 如果轮播已停止，点击后自动启动
+    if (!isCarouselRunning) {
+      toggleCarousel();
+    }
+
+    // 提示用户已跳转到指定通知
+    snackbar("已跳转到选中通知", 1000, "bottom");
+  }
+
+  // 注意：需要在displayMessages函数中声明currentIndex为全局变量
+  // 在轮播相关变量区域添加：
+  let currentIndex = 0; // 全局当前通知索引
 }
 
 // ========================= 8. 本地存储操作 =========================
@@ -478,7 +534,7 @@ function loadNotificationsFromLocalStorage() {
     try {
       notifications = JSON.parse(saved);
     } catch (e) {
-      console.error("错误：加载通知失败。", e);
+      console.error("加载通知失败", e);
       notifications = [];
     }
   }
@@ -499,13 +555,11 @@ function toggleCarousel() {
     }
   }
 
-  if (notifications.length > 0) {
-    snackbar(
-      isCarouselRunning ? "已继续通知轮播" : "已暂停通知轮播",
-      1500,
-      "bottom"
-    );
-  }
+  snackbar(
+    isCarouselRunning ? "已继续通知轮播" : "已暂停通知轮播",
+    1500,
+    "bottom"
+  );
 
   if (isCarouselRunning) {
     lastSwitchSecond = new Date().getSeconds();
@@ -516,7 +570,7 @@ function displayMessages() {
   if (screenSaver.style.display === "flex") return;
 
   if (showListElements.length === 0) {
-    snackbar("错误：没有找到可以显示的消息内容。", 3000, "bottom");
+    snackbar("没有找到可以显示的消息内容", 3000, "bottom");
     return;
   }
 
@@ -621,61 +675,86 @@ function displayMessages() {
 }
 
 // ========================= 10. 字体大小设置（适配自定义滑块） =========================
-function initCustomSliders() {
-  const savedFontSize =
-    parseFloat(localStorage.getItem(STORAGE_KEYS.FONT_SIZE)) || 1;
+// 新增：统一获取当前字体大小（从localStorage读取，确保数据唯一来源）
+function getCurrentFontSize() {
+  return parseFloat(localStorage.getItem(STORAGE_KEYS.FONT_SIZE)) || 1;
+}
 
-  // 初始化所有滑块
+// 新增：统一更新字体大小（同步到localStorage + 所有滑块 + 界面）
+function updateFontSize(value) {
+  // 1. 边界值控制（确保字体大小在1-5rem范围内）
+  const clampedValue = Math.max(1, Math.min(5, value));
+  // 2. 步长控制（保留1位小数，避免精度问题）
+  const steppedValue = Math.round(clampedValue * 10) / 10;
+  // 3. 保存到localStorage
+  localStorage.setItem(STORAGE_KEYS.FONT_SIZE, steppedValue.toString());
+
+  // 4. 同步所有滑块的视觉状态
+  syncAllSliders(steppedValue);
+
+  // 5. 同步更新界面字体大小
+  const fontSizeValue = steppedValue + "rem";
+  const msgCards = document.querySelectorAll("mdui-card.msgCard");
+  const viewCard = document.querySelector("mdui-card.viewCard");
+  const showListElements = document.querySelectorAll("#showList");
+
+  msgCards.forEach((card) => (card.style.fontSize = fontSizeValue));
+  if (viewCard) viewCard.style.fontSize = fontSizeValue;
+  showListElements.forEach((el) => (el.style.fontSize = fontSizeValue));
+}
+
+// 新增：同步所有滑块到指定字体大小对应的状态
+function syncAllSliders(targetValue) {
+  // 计算目标值对应的滑块百分比（1rem→0%，5rem→100%）
+  const targetPercent = ((targetValue - 1) / 4) * 100;
+  // 遍历所有滑块，更新样式（避免重复绑定事件导致的冲突）
   customSliders.forEach((slider) => {
-    // 设置滑块初始位置
-    const percent = ((savedFontSize - 1) / (5 - 1)) * 100;
-    slider.style.setProperty("--active-width", `${percent}%`);
+    slider.style.setProperty("--active-width", `${targetPercent}%`);
+  });
+}
 
-    // 为每个滑块添加事件监听
+// 初始化所有自定义滑块（核心优化：统一绑定事件，调用统一更新函数）
+function initCustomSliders() {
+  const initialSize = getCurrentFontSize();
+  // 1. 初始化所有滑块的初始状态
+  syncAllSliders(initialSize);
+
+  // 2. 为每个滑块绑定事件（逻辑统一，避免差异化）
+  customSliders.forEach((slider) => {
     initSliderEvents(slider);
   });
-
-  // 应用初始字体大小
-  updateFontSizeDisplay(savedFontSize);
 }
-// 为滑块添加事件处理
+
+// 单个滑块的事件处理（优化：移除本地存储写入，改用统一更新函数）
 function initSliderEvents(slider) {
   const controlBtn = slider.querySelector(".control-btn");
   let isDragging = false;
 
-  // 计算滑块值的辅助函数
+  // 计算滑块当前值（基于滑块百分比）
   function getValueFromSlider(sliderEl) {
     const percent = parseFloat(
       getComputedStyle(sliderEl).getPropertyValue("--active-width")
     );
-    // 将0-100%转换为1-5的范围
-    return 1 + (percent / 100) * 4;
+    return 1 + (percent / 100) * 4; // 百分比→字体大小（1-5rem）
   }
 
-  // 计算滑块百分比的辅助函数
-  function getPercentFromValue(value) {
-    // 将1-5转换为0-100%
-    return ((value - 1) / 4) * 100;
-  }
-
-  // 计算点击位置对应的百分比
+  // 计算点击/拖拽位置对应的百分比
   function calculatePercent(event) {
     const rect = slider.getBoundingClientRect();
-    let clientX;
+    const clientX = event.type.startsWith("touch")
+      ? event.touches[0].clientX
+      : event.clientX;
 
-    if (event.type.startsWith("touch")) {
-      clientX = event.touches[0].clientX;
-    } else {
-      clientX = event.clientX;
-    }
-
+    // 计算百分比并边界控制（0-100%）
     let percent = ((clientX - rect.left) / rect.width) * 100;
-    percent = Math.max(0, Math.min(100, percent));
+    return Math.max(0, Math.min(100, percent));
+  }
 
-    // 应用步长0.1
-    const value = 1 + (percent / 100) * 4;
-    const steppedValue = Math.round(value / 0.1) * 0.1;
-    return getPercentFromValue(steppedValue);
+  // 拖拽/点击时的统一处理逻辑
+  function handleSliderChange(event) {
+    const newPercent = calculatePercent(event);
+    const newValue = 1 + (newPercent / 100) * 4; // 百分比→字体大小
+    updateFontSize(newValue); // 调用统一更新函数（同步所有状态）
   }
 
   // 开始拖拽
@@ -685,42 +764,24 @@ function initSliderEvents(slider) {
     event.preventDefault();
   }
 
-  // 拖拽过程
+  // 拖拽过程（实时更新）
   function drag(event) {
-    if (!isDragging) return;
-
-    const newPercent = calculatePercent(event);
-    slider.style.setProperty("--active-width", `${newPercent}%`);
-
-    // 更新字体大小
-    const currentValue = getValueFromSlider(slider);
-    updateFontSizeDisplay(currentValue);
+    if (isDragging) handleSliderChange(event);
   }
 
   // 结束拖拽
   function endDrag() {
     isDragging = false;
     slider.classList.remove("dragging");
-
-    // 保存设置
-    const currentValue = getValueFromSlider(slider);
-    localStorage.setItem(STORAGE_KEYS.FONT_SIZE, currentValue.toString());
   }
 
-  // 点击滑块
+  // 点击滑块（直接跳转）
   function handleClick(event) {
-    if (isDragging) return;
-
-    const newPercent = calculatePercent(event);
-    slider.style.setProperty("--active-width", `${newPercent}%`);
-
-    // 更新字体大小
-    const currentValue = getValueFromSlider(slider);
-    updateFontSizeDisplay(currentValue);
-    localStorage.setItem(STORAGE_KEYS.FONT_SIZE, currentValue.toString());
+    if (!isDragging) handleSliderChange(event);
+    event.stopPropagation();
   }
 
-  // 绑定事件
+  // 绑定事件（保持原交互逻辑，仅修改核心处理函数）
   controlBtn.addEventListener("mousedown", startDrag);
   controlBtn.addEventListener("touchstart", startDrag);
   document.addEventListener("mousemove", drag);
@@ -728,47 +789,11 @@ function initSliderEvents(slider) {
   document.addEventListener("mouseup", endDrag);
   document.addEventListener("touchend", endDrag);
   slider.addEventListener("click", handleClick);
-  slider.addEventListener("click", (e) => e.stopPropagation());
 }
 
-// 初始化字体大小
+// 初始化字体大小（简化：直接调用统一函数）
 function initFontSize() {
-  // 从本地存储获取字体大小
-  const savedFontSize =
-    parseFloat(localStorage.getItem(STORAGE_KEYS.FONT_SIZE)) || 1;
-  const fontSizeValue = savedFontSize + "rem";
-
-  const msgCards = document.querySelectorAll("mdui-card.msgCard");
-  const viewCard = document.querySelector("mdui-card.viewCard");
-  const showListElements = document.querySelectorAll("#showList");
-
-  msgCards.forEach((card) => {
-    card.style.fontSize = fontSizeValue;
-  });
-  if (viewCard) {
-    viewCard.style.fontSize = fontSizeValue;
-  }
-  showListElements.forEach((el) => {
-    el.style.fontSize = fontSizeValue;
-  });
-}
-// 更新字体大小显示
-function updateFontSizeDisplay(value) {
-  const fontSizeValue = value + "rem";
-
-  const msgCards = document.querySelectorAll("mdui-card.msgCard");
-  const viewCard = document.querySelector("mdui-card.viewCard");
-  const showListElements = document.querySelectorAll("#showList");
-
-  msgCards.forEach((card) => {
-    card.style.fontSize = fontSizeValue;
-  });
-  if (viewCard) {
-    viewCard.style.fontSize = fontSizeValue;
-  }
-  showListElements.forEach((el) => {
-    el.style.fontSize = fontSizeValue;
-  });
+  updateFontSize(getCurrentFontSize());
 }
 
 // ========================= 11. 侧边栏控制 =========================
@@ -882,7 +907,7 @@ let currentPlayingNotifyId = null;
 function openEditDialog() {
   // 若没有通知，直接提示并返回
   if (notifications.length === 0) {
-    snackbar("暂无通知可修改。", 1500, "bottom");
+    snackbar("暂无通知可修改", 1500, "bottom");
     return;
   }
 
@@ -926,7 +951,7 @@ function initEditDialog() {
   closeEditBtn.addEventListener("click", () => {
     const newContent = editTextField.value.trim();
     if (!newContent) {
-      snackbar("错误：通知内容不能为空。", 1500, "bottom");
+      snackbar("通知内容不能为空", 1500, "bottom");
       return;
     }
 
@@ -980,7 +1005,7 @@ function initEditDialog() {
 
 function deleteCurrentNotification() {
   if (notifications.length === 0) {
-    snackbar("没有通知可删除。", 1500, "bottom");
+    snackbar("没有通知可删除", 1500, "bottom");
     return;
   }
 

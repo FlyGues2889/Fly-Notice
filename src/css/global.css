@@ -89,6 +89,10 @@ mdui-segmented-button-group {
   }
 }
 
+mdui-menu {
+  border-radius: var(--mdui-shape-corner-medium);
+}
+
 
 /* 主窗口控件 */
 mdui-top-app-bar {
@@ -306,8 +310,8 @@ div.list-container {
   }
 
   mdui-list-item[active] {
-    border: rgb(var(--mdui-color-secondary), 0.5) solid 0.1rem;
-    background-color: unset;
+    border: rgba(var(--mdui-color-secondary), 0.3) solid 0.1rem;
+    background-color: rgba(var(--mdui-color-secondary-container),0.5);
 
     border-radius: var(--mdui-shape-corner-extra-large);
   }
