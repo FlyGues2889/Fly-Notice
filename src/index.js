@@ -557,7 +557,7 @@ function toggleCarousel() {
 
   snackbar(
     isCarouselRunning ? "已继续通知轮播" : "已暂停通知轮播",
-    1500,
+    1000,
     "bottom"
   );
 
