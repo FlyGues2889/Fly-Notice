@@ -375,9 +375,10 @@ function renderNotifications() {
     const editBtn = document.createElement("mdui-button-icon");
     editBtn.innerHTML = '<span class="material-symbols-rounded">edit</span>';
     editBtn.style.position = "absolute";
-    editBtn.style.right = "3.1rem";
+    editBtn.style.left = "3.1rem";
     editBtn.style.bottom = "0";
     editBtn.style.color = "rgba(var(--mdui-color-secondary),0.5)";
+    editBtn.style.transform = "scale(0.8)";
     editBtn.addEventListener("click", () => {
       if (isCarouselRunning) {
         toggleCarousel();
@@ -400,9 +401,10 @@ function renderNotifications() {
     deleteBtn.innerHTML =
       '<span class="material-symbols-rounded">delete</span>';
     deleteBtn.style.position = "absolute";
-    deleteBtn.style.right = "1rem";
+    deleteBtn.style.left = "1rem";
     deleteBtn.style.bottom = "0";
     deleteBtn.style.color = "rgba(var(--mdui-color-secondary),0.5)";
+    deleteBtn.style.transform = "scale(0.8)";
     deleteBtn.addEventListener("click", () => {
       deleteNotification(notification.id);
     });
@@ -412,7 +414,7 @@ function renderNotifications() {
     importantMark.innerHTML =
       '<span class="material-symbols-rounded-fill">flag</span>';
     importantMark.style.position = "absolute";
-    importantMark.style.left = "1rem";
+    importantMark.style.right = "1rem";
     importantMark.style.bottom = "0";
     importantMark.style.color = "rgba(var(--mdui-color-primary),0.5)";
 

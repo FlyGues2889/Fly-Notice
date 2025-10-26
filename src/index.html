@@ -111,35 +111,30 @@
 
         <div class="page" id="mainPage">
             <div class="showList" id="showList"></div>
+
+            <div class="add-toolbar">
+                <mdui-button onclick="openEditDialog()" class="edit-btn normalBtn">
+                    <span class="material-symbols-rounded">edit</span>
+                </mdui-button>
+
+                <mdui-button onclick="deleteCurrentNotification()" class="delete-btn normalBtn">
+                    <span class="material-symbols-rounded">delete</span>
+                </mdui-button>
+
+                <mdui-button onclick="toggleCarousel()" class="carousel-toggle-btn normalBtn">
+                    <span class="material-symbols-rounded">lock</span>
+                </mdui-button>
+            </div>
+
+            <mdui-button class="openAddDialogBtn primaryBtn" onclick="openAddDialog()">
+                <span class="material-symbols-rounded-fill">notification_add</span>
+            </mdui-button>
         </div>
 
         <div class="page" id="listPage" style="display: none">
             <div class="page-container" style="width: calc(100% - 4rem)">
                 <div class="msgList"></div>
             </div>
-        </div>
-
-        <div class="add-toolbar">
-            <mdui-dropdown placement="top-end">
-                <mdui-button slot="trigger" class="normalBtn">
-                    <span class="material-symbols-rounded">more_vert</span>
-                </mdui-button>
-                <mdui-menu>
-                    <mdui-menu-item onclick="openEditDialog()">
-                        <span slot="icon" class="material-symbols-rounded">edit</span>
-                        修改显示的内容
-                    </mdui-menu-item>
-                    <mdui-divider middle></mdui-divider>
-                    <mdui-menu-item onclick="deleteCurrentNotification()">
-                        <span slot="icon" class="material-symbols-rounded">delete</span>
-                        删除显示的通知
-                    </mdui-menu-item>
-                </mdui-menu>
-            </mdui-dropdown>
-
-            <mdui-button onclick="toggleCarousel()" class="carousel-toggle-btn normalBtn">
-                <span class="material-symbols-rounded">lock</span>
-            </mdui-button>
 
             <mdui-button class="openAddDialogBtn primaryBtn" onclick="openAddDialog()">
                 <span class="material-symbols-rounded-fill">notification_add</span>
@@ -154,21 +149,27 @@
                         mdui-card.viewCard {
                             width: 100%;
                             padding: 1.4rem;
-                            height: 6.4rem;
+                            height: 12rem;
                             display: flex;
                             align-items: center;
                             color: rgb(var(--mdui-color-secondary));
                             border: 0.15rem solid rgba(var(--mdui-color-secondary), 0.2);
                             background-color: rgba(var(--mdui-color-secondary-container), 0.2);
+
+                            overflow: scroll;
                         }
                     </style>
                     <mdui-card variant="outlined" class="viewCard">
-                        示例文字
+                        We sit on the curb after a walk, sharing a bag of nuts. She picks out the walnuts for me—she
+                        knows I hate peeling them. We watch cars go by, chatting about nothing important, but it feels
+                        perfect.
+                        <br>
+                        散步后坐在路边分坚果。她把剥好的核桃递我，知道我嫌剥壳麻烦。看着车来来往往，聊些无关紧要的话，却觉得特别好。
                     </mdui-card>
                 </mdui-list-item>
                 <mdui-list>
                     <mdui-list-subheader>通用</mdui-list-subheader>
-                    <mdui-list-item nonclickable class="topList">
+                    <mdui-list-item nonclickable class="topList top">
                         <span slot="icon" class="material-symbols-rounded">featured_play_list</span>
                         通知卡片样式
                         <span slot="description">设置并预览通知卡片的样式</span>

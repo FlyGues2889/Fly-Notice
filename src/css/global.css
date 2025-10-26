@@ -135,7 +135,7 @@ div.page {
 
   font-family: 'Harmony Sans SC';
 
-  background-color: rgb(var(--mdui-color-surface));
+  background-color: rgb(var(--mdui-color-surface), 0.8);
   border-radius: var(--mdui-shape-corner-extra-large) 0 0 var(--mdui-shape-corner-extra-large);
 
   transition: all 0.3s cubic-bezier(0.28, 0.02, 0.45, 0.98);
@@ -190,6 +190,9 @@ div.loadingLayer {
 /* 设置页 */
 
 div#settingPage {
+  .page-container {
+    padding-right: 0.2rem;
+  }
 
   mdui-list-subheader {
     margin: 0.5rem 0;
@@ -209,7 +212,7 @@ div.time-container {
 
     font-family: 'Product Sans';
     /* text-align: center; */
-    background-color: rgba(var(--mdui-color-surface), 0.75);
+    background-color: rgba(var(--mdui-color-surface), 0.6);
     border-radius: var(--mdui-shape-corner-large);
   }
 
@@ -254,7 +257,7 @@ mdui-navigation-rail {
   }
 
   mdui-button-icon#list-container-switch {
-    background-color: rgba(var(--mdui-color-surface), 0.75);
+    background-color: rgba(var(--mdui-color-surface), 0.6);
   }
 }
 
@@ -285,7 +288,7 @@ div.list-container {
     width: calc(100% - 1rem);
     margin: 0 0.5rem;
 
-    background-color: rgba(var(--mdui-color-surface), 0.75);
+    background-color: rgba(var(--mdui-color-surface), 0.6);
     border-radius: var(--mdui-shape-corner-small) var(--mdui-shape-corner-small) var(--mdui-shape-corner-large) var(--mdui-shape-corner-large);
 
     position: absolute;
@@ -311,7 +314,7 @@ div.list-container {
 
   mdui-list-item[active] {
     border: rgba(var(--mdui-color-secondary), 0.3) solid 0.1rem;
-    background-color: rgba(var(--mdui-color-secondary-container),0.5);
+    background-color: rgba(var(--mdui-color-secondary-container), 0.3);
 
     border-radius: var(--mdui-shape-corner-extra-large);
   }
@@ -351,7 +354,7 @@ div.list-container {
     margin-top: 1em;
     padding: 0 0.4rem;
 
-    background-color: rgba(var(--mdui-color-surface), 0.75);
+    background-color: rgba(var(--mdui-color-surface), 0.6);
     border-radius: var(--mdui-shape-corner-large) var(--mdui-shape-corner-large) var(--mdui-shape-corner-small) var(--mdui-shape-corner-small);
 
     overflow: auto;
@@ -454,38 +457,17 @@ div.showList {
 }
 
 div.margined {
-  margin-left: 2.5rem;
+  padding-left: 2.5rem;
 }
 
 .add-toolbar {
   position: fixed;
-  right: 1.5rem;
+  left: 2.4rem;
   bottom: 1.5rem;
 
-  .primaryBtn {
-    height: 4.2rem;
-    width: 4rem;
-    margin: 0 0.2rem;
-
-    border-radius: 2rem;
-    background-color: rgb(var(--mdui-color-tertiary-container));
-    color: rgb(var(--mdui-color-tertiary));
-    box-shadow: none;
-
-    font-family: 'Harmony Sans SC M';
-
-    transition: all 0.1s;
-  }
-
-  .primaryBtn:hover {
-    border-radius: var(--mdui-shape-corner-medium);
-    background-color: rgb(var(--mdui-color-tertiary));
-    color: rgb(var(--mdui-color-on-tertiary));
-  }
-
   .normalBtn {
-    height: 4.2rem;
-    width: 2.4rem;
+    height: 3rem;
+    width: 3.6rem;
 
     background-color: rgb(var(--mdui-color-secondary-container));
     color: rgb(var(--mdui-color-secondary));
@@ -493,7 +475,7 @@ div.margined {
 
     border-radius: 2rem;
 
-    transition: all 0.1s;
+    transition: all 0.25s;
 
     .material-symbols-rounded {
       font-size: 22px;
@@ -502,6 +484,28 @@ div.margined {
 
   .normalBtn:hover {
     border-radius: var(--mdui-shape-corner-medium);
-    border: 0.1rem solid rgba(var(--mdui-color-secondary), 0.15);
   }
+}
+
+.primaryBtn {
+  height: 4.2rem;
+  width: 4rem;
+  margin: 0 0.2rem;
+
+  position: absolute;
+  right: 1.8rem;
+  bottom: 1.8rem;
+
+  border-radius: var(--mdui-shape-corner-medium);
+  background-color: rgb(var(--mdui-color-tertiary));
+  color: rgb(var(--mdui-color-on-tertiary));
+  box-shadow: var(--mdui-elevation-level5);
+
+  font-family: 'Harmony Sans SC M';
+
+  transition: all 0.2s;
+}
+
+.primaryBtn:hover {
+  border-radius: var(--mdui-shape-corner-extra-large);
 }
