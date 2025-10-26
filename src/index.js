@@ -77,7 +77,6 @@ function showTime() {
   const seconds = String(date.getSeconds()).padStart(2, "0");
   const current = `${month}-${day}&nbsp;&nbsp;${hour}:${minute}:${seconds}`;
   document.getElementById("time").innerHTML = current;
-  openAddDialogButton.removeAttribute("loading");
 }
 
 // ========================= 5. 全屏与息屏显示功能 =========================
@@ -232,7 +231,6 @@ function addNotification(content) {
   textField.value = "";
   // 重置复选框状态
   document.getElementById("check-important-msg").checked = false;
-  openAddDialogButton.removeAttribute("extended");
   displayMessages();
 }
 
@@ -897,6 +895,11 @@ function openAddDialog() {
   const closeButton2 = blockDialog.querySelector(".close-add-dialog");
   blockDialog.open = true;
   closeButton2.addEventListener("click", () => (blockDialog.open = false));
+}
+
+function openInfoDialog() {
+  const infoDialog = document.querySelector(".info-dialog");
+  infoDialog.open = true;
 }
 
 // ========================= 13. 修改当前播放通知相关功能 =========================

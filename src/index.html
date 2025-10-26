@@ -157,14 +157,13 @@
                             background-color: rgba(var(--mdui-color-secondary-container), 0.2);
 
                             overflow: scroll;
+                            line-height: 3.2rem;
                         }
                     </style>
                     <mdui-card variant="outlined" class="viewCard">
-                        We sit on the curb after a walk, sharing a bag of nuts. She picks out the walnuts for me—she
-                        knows I hate peeling them. We watch cars go by, chatting about nothing important, but it feels
-                        perfect.
-                        <br>
-                        散步后坐在路边分坚果。她把剥好的核桃递我，知道我嫌剥壳麻烦。看着车来来往往，聊些无关紧要的话，却觉得特别好。
+                        散步后坐在路边分坚果。<br>
+                        朋友把剥好的核桃递我，知道我嫌剥壳麻烦。<br>
+                        看着车来来往往，聊些无关紧要的话，却觉得特别好。
                     </mdui-card>
                 </mdui-list-item>
                 <mdui-list>
@@ -218,17 +217,10 @@
 
                     </mdui-list-item>
                     <mdui-list-subheader>关于</mdui-list-subheader>
-                    <mdui-list-item rounded nonclickable>
+                    <mdui-list-item rounded onclick="openInfoDialog()">
                         <span slot="icon" class="material-symbols-rounded">info</span>
-                        关于 FlyNotice
-                        <span slot="description">版本 1.2.5</span>
-                    </mdui-list-item>
-                    <mdui-list-item rounded nonclickable>
-                        <span slot="icon" class="material-symbols-rounded">inventory_2</span>
-                        使用开源库
-                        <span slot="description">
-                            MDUI - Material Symbols
-                        </span>
+                        关于此软件
+                        <span slot="description">查看软件信息</span>
                     </mdui-list-item>
                 </mdui-list>
             </div>
@@ -265,6 +257,49 @@
         </mdui-list-item>
 
         <mdui-button class="close-edit-dialog" slot="action" variant="tonal">完成</mdui-button>
+    </mdui-dialog>
+
+    <mdui-dialog close-on-overlay-click class="info-dialog">
+        <span slot="headline" style="font-family: 'Nunito';font-weight: bold;">FlyNotice</span>
+        <span slot="icon" class="material-symbols-rounded">info</span>
+        <small>FlyNotice 是基于 Material You 设计风格的通知显示软件。</small>
+        <mdui-list>
+            <mdui-collapse accordion>
+                <mdui-collapse-item>
+                    <mdui-list-item nonclickable slot="header"
+                        style="margin-top: 1rem;background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-large) var(--mdui-shape-corner-large) var(--mdui-shape-corner-small) var(--mdui-shape-corner-small);">
+                        <span slot="icon" class="material-symbols-rounded">browser_updated</span>
+                        <mdui-button slot="end-icon" variant="tonal"
+                            style="background-color: rgb(var(--mdui-color-surface-container-high));width: 1rem;">
+                            <span class="material-symbols-rounded">keyboard_arrow_up</span>
+                        </mdui-button>
+                        当前已安装的更新
+                        <span slot="description">版本 1.2.6</span>
+                    </mdui-list-item>
+                    <mdui-list-item nonclickable
+                        style="margin-top: 2px;background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-small);">
+                        <p style="color: rgb(var(--mdui-color-secondary));margin: 0;">更新日志</p>
+                        <span slot="description">
+                            25-10-26 13:23 (推送自 Lvi_Fly - FlyGues Studio)
+                            <p style="margin-top: 0.2rem;">
+                                # 修补<br>
+                                - 优化：按钮组已被归类，卡片视图不再展示轮播冗余按钮<br>
+                                - 优化：调整了一些容器的背景颜色，看起来更柔和<br>
+                                - 优化：卡片视图的通知卡片操作按钮已减小缩放并调整位置<br>
+                                - 优化：部分文案更改，展示内容改为 FlyGues Studio 的文段精选库<br>
+                            </p>
+                        </span>
+                    </mdui-list-item>
+                </mdui-collapse-item>
+            </mdui-collapse>
+        </mdui-list>
+        <mdui-list-item nonclickable
+            style="background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-small) var(--mdui-shape-corner-small) var(--mdui-shape-corner-large) var(--mdui-shape-corner-large);">
+            Made by Lvi_Fly
+                <span slot="icon" class="material-symbols-rounded-fill">person_4</span>
+            <span slot="description">https://github.com/FlyGues2889</span>
+        </mdui-list-item>
+
     </mdui-dialog>
 </body>
 
