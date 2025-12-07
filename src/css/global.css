@@ -218,12 +218,22 @@ div.time-container {
 
   span#time {
     color: rgb(var(--mdui-color-secondary));
-    font-size: 0.9rem;
+    font-size: 1.2rem;
+    letter-spacing: initial;
   }
 
-  span[slot="icon"] {
-    color: rgba(var(--mdui-color-secondary), 0.5);
+  .statusIcon {
+    width: 1rem;
+    margin-left: -0.2rem;
+
+    span#unreadCount {
+      color: rgba(var(--mdui-color-secondary));
+      font-family: 'Nunito';
+      font-size: larger;
+      font-weight: bold;
+    }
   }
+
 }
 
 div.showList {
@@ -460,7 +470,7 @@ div.margined {
   padding-left: 2.5rem;
 }
 
-.add-toolbar {
+.left-toolbar {
   position: fixed;
   left: 2.4rem;
   bottom: 1.5rem;
@@ -482,6 +492,36 @@ div.margined {
     }
   }
 
+
+
+  .normalBtn:hover {
+    border-radius: var(--mdui-shape-corner-medium);
+  }
+}
+
+.right-toolbar {
+  position: fixed;
+  right: 2.4rem;
+  bottom: 1.5rem;
+
+  .normalBtn {
+    height: 3rem;
+    width: 3.6rem;
+
+    background-color: rgb(var(--mdui-color-secondary-container));
+    color: rgb(var(--mdui-color-secondary));
+    box-shadow: none;
+
+    border-radius: 2rem;
+
+    transition: all 0.25s;
+
+    .material-symbols-rounded {
+      font-size: 22px;
+    }
+
+  }
+
   .normalBtn:hover {
     border-radius: var(--mdui-shape-corner-medium);
   }
@@ -492,20 +532,17 @@ div.margined {
   width: 4rem;
   margin: 0 0.2rem;
 
-  position: absolute;
-  right: 1.8rem;
-  bottom: 1.8rem;
+  margin-top: 0.5rem;
+
+  position: static;
 
   border-radius: var(--mdui-shape-corner-medium);
-  background-color: rgb(var(--mdui-color-tertiary));
-  color: rgb(var(--mdui-color-on-tertiary));
-  box-shadow: var(--mdui-elevation-level5);
+  background-color: rgb(var(--mdui-color-tertiary-container));
+  color: rgb(var(--mdui-color-tertiary));
+  box-shadow: var(--mdui-elevation-level1);
 
   font-family: 'Harmony Sans SC M';
 
   transition: all 0.2s;
-}
 
-.primaryBtn:hover {
-  border-radius: var(--mdui-shape-corner-extra-large);
 }

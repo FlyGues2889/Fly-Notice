@@ -33,11 +33,11 @@ const countDisplay = document.getElementById("count-display");
 const carouselToggleBtn = document.querySelector(".carousel-toggle-btn");
 const deleteBtn = document.querySelector(".deleteMsgBtn");
 const closeEditBtn = document.querySelector(".close-edit-dialog");
-// 新增：获取修改弹窗中的重要性复选框
 const changeImportantCheck = document.getElementById("change-important-msg");
-let isDialogClosing = false; // 标记弹窗是否正在关闭
 
-// 轮播相关变量
+let isDialogClosing = false;
+let currentIndex = 0;
+
 let isCarouselRunning = true;
 let messageInterval;
 let lastSwitchSecond = -1;
@@ -70,12 +70,10 @@ function snackbar(message, closeTime, placement) {
 
 function showTime() {
   const date = new Date();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
   const hour = String(date.getHours()).padStart(2, "0");
   const minute = String(date.getMinutes()).padStart(2, "0");
   const seconds = String(date.getSeconds()).padStart(2, "0");
-  const current = `${month}-${day}&nbsp;&nbsp;${hour}:${minute}:${seconds}`;
+  const current = `${hour}:${minute}:${seconds}`;
   document.getElementById("time").innerHTML = current;
 }
 
@@ -512,6 +510,35 @@ function renderNotifications() {
   // 注意：需要在displayMessages函数中声明currentIndex为全局变量
   // 在轮播相关变量区域添加：
   let currentIndex = 0; // 全局当前通知索引
+
+  const prevBtn = document.getElementById("prevNotificationBtn");
+  const nextBtn = document.getElementById("nextNotificationBtn");
+
+  if (prevBtn && nextBtn) {
+    const isDisabled = notifications.length <= 1;
+    prevBtn.disabled = isDisabled;
+    nextBtn.disabled = isDisabled;
+    // 可选：添加禁用样式
+    if (isDisabled) {
+      prevBtn.style.opacity = "0.8";
+      prevBtn.style.backgroundColor =
+        "rgba(var(--mdui-color-surface-container))";
+      prevBtn.style.color = "rgba(var(--mdui-color-secondary),0.5)";
+      nextBtn.style.opacity = "0.8";
+      nextBtn.style.backgroundColor =
+        "rgba(var(--mdui-color-surface-container))";
+      nextBtn.style.color = "rgba(var(--mdui-color-secondary),0.5)";
+    } else {
+      prevBtn.style.opacity = "1";
+      prevBtn.style.backgroundColor =
+        "rgb(var(--mdui-color-secondary-container))";
+      prevBtn.style.color = "rgba(var(--mdui-color-secondary),1)";
+      nextBtn.style.opacity = "1";
+      nextBtn.style.backgroundColor =
+        "rgb(var(--mdui-color-secondary-container))";
+      nextBtn.style.color = "rgba(var(--mdui-color-secondary),1)";
+    }
+  }
 }
 
 // ========================= 8. 本地存储操作 =========================
@@ -545,13 +572,18 @@ function toggleCarousel() {
   isCarouselRunning = !isCarouselRunning;
 
   if (carouselToggleBtn) {
-    // 先判断按钮是否存在，避免报错
     if (isCarouselRunning) {
       carouselToggleBtn.innerHTML =
         '<span class="material-symbols-rounded">lock</span>';
+      carouselToggleBtn.style.backgroundColor =
+        "rgb(var(--mdui-color-secondary-container))";
+      carouselToggleBtn.style.color = "rgba(var(--mdui-color-secondary))";
     } else {
       carouselToggleBtn.innerHTML =
-        '<span class="material-symbols-rounded">no_encryption</span>';
+      '<span class="material-symbols-rounded">no_encryption</span>';
+      carouselToggleBtn.style.backgroundColor =
+        "rgba(var(--mdui-color-secondary))";
+      carouselToggleBtn.style.color = "rgba(var(--mdui-color-on-secondary))";
     }
   }
 
@@ -595,8 +627,6 @@ function displayMessages() {
     return;
   }
 
-  // 初始化轮播状态
-  let currentIndex = 0;
   const overviewItems = overviewList.querySelectorAll("mdui-list-item");
   const scrollTimeSlider = document.getElementById("msgScrollTime");
 
@@ -672,6 +702,89 @@ function displayMessages() {
       lastSwitchSecond = currentSecond;
     }
   }, 100);
+}
+
+function showPrevNotification() {
+  // 无通知时提示
+  if (notifications.length === 0) {
+    snackbar("暂无通知可切换", 1500, "bottom");
+    return;
+  }
+
+  // 暂停轮播（手动切换时暂停自动轮播）
+  if (isCarouselRunning) {
+    toggleCarousel();
+  }
+
+  // 计算上一条索引（边界处理：0的上一条是最后一条）
+  currentIndex =
+    (currentIndex - 1 + notifications.length) % notifications.length;
+
+  // 更新显示与状态
+  updateNotificationDisplay(currentIndex);
+
+  // 重置计时
+  lastSwitchSecond = new Date().getSeconds();
+
+  // 提示
+  snackbar("已切换到上一条通知", 1000, "bottom");
+}
+
+/**
+ * 切换到下一条通知
+ */
+function showNextNotification() {
+  // 无通知时提示
+  if (notifications.length === 0) {
+    snackbar("暂无通知可切换", 1500, "bottom");
+    return;
+  }
+
+  // 暂停轮播
+  if (isCarouselRunning) {
+    toggleCarousel();
+  }
+
+  // 计算下一条索引
+  currentIndex = (currentIndex + 1) % notifications.length;
+
+  // 更新显示与状态
+  updateNotificationDisplay(currentIndex);
+
+  // 重置计时
+  lastSwitchSecond = new Date().getSeconds();
+
+  // 提示
+  snackbar("已切换到下一条通知", 1000, "bottom");
+}
+
+/**
+ * 统一更新通知显示（复用逻辑，避免代码冗余）
+ * @param {number} index - 要显示的通知索引
+ */
+function updateNotificationDisplay(index) {
+  if (index < 0 || index >= notifications.length) return;
+
+  // 1. 更新主显示区域内容与样式
+  showListElements.forEach((el) => {
+    el.textContent = notifications[index].content;
+    // 应用重要通知颜色
+    if (notifications[index].isImportant) {
+      el.style.color = "rgb(var(--mdui-color-primary))";
+    } else {
+      el.style.color = "";
+    }
+  });
+
+  // 2. 更新侧边栏激活状态
+  const overviewItems = overviewList.querySelectorAll("mdui-list-item");
+  overviewItems.forEach((item) => item.removeAttribute("active"));
+  if (overviewItems[index]) {
+    overviewItems[index].setAttribute("active", "");
+  }
+
+  // 3. 更新当前播放的通知ID
+  currentPlayingNotifyId = notifications[index].id;
 }
 
 // ========================= 10. 字体大小设置（适配自定义滑块） =========================
@@ -864,6 +977,16 @@ window.onload = function () {
 
   initEditDialog();
   initDeleteButton();
+
+  const prevBtn = document.getElementById("prevNotificationBtn");
+  const nextBtn = document.getElementById("nextNotificationBtn");
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", showPrevNotification);
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener("click", showNextNotification);
+  }
 
   loadingLayer.style.display = "none";
 };

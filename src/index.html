@@ -39,10 +39,14 @@
             </mdui-button>
         </div>
 
-        <mdui-navigation-rail contained value="mainPage" id="navigation-rail">
+        <mdui-navigation-rail contained value="mainPage" id="navigation-rail" alignment="center">
             <mdui-button-icon slot="top" id="list-container-switch" onclick="showListContainer()">
                 <span class="material-symbols-rounded">menu_open</span>
             </mdui-button-icon>
+
+            <mdui-button slot="top" class="openAddDialogBtn primaryBtn" onclick="openAddDialog()">
+                <span class="material-symbols-rounded-fill">notification_add</span>
+            </mdui-button>
 
             <mdui-navigation-rail-item id="toMain" value="mainPage" href="javascript:void(0);"
                 onclick="navigate('mainPage')">
@@ -68,13 +72,10 @@
         <div class="list-container">
             <div class="time-container">
                 <mdui-list-item nonclickable>
-                    <span slot="icon" class="material-symbols-rounded">notifications_active</span>
+                    <mdui-button class="statusIcon" slot="icon">
+                        <span id="unreadCount">0</span>
+                    </mdui-button>
                     <span id="time">Loading</span>
-
-                    <span slot="description" class="showCount">
-                        <span id="unreadCount" style="font-family: 'Product Sans';">0</span>
-                        条通知
-                    </span>
                 </mdui-list-item>
             </div>
 
@@ -112,7 +113,7 @@
         <div class="page" id="mainPage">
             <div class="showList" id="showList"></div>
 
-            <div class="add-toolbar">
+            <div class="left-toolbar">
                 <mdui-button onclick="openEditDialog()" class="edit-btn normalBtn">
                     <span class="material-symbols-rounded">edit</span>
                 </mdui-button>
@@ -126,19 +127,20 @@
                 </mdui-button>
             </div>
 
-            <mdui-button class="openAddDialogBtn primaryBtn" onclick="openAddDialog()">
-                <span class="material-symbols-rounded-fill">notification_add</span>
-            </mdui-button>
+            <div class="right-toolbar">
+                <mdui-button id="prevNotificationBtn" class="normalBtn">
+                    <span class="material-symbols-rounded">arrow_back</span>
+                </mdui-button>
+                <mdui-button id="nextNotificationBtn" class="normalBtn">
+                    <span class="material-symbols-rounded">arrow_forward</span>
+                </mdui-button>
+            </div>
         </div>
 
         <div class="page" id="listPage" style="display: none">
             <div class="page-container" style="width: calc(100% - 4rem)">
                 <div class="msgList"></div>
             </div>
-
-            <mdui-button class="openAddDialogBtn primaryBtn" onclick="openAddDialog()">
-                <span class="material-symbols-rounded-fill">notification_add</span>
-            </mdui-button>
         </div>
 
         <div class="page" id="settingPage" style="display: none;">
@@ -149,21 +151,18 @@
                         mdui-card.viewCard {
                             width: 100%;
                             padding: 1.4rem;
-                            height: 12rem;
+                            height: 8rem;
                             display: flex;
                             align-items: center;
                             color: rgb(var(--mdui-color-secondary));
                             border: 0.15rem solid rgba(var(--mdui-color-secondary), 0.2);
                             background-color: rgba(var(--mdui-color-secondary-container), 0.2);
 
-                            overflow: scroll;
                             line-height: 3.2rem;
                         }
                     </style>
                     <mdui-card variant="outlined" class="viewCard">
-                        散步后坐在路边分坚果。<br>
-                        朋友把剥好的核桃递我，知道我嫌剥壳麻烦。<br>
-                        看着车来来往往，聊些无关紧要的话，却觉得特别好。
+                        The quick brown fox jumps over the lazy dog.
                     </mdui-card>
                 </mdui-list-item>
                 <mdui-list>
@@ -268,25 +267,26 @@
                 <mdui-collapse-item>
                     <mdui-list-item nonclickable slot="header"
                         style="margin-top: 1rem;background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-large) var(--mdui-shape-corner-large) var(--mdui-shape-corner-small) var(--mdui-shape-corner-small);">
-                        <span slot="icon" class="material-symbols-rounded">browser_updated</span>
+                        <span slot="icon" class="material-symbols-rounded" style="color: rgb(var(--mdui-color-primary));">browser_updated</span>
                         <mdui-button slot="end-icon" variant="tonal"
                             style="background-color: rgb(var(--mdui-color-surface-container-high));width: 1rem;">
                             <span class="material-symbols-rounded">keyboard_arrow_up</span>
                         </mdui-button>
                         当前已安装的更新
-                        <span slot="description">版本 1.2.6</span>
+                        <span slot="description">版本 1.2.7</span>
                     </mdui-list-item>
                     <mdui-list-item nonclickable
                         style="margin-top: 2px;background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-small);">
                         <p style="color: rgb(var(--mdui-color-secondary));margin: 0;">更新日志</p>
                         <span slot="description">
-                            25-10-26 13:23 (推送自 Lvi_Fly - FlyGues Studio)
-                            <p style="margin-top: 0.2rem;">
+                            25-12-07 14:33 (推送自 Lvi_Fly - FlyGues Studio)
+                            <p style="margin-top: 0.2rem;font-size: 0.7rem;">
+                                # 新增<br>
+                                - 新增：新增上下通知切换按钮<br>
                                 # 修补<br>
-                                - 优化：按钮组已被归类，卡片视图不再展示轮播冗余按钮<br>
-                                - 优化：调整了一些容器的背景颜色，看起来更柔和<br>
-                                - 优化：卡片视图的通知卡片操作按钮已减小缩放并调整位置<br>
-                                - 优化：部分文案更改，展示内容改为 FlyGues Studio 的文段精选库<br>
+                                - 优化：调整添加通知按钮的位置，使其全局可见<br>
+                                - 优化：现在通知锁定按钮的背景颜色会跟随切换改变深浅色<br>
+                                - 优化：时间显示区域极简化<br>
                             </p>
                         </span>
                     </mdui-list-item>
@@ -296,7 +296,7 @@
         <mdui-list-item nonclickable
             style="background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-small) var(--mdui-shape-corner-small) var(--mdui-shape-corner-large) var(--mdui-shape-corner-large);">
             Made by Lvi_Fly
-                <span slot="icon" class="material-symbols-rounded-fill">person_4</span>
+            <span slot="icon" class="material-symbols-rounded-fill">person_4</span>
             <span slot="description">https://github.com/FlyGues2889</span>
         </mdui-list-item>
 
