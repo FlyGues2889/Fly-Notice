@@ -245,6 +245,16 @@ function deleteNotification(id) {
   // 保存到本地存储
   saveNotificationsToLocalStorage();
 
+  if (notifications.length > 0) {
+    // 如果删除的是当前显示的通知，索引回退一位
+    if (deleteIndex === currentIndex || currentIndex >= notifications.length) {
+      currentIndex = Math.max(0, currentIndex - 1);
+    }
+  } else {
+    // 无通知时重置索引
+    currentIndex = 0;
+  }
+
   // 重新渲染
   renderNotifications();
 
@@ -453,15 +463,20 @@ function renderNotifications() {
   showListElements.forEach((el) => {
     el.style.opacity = "1";
     el.style.flexDirection = "row";
-    el.textContent = notifications[0].content;
+    el.textContent = notifications[currentIndex].content;
     // 应用重要通知颜色
-    if (notifications[0].isImportant) {
+    if (notifications[currentIndex].isImportant) {
       el.style.color = "rgb(var(--mdui-color-primary))";
     } else {
       el.style.color = ""; // 使用默认颜色
     }
   });
 
+  const overviewItems = overviewList.querySelectorAll("mdui-list-item");
+  overviewItems.forEach((item) => item.removeAttribute("active"));
+  if (overviewItems[currentIndex] && notifications.length > 0) {
+    overviewItems[currentIndex].setAttribute("active", "");
+  }
   // 新增：跳转到指定索引的通知并重新计时
   function jumpToNotification(index) {
     if (index < 0 || index >= notifications.length) return;
@@ -506,10 +521,6 @@ function renderNotifications() {
     // 提示用户已跳转到指定通知
     snackbar("已跳转到选中通知", 1000, "bottom");
   }
-
-  // 注意：需要在displayMessages函数中声明currentIndex为全局变量
-  // 在轮播相关变量区域添加：
-  let currentIndex = 0; // 全局当前通知索引
 
   const prevBtn = document.getElementById("prevNotificationBtn");
   const nextBtn = document.getElementById("nextNotificationBtn");
@@ -580,7 +591,7 @@ function toggleCarousel() {
       carouselToggleBtn.style.color = "rgba(var(--mdui-color-secondary))";
     } else {
       carouselToggleBtn.innerHTML =
-      '<span class="material-symbols-rounded">no_encryption</span>';
+        '<span class="material-symbols-rounded">no_encryption</span>';
       carouselToggleBtn.style.backgroundColor =
         "rgba(var(--mdui-color-secondary))";
       carouselToggleBtn.style.color = "rgba(var(--mdui-color-on-secondary))";
@@ -606,7 +617,7 @@ function displayMessages() {
     return;
   }
 
-  // 清除现有定时器
+  // 清除现有定时器（关键：确保每次调用只保留一个定时器）
   if (messageInterval) {
     clearInterval(messageInterval);
     messageInterval = null;
@@ -627,17 +638,17 @@ function displayMessages() {
     return;
   }
 
+  // 初始化轮播状态（使用全局currentIndex）
   const overviewItems = overviewList.querySelectorAll("mdui-list-item");
   const scrollTimeSlider = document.getElementById("msgScrollTime");
 
-  // 显示第一条通知
+  // ========== 修改：确保显示全局currentIndex对应的通知 ==========
   showListElements.forEach((el) => {
     el.textContent = notifications[currentIndex].content;
-    // 应用重要通知颜色
     if (notifications[currentIndex].isImportant) {
       el.style.color = "rgb(var(--mdui-color-primary))";
     } else {
-      el.style.color = ""; // 使用默认颜色
+      el.style.color = "";
     }
   });
 
@@ -649,8 +660,8 @@ function displayMessages() {
     overviewItems[currentIndex].setAttribute("active", "");
   }
 
-  // 准备下一条索引
-  currentIndex = (currentIndex + 1) % notifications.length;
+  // 准备下一条索引（基于全局currentIndex）
+  let nextIndex = (currentIndex + 1) % notifications.length;
   lastSwitchSecond = new Date().getSeconds();
 
   // 保存初始滚动时间
@@ -666,7 +677,6 @@ function displayMessages() {
 
   // 启动轮播定时器
   messageInterval = setInterval(() => {
-    // 如果轮播已停止，则不执行切换
     if (!isCarouselRunning) return;
 
     const now = new Date();
@@ -675,14 +685,13 @@ function displayMessages() {
     const secondDiff = (currentSecond - lastSwitchSecond + 60) % 60;
 
     if (secondDiff >= scrollTime) {
-      // 更新显示内容
+      // 更新显示全局currentIndex对应的通知
       showListElements.forEach((el) => {
         el.textContent = notifications[currentIndex].content;
-        // 应用重要通知颜色
         if (notifications[currentIndex].isImportant) {
           el.style.color = "rgb(var(--mdui-color-primary))";
         } else {
-          el.style.color = ""; // 使用默认颜色
+          el.style.color = "";
         }
       });
 
@@ -697,13 +706,12 @@ function displayMessages() {
       // 更新当前播放的通知ID
       currentPlayingNotifyId = notifications[currentIndex].id;
 
-      // 计算下一个索引
+      // 计算下一个索引（更新全局currentIndex）
       currentIndex = (currentIndex + 1) % notifications.length;
       lastSwitchSecond = currentSecond;
     }
   }, 100);
 }
-
 function showPrevNotification() {
   // 无通知时提示
   if (notifications.length === 0) {

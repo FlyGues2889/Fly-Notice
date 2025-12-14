@@ -17,19 +17,9 @@ mdui-layout {
 }
 
 :root {
-  ::-webkit-scrollbar {
-    width: 0.5rem;
-    height: 0.4rem;
-  }
+      scrollbar-width: thin;
+    scrollbar-color: rgba(var(--mdui-color-secondary), 0.15) #00000000;
 
-  ::-webkit-scrollbar-track {
-    background: none;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: rgb(var(--mdui-color-secondary), 0.2);
-    border-radius: 1rem;
-  }
 }
 
 mdui-select,
@@ -444,8 +434,8 @@ div.list-container {
     bottom: 2rem;
     right: 2rem;
 
-    background-color: rgb(var(--mdui-color-tertiary-container));
-    color: rgb(var(--mdui-color-tertiary));
+    background-color: rgb(var(--mdui-color-secondary));
+    color: rgb(var(--mdui-color-surface));
     border-radius: var(--mdui-shape-corner-extra-large);
 
     cursor: pointer;
@@ -537,8 +527,8 @@ div.margined {
   position: static;
 
   border-radius: var(--mdui-shape-corner-medium);
-  background-color: rgb(var(--mdui-color-tertiary-container));
-  color: rgb(var(--mdui-color-tertiary));
+  background-color: rgb(var(--mdui-color-secondary));
+  color: rgb(var(--mdui-color-surface));
   box-shadow: var(--mdui-elevation-level1);
 
   font-family: 'Harmony Sans SC M';

@@ -26,7 +26,7 @@
             <mdui-circular-progress></mdui-circular-progress>
         </div>
 
-        <div class="no-disturb-screen" id="no-disturb-screen">
+        <div class="no-disturb-screen mdui-theme-dark" id="no-disturb-screen">
             <div class="time-display" id="time-display">Requesting...</div>
             <div class="count-display" id="count-display"></div>
 
@@ -228,9 +228,9 @@
 
     <mdui-dialog close-on-overlay-click headline="添加新通知" class="add-dialog">
         <span slot="icon" class="material-symbols-rounded">notification_add</span>
-        <mdui-text-field rows="3" clearable autosize label="通知内容" type="input" id="excludeNums" value=""
+        <mdui-text-field rows="3" clearable  label="通知内容" type="input" id="excludeNums" value=""
             variant="outlined"
-            style="width: 50vw;max-width: 32rem;margin-top: 0.8rem;font-family: 'HarmonyOS Sans SC';">
+            style="width: 50vw;max-width: 50vw;height:28vh;max-height:28vh;margin-top: 0.8rem;font-family: 'HarmonyOS Sans SC';">
         </mdui-text-field>
         <mdui-list-item nonclickable>
             <mdui-checkbox slot="end-icon" id="check-important-msg"></mdui-checkbox>
@@ -244,9 +244,9 @@
 
     <mdui-dialog close-on-overlay-click headline="修改通知内容" class="edit-dialog">
         <span slot="icon" class="material-symbols-rounded">edit</span>
-        <mdui-text-field rows="3" clearable autosize label="通知内容" type="input" id="editMsgContent" value=""
+        <mdui-text-field rows="3" clearable  label="通知内容" type="input" id="editMsgContent" value=""
             variant="outlined"
-            style="width: 50vw;max-width: 32rem;margin-top: 0.8rem;font-family: 'HarmonyOS Sans SC';">
+            style="width: 50vw;max-width: 50vw;height:28vh;max-height:28vh;margin-top: 0.8rem;font-family: 'HarmonyOS Sans SC';">
         </mdui-text-field>
         <mdui-list-item nonclickable>
             <mdui-checkbox slot="end-icon" id="change-important-msg"></mdui-checkbox>
@@ -267,26 +267,26 @@
                 <mdui-collapse-item>
                     <mdui-list-item nonclickable slot="header"
                         style="margin-top: 1rem;background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-large) var(--mdui-shape-corner-large) var(--mdui-shape-corner-small) var(--mdui-shape-corner-small);">
-                        <span slot="icon" class="material-symbols-rounded" style="color: rgb(var(--mdui-color-primary));">browser_updated</span>
+                        <span slot="icon" class="material-symbols-rounded"
+                            style="color: rgb(var(--mdui-color-primary));">browser_updated</span>
                         <mdui-button slot="end-icon" variant="tonal"
                             style="background-color: rgb(var(--mdui-color-surface-container-high));width: 1rem;">
                             <span class="material-symbols-rounded">keyboard_arrow_up</span>
                         </mdui-button>
                         当前已安装的更新
-                        <span slot="description">版本 1.2.7</span>
+                        <span slot="description">版本 1.2.8</span>
                     </mdui-list-item>
                     <mdui-list-item nonclickable
                         style="margin-top: 2px;background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-small);">
                         <p style="color: rgb(var(--mdui-color-secondary));margin: 0;">更新日志</p>
                         <span slot="description">
-                            25-12-07 14:33 (推送自 Lvi_Fly - FlyGues Studio)
+                            25-12-014 12:13 (推送自 Lvi_Fly - FlyGues Studio)
                             <p style="margin-top: 0.2rem;font-size: 0.7rem;">
-                                # 新增<br>
-                                - 新增：新增上下通知切换按钮<br>
                                 # 修补<br>
-                                - 优化：调整添加通知按钮的位置，使其全局可见<br>
-                                - 优化：现在通知锁定按钮的背景颜色会跟随切换改变深浅色<br>
-                                - 优化：时间显示区域极简化<br>
+                                - 优化：调整添加通知按钮的颜色<br>
+                                - 优化：调整全局滚动条的样式<br>
+                                - 优化：解决了修改和添加通知弹窗的文本框布局溢出问题<br>
+                                - 优化：息屏模式改为全局黑暗模式，按钮颜色调整
                             </p>
                         </span>
                     </mdui-list-item>
