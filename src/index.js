@@ -35,6 +35,9 @@ const deleteBtn = document.querySelector(".deleteMsgBtn");
 const closeEditBtn = document.querySelector(".close-edit-dialog");
 const changeImportantCheck = document.getElementById("change-important-msg");
 
+const prevBtn = document.getElementById("prevNotificationBtn");
+const nextBtn = document.getElementById("nextNotificationBtn");
+
 let isDialogClosing = false;
 let currentIndex = 0;
 
@@ -73,7 +76,7 @@ function showTime() {
   const hour = String(date.getHours()).padStart(2, "0");
   const minute = String(date.getMinutes()).padStart(2, "0");
   const seconds = String(date.getSeconds()).padStart(2, "0");
-  const current = `${hour}:${minute}:${seconds}`;
+  const current = `${hour} : ${minute} : ${seconds}`;
   document.getElementById("time").innerHTML = current;
 }
 
@@ -237,6 +240,11 @@ function addNotification(content) {
  * @param {string} id - 通知ID
  */
 function deleteNotification(id) {
+  // 新增：定义deleteIndex，找到要删除的通知索引
+  const deleteIndex = notifications.findIndex(
+    (notification) => notification.id === id
+  );
+
   // 从数组中删除
   notifications = notifications.filter(
     (notification) => notification.id !== id
@@ -267,7 +275,6 @@ function deleteNotification(id) {
   snackbar("通知已删除", 1000, "bottom");
   displayMessages();
 }
-
 /**
  * 更新通知内容（支持更新重要性状态）
  * @param {string} id - 通知ID
@@ -477,11 +484,11 @@ function renderNotifications() {
   if (overviewItems[currentIndex] && notifications.length > 0) {
     overviewItems[currentIndex].setAttribute("active", "");
   }
-  // 新增：跳转到指定索引的通知并重新计时
+
   function jumpToNotification(index) {
     if (index < 0 || index >= notifications.length) return;
 
-    // 更新当前播放索引
+    // 更新当前播放索引（直接设为目标索引，不再自增）
     currentIndex = index;
 
     // 显示选中的通知
@@ -510,9 +517,6 @@ function renderNotifications() {
     // 重新计时（重置轮播计时器）
     lastSwitchSecond = new Date().getSeconds();
 
-    // 准备下一条索引
-    currentIndex = (currentIndex + 1) % notifications.length;
-
     // 如果轮播已停止，点击后自动启动
     if (!isCarouselRunning) {
       toggleCarousel();
@@ -521,10 +525,6 @@ function renderNotifications() {
     // 提示用户已跳转到指定通知
     snackbar("已跳转到选中通知", 1000, "bottom");
   }
-
-  const prevBtn = document.getElementById("prevNotificationBtn");
-  const nextBtn = document.getElementById("nextNotificationBtn");
-
   if (prevBtn && nextBtn) {
     const isDisabled = notifications.length <= 1;
     prevBtn.disabled = isDisabled;
@@ -589,12 +589,36 @@ function toggleCarousel() {
       carouselToggleBtn.style.backgroundColor =
         "rgb(var(--mdui-color-secondary-container))";
       carouselToggleBtn.style.color = "rgba(var(--mdui-color-secondary))";
+
+      prevBtn.disabled = false;
+      nextBtn.disabled = false;
+
+      prevBtn.style.opacity = "1";
+      prevBtn.style.backgroundColor =
+        "rgb(var(--mdui-color-secondary-container))";
+      prevBtn.style.color = "rgba(var(--mdui-color-secondary),1)";
+      nextBtn.style.opacity = "1";
+      nextBtn.style.backgroundColor =
+        "rgb(var(--mdui-color-secondary-container))";
+      nextBtn.style.color = "rgba(var(--mdui-color-secondary),1)";
     } else {
       carouselToggleBtn.innerHTML =
         '<span class="material-symbols-rounded">no_encryption</span>';
       carouselToggleBtn.style.backgroundColor =
         "rgba(var(--mdui-color-secondary))";
       carouselToggleBtn.style.color = "rgba(var(--mdui-color-on-secondary))";
+
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+
+      prevBtn.style.opacity = "0.8";
+      prevBtn.style.backgroundColor =
+        "rgba(var(--mdui-color-surface-container))";
+      prevBtn.style.color = "rgba(var(--mdui-color-secondary),0.5)";
+      nextBtn.style.opacity = "0.8";
+      nextBtn.style.backgroundColor =
+        "rgba(var(--mdui-color-surface-container))";
+      nextBtn.style.color = "rgba(var(--mdui-color-secondary),0.5)";
     }
   }
 

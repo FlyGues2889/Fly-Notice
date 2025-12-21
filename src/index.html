@@ -23,7 +23,14 @@
 <body id="body" class="mdui-theme-auto" style="margin: 0;">
     <mdui-layout style="height: 100vh;">
         <div class="loadingLayer" id="loading-layer">
-            <mdui-circular-progress></mdui-circular-progress>
+            <svg xmlns="http://www.w3.org/2000/svg" width="3.6em" height="3.6em" viewBox="0 0 24 24">
+                <path fill="none" stroke="#526070" stroke-dasharray="16" stroke-dashoffset="16" stroke-linecap="round"
+                    stroke-linejoin="round" stroke-width="2" d="M12 3c4.97 0 9 4.03 9 9">
+                    <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.14s" values="16;0" />
+                    <animateTransform attributeName="transform" dur="1.05s" repeatCount="indefinite" type="rotate"
+                        values="0 12 12;360 12 12" />
+                </path>
+            </svg>
         </div>
 
         <div class="no-disturb-screen mdui-theme-dark" id="no-disturb-screen">
@@ -228,8 +235,7 @@
 
     <mdui-dialog close-on-overlay-click headline="添加新通知" class="add-dialog">
         <span slot="icon" class="material-symbols-rounded">notification_add</span>
-        <mdui-text-field rows="3" clearable  label="通知内容" type="input" id="excludeNums" value=""
-            variant="outlined"
+        <mdui-text-field rows="3" clearable label="通知内容" type="input" id="excludeNums" value="" variant="outlined"
             style="width: 50vw;max-width: 50vw;height:28vh;max-height:28vh;margin-top: 0.8rem;font-family: 'HarmonyOS Sans SC';">
         </mdui-text-field>
         <mdui-list-item nonclickable>
@@ -244,8 +250,7 @@
 
     <mdui-dialog close-on-overlay-click headline="修改通知内容" class="edit-dialog">
         <span slot="icon" class="material-symbols-rounded">edit</span>
-        <mdui-text-field rows="3" clearable  label="通知内容" type="input" id="editMsgContent" value=""
-            variant="outlined"
+        <mdui-text-field rows="3" clearable label="通知内容" type="input" id="editMsgContent" value="" variant="outlined"
             style="width: 50vw;max-width: 50vw;height:28vh;max-height:28vh;margin-top: 0.8rem;font-family: 'HarmonyOS Sans SC';">
         </mdui-text-field>
         <mdui-list-item nonclickable>
@@ -267,26 +272,47 @@
                 <mdui-collapse-item>
                     <mdui-list-item nonclickable slot="header"
                         style="margin-top: 1rem;background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-large) var(--mdui-shape-corner-large) var(--mdui-shape-corner-small) var(--mdui-shape-corner-small);">
-                        <span slot="icon" class="material-symbols-rounded"
-                            style="color: rgb(var(--mdui-color-primary));">browser_updated</span>
+                        <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="2.4em" height="2.4em" viewBox="0 0 24 24">
+                            <g fill="none" stroke="#526070" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2">
+                                <path stroke-dasharray="2 4" stroke-dashoffset="6"
+                                    d="M12 3c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9">
+                                    <animate attributeName="stroke-dashoffset" dur="0.6s" repeatCount="indefinite"
+                                        values="6;0" />
+                                </path>
+                                <path stroke-dasharray="32" stroke-dashoffset="32"
+                                    d="M12 21c-4.97 0 -9 -4.03 -9 -9c0 -4.97 4.03 -9 9 -9">
+                                    <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.1s" dur="0.4s"
+                                        values="32;0" />
+                                </path>
+                                <path stroke-dasharray="10" stroke-dashoffset="10" d="M12 8v7.5">
+                                    <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.2s"
+                                        values="10;0" />
+                                </path>
+                                <path stroke-dasharray="6" stroke-dashoffset="6"
+                                    d="M12 15.5l3.5 -3.5M12 15.5l-3.5 -3.5">
+                                    <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s" dur="0.2s"
+                                        values="6;0" />
+                                </path>
+                            </g>
+                        </svg>
                         <mdui-button slot="end-icon" variant="tonal"
                             style="background-color: rgb(var(--mdui-color-surface-container-high));width: 1rem;">
                             <span class="material-symbols-rounded">keyboard_arrow_up</span>
                         </mdui-button>
                         当前已安装的更新
-                        <span slot="description">版本 1.2.8</span>
+                        <span slot="description">版本 1.2.9</span>
                     </mdui-list-item>
                     <mdui-list-item nonclickable
                         style="margin-top: 2px;background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-small);">
                         <p style="color: rgb(var(--mdui-color-secondary));margin: 0;">更新日志</p>
                         <span slot="description">
-                            25-12-014 12:13 (推送自 Lvi_Fly - FlyGues Studio)
+                            25-12-21 13:05 (推送自 Lvi_Fly - FlyGues Studio)
                             <p style="margin-top: 0.2rem;font-size: 0.7rem;">
                                 # 修补<br>
-                                - 优化：调整添加通知按钮的颜色<br>
-                                - 优化：调整全局滚动条的样式<br>
-                                - 优化：解决了修改和添加通知弹窗的文本框布局溢出问题<br>
-                                - 优化：息屏模式改为全局黑暗模式，按钮颜色调整
+                                - 优化：修复了点击通知缩略栏不能跳转通知的bug<br>
+                                - 优化：修复了当通知轮播锁定时通知切换按钮没有被禁用的bug<br>
+                                - 优化：现在当通知字号过大而不能完全显示时，文字将被限制在一个可滚动容器内
                             </p>
                         </span>
                     </mdui-list-item>

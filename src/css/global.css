@@ -17,8 +17,8 @@ mdui-layout {
 }
 
 :root {
-      scrollbar-width: thin;
-    scrollbar-color: rgba(var(--mdui-color-secondary), 0.15) #00000000;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--mdui-color-secondary), 0.15) #00000000;
 
 }
 
@@ -98,7 +98,6 @@ mdui-top-app-bar {
     margin-left: 1.6rem;
 
     font-size: medium;
-    -webkit-app-region: drag;
     user-select: none;
 
     color: rgb(var(--mdui-color-primary));
@@ -166,7 +165,7 @@ div.loadingLayer {
   height: 100vh;
   z-index: 100;
 
-  background-color: rgb(var(--mdui-color-surface));
+  background-color: #EDF2FC;
 
   position: fixed;
   top: 0;
@@ -237,6 +236,8 @@ div.showList {
   align-items: center;
   white-space: pre-wrap;
 
+  overflow: scroll;
+
   transition: all 0.3s cubic-bezier(0.28, 0.02, 0.45, 0.98);
 }
 
@@ -251,6 +252,8 @@ mdui-card.viewCard {
 mdui-navigation-rail {
   z-index: 100;
   background-color: unset;
+
+  -webkit-app-region: drag;
 
   mdui-button-icon[slot="bottom"] {
     margin-bottom: 1.2rem;
