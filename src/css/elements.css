@@ -1,7 +1,7 @@
 .slideBtn {
     --active-width: 0%;
     --active-color: rgb(var(--mdui-color-secondary));
-    --bkg-height: 0.8rem;
+    --bkg-height: 1rem;
 
 
     max-width: 16rem;
@@ -24,7 +24,7 @@
     width: calc(var(--active-width) - 0.2rem);
     height: var(--bkg-height);
     background-color: var(--active-color);
-    border-radius: 0.5rem 0.2rem 0.2rem 0.5rem;
+    border-radius: 0.4rem 0.2rem 0.2rem 0.4rem;
     transition: width 0.1s ease;
 }
 
@@ -49,6 +49,6 @@
     width: calc(100% - var(--active-width) - 0.2rem);
     height: var(--bkg-height);
     background-color: #00000014;
-    border-radius: 0.2rem 0.5rem 0.5rem 0.2rem;
+    border-radius: 0.2rem 0.4rem 0.4rem 0.2rem;
     transition: width 0.1s ease;
 }

@@ -314,7 +314,7 @@ function renderNotifications() {
   // 更新计数
   const notificationCount = notifications.length;
   unreadCount.textContent = notificationCount;
-  countDisplay.textContent = `${notificationCount} 条通知在队列中`;
+  countDisplay.textContent = `共 ${notificationCount} 条通知`;
 
   // 无通知时显示空状态
   if (notificationCount === 0) {
