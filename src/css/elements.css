@@ -48,7 +48,7 @@
     flex-grow: 1;
     width: calc(100% - var(--active-width) - 0.2rem);
     height: var(--bkg-height);
-    background-color: #00000014;
+    background-color: rgb(var(--mdui-color-surface));
     border-radius: 0.2rem 0.4rem 0.4rem 0.2rem;
     transition: width 0.1s ease;
 }

@@ -13,8 +13,8 @@
         "title": "FlyNotice",
         "width": 1024,
         "height": 600,
-        "minWidth": 720,
-        "minHeight": 480,
+        "minWidth": 960,
+        "minHeight": 540,
         "decorations": false,
         "transparent": true
       }
