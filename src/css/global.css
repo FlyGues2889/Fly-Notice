@@ -117,7 +117,7 @@ mdui-top-app-bar {
 div.page {
   width: 100%;
   margin: 0 0 0 calc(5rem + 14rem);
-  padding: 0 3rem;
+  padding: 0 2rem;
 
   overflow: auto;
   min-height: 472px;
@@ -126,7 +126,7 @@ div.page {
 
   background-color: rgb(var(--mdui-color-surface), 0.8);
   border-radius: var(--mdui-shape-corner-extra-large) 0 0 var(--mdui-shape-corner-extra-large);
-  box-shadow: rgba(var(--mdui-color-on-surface-light),0.2) 0px 0px 0.5rem;
+  box-shadow: var(--mdui-elevation-level2);
 
   transition: all 0.3s cubic-bezier(0.28, 0.02, 0.45, 0.98);
   transform: translateX(0);
@@ -162,7 +162,7 @@ h1 {
 }
 
 mdui-snackbar {
-  margin-left: 6rem;
+  margin-right: 6rem;
   margin-bottom: 1.6rem;
   border-radius: var(--mdui-shape-corner-medium);
 
@@ -213,13 +213,13 @@ div.time-container {
 
     font-family: 'Harmony Sans SC M';
     /* text-align: center; */
-    background-color: rgba(var(--mdui-color-surface), 0.6);
+    background-color: rgba(var(--mdui-color-surface),0.8);
     border-radius: var(--mdui-shape-corner-extra-large);
   }
 
   span#time {
     color: rgb(var(--mdui-color-secondary));
-    font-size: 1.1rem;
+    font-size: 1rem;
     letter-spacing: initial;
   }
 
@@ -233,7 +233,7 @@ div.time-container {
 
 div.showList {
   width: 100%;
-  height: calc(100vh - 6rem);
+  height: calc(100vh - 5rem);
 
   margin-top: 3rem;
 
@@ -298,7 +298,7 @@ div.list-container {
     width: calc(100% - 1rem);
     margin: 0 0.5rem;
 
-    background-color: rgba(var(--mdui-color-surface), 0.6);
+    background-color: rgba(var(--mdui-color-surface),0.8);
     border-radius: var(--mdui-shape-corner-small) var(--mdui-shape-corner-small) var(--mdui-shape-corner-extra-large) var(--mdui-shape-corner-extra-large);
 
     position: absolute;
@@ -323,10 +323,19 @@ div.list-container {
   }
 
   mdui-list-item[active] {
-    border: rgba(var(--mdui-color-secondary),0.5) solid 0.1rem;
+    border: rgba(var(--mdui-color-secondary), 0.5) solid 0.1rem;
     background-color: unset;
-
+    
     border-radius: 1.4rem !important;
+
+    transition: all 0.1s;
+    transition: border-radius 0.2s;
+  }
+
+  mdui-list-item[active]:hover {
+    background-color: rgba(var(--mdui-color-secondary-container));
+
+    border-radius: 2rem !important;
   }
 
   mdui-list-subheader {
@@ -364,7 +373,7 @@ div.list-container {
     margin-top: 1em;
     padding: 0 0.4rem;
 
-    background-color: rgba(var(--mdui-color-surface), 0.6);
+    background-color: rgba(var(--mdui-color-surface),0.8);
     border-radius: var(--mdui-shape-corner-extra-large) var(--mdui-shape-corner-extra-large) var(--mdui-shape-corner-small) var(--mdui-shape-corner-small);
 
     overflow: auto;
@@ -485,27 +494,32 @@ div.margined {
   left: 2.4rem;
   bottom: 1.5rem;
 
-  .normalBtn {
-    height: 3rem;
-    width: 3.6rem;
+  display: block;
+  background-color: rgba(var(--mdui-color-surface));
+  border-radius: 2rem;
+  transition: all 0.2s;
 
-    background-color: rgb(var(--mdui-color-secondary-container));
-    color: rgb(var(--mdui-color-secondary));
-    box-shadow: none;
+  div.bkg {
+    height: 2.5rem;
 
+    margin: 0;
+    padding: 0.4rem 0.6rem;
+
+    box-shadow: var(--mdui-elevation-level5);
+    background-color: rgba(var(--mdui-color-secondary-container), 0.4);
     border-radius: 2rem;
 
-    transition: all 0.25s;
+    transition: all 0.2s;
 
-    .material-symbols-rounded {
-      font-size: 22px;
+    mdui-button-icon {
+      margin: 0;
+
+      color: rgb(var(--mdui-color-secondary));
+
+      .material-symbols-rounded {
+        font-size: 1.4rem;
+      }
     }
-  }
-
-
-
-  .normalBtn:hover {
-    border-radius: var(--mdui-shape-corner-medium);
   }
 }
 

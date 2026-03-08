@@ -146,7 +146,7 @@ function toggleScreenSaver() {
       snackbar(
         "<b>息屏显示已启用</b><br><small>点击屏幕正下方按钮退出到正常窗口</small>",
         5000,
-        "top-end"
+        "top-end",
       );
     }, 500);
   }
@@ -175,7 +175,7 @@ function navigate(pageId) {
   document.getElementById(pageId).style.display = "block";
 
   const navigationItems = document.querySelectorAll(
-    "mdui-navigation-rail-item"
+    "mdui-navigation-rail-item",
   );
   navigationItems.forEach((item) => {
     item.removeAttribute("active");
@@ -228,7 +228,7 @@ function addNotification(content) {
   }
 
   // 提示与重置
-  snackbar("已添加新通知", 1000, "bottom");
+  snackbar("已添加新通知", 1000, "bottom-end");
   textField.value = "";
   // 重置复选框状态
   document.getElementById("check-important-msg").checked = false;
@@ -242,12 +242,12 @@ function addNotification(content) {
 function deleteNotification(id) {
   // 新增：定义deleteIndex，找到要删除的通知索引
   const deleteIndex = notifications.findIndex(
-    (notification) => notification.id === id
+    (notification) => notification.id === id,
   );
 
   // 从数组中删除
   notifications = notifications.filter(
-    (notification) => notification.id !== id
+    (notification) => notification.id !== id,
   );
 
   // 保存到本地存储
@@ -272,7 +272,7 @@ function deleteNotification(id) {
   }
 
   // 提示
-  snackbar("通知已删除", 1000, "bottom");
+  snackbar("通知已删除", 1000, "bottom-end");
   displayMessages();
 }
 /**
@@ -286,7 +286,7 @@ function updateNotification(id, newContent, newIsImportant) {
 
   // 找到并更新通知
   const index = notifications.findIndex(
-    (notification) => notification.id === id
+    (notification) => notification.id === id,
   );
   if (index !== -1) {
     notifications[index].content = newContent;
@@ -301,7 +301,7 @@ function updateNotification(id, newContent, newIsImportant) {
     renderNotifications();
 
     // 提示
-    snackbar("通知已更新", 1000, "bottom");
+    snackbar("通知已更新", 1000, "bottom-end");
     displayMessages();
   }
 }
@@ -523,7 +523,7 @@ function renderNotifications() {
     }
 
     // 提示用户已跳转到指定通知
-    snackbar("已跳转到选中通知", 1000, "bottom");
+    snackbar("已跳转到选中通知", 1000, "bottom-end");
   }
   if (prevBtn && nextBtn) {
     const isDisabled = notifications.length <= 1;
@@ -531,23 +531,11 @@ function renderNotifications() {
     nextBtn.disabled = isDisabled;
     // 可选：添加禁用样式
     if (isDisabled) {
-      prevBtn.style.opacity = "0.8";
-      prevBtn.style.backgroundColor =
-        "rgba(var(--mdui-color-surface-container))";
-      prevBtn.style.color = "rgba(var(--mdui-color-secondary),0.5)";
-      nextBtn.style.opacity = "0.8";
-      nextBtn.style.backgroundColor =
-        "rgba(var(--mdui-color-surface-container))";
-      nextBtn.style.color = "rgba(var(--mdui-color-secondary),0.5)";
+      prevBtn.style.display = "none";
+      nextBtn.style.display = "none";
     } else {
-      prevBtn.style.opacity = "1";
-      prevBtn.style.backgroundColor =
-        "rgb(var(--mdui-color-secondary-container))";
-      prevBtn.style.color = "rgba(var(--mdui-color-secondary),1)";
-      nextBtn.style.opacity = "1";
-      nextBtn.style.backgroundColor =
-        "rgb(var(--mdui-color-secondary-container))";
-      nextBtn.style.color = "rgba(var(--mdui-color-secondary),1)";
+      prevBtn.style.display = "";
+      nextBtn.style.display = "";
     }
   }
 }
@@ -559,7 +547,7 @@ function renderNotifications() {
 function saveNotificationsToLocalStorage() {
   localStorage.setItem(
     STORAGE_KEYS.NOTIFICATIONS,
-    JSON.stringify(notifications)
+    JSON.stringify(notifications),
   );
 }
 
@@ -586,46 +574,47 @@ function toggleCarousel() {
     if (isCarouselRunning) {
       carouselToggleBtn.innerHTML =
         '<span class="material-symbols-rounded">lock</span>';
-      carouselToggleBtn.style.backgroundColor =
-        "rgb(var(--mdui-color-secondary-container))";
       carouselToggleBtn.style.color = "rgba(var(--mdui-color-secondary))";
 
       prevBtn.disabled = false;
       nextBtn.disabled = false;
 
-      prevBtn.style.opacity = "1";
-      prevBtn.style.backgroundColor =
-        "rgb(var(--mdui-color-secondary-container))";
-      prevBtn.style.color = "rgba(var(--mdui-color-secondary),1)";
-      nextBtn.style.opacity = "1";
-      nextBtn.style.backgroundColor =
-        "rgb(var(--mdui-color-secondary-container))";
-      nextBtn.style.color = "rgba(var(--mdui-color-secondary),1)";
+      const isDisabled = notifications.length <= 1;
+      prevBtn.disabled = isDisabled;
+      nextBtn.disabled = isDisabled;
+      if (isDisabled) {
+        prevBtn.style.display = "none";
+        nextBtn.style.display = "none";
+      } else {
+        prevBtn.style.display = "";
+        nextBtn.style.display = "";
+      }
     } else {
       carouselToggleBtn.innerHTML =
-        '<span class="material-symbols-rounded">no_encryption</span>';
-      carouselToggleBtn.style.backgroundColor =
-        "rgba(var(--mdui-color-secondary))";
-      carouselToggleBtn.style.color = "rgba(var(--mdui-color-on-secondary))";
+        '<span class="material-symbols-rounded-fill">no_encryption</span>';
+      carouselToggleBtn.style.color = "rgba(var(--mdui-color-secondary))";
 
       prevBtn.disabled = true;
       nextBtn.disabled = true;
 
-      prevBtn.style.opacity = "0.8";
-      prevBtn.style.backgroundColor =
-        "rgba(var(--mdui-color-surface-container))";
-      prevBtn.style.color = "rgba(var(--mdui-color-secondary),0.5)";
-      nextBtn.style.opacity = "0.8";
-      nextBtn.style.backgroundColor =
-        "rgba(var(--mdui-color-surface-container))";
-      nextBtn.style.color = "rgba(var(--mdui-color-secondary),0.5)";
+      const isDisabled = notifications.length <= 1;
+      prevBtn.disabled = isDisabled;
+      nextBtn.disabled = isDisabled;
+      // 可选：添加禁用样式
+      if (isDisabled) {
+        prevBtn.style.display = "none";
+        nextBtn.style.display = "none";
+      } else {
+        prevBtn.style.display = "";
+        nextBtn.style.display = "";
+      }
     }
   }
 
   snackbar(
     isCarouselRunning ? "已继续通知轮播" : "已暂停通知轮播",
     1000,
-    "bottom"
+    "bottom-end",
   );
 
   if (isCarouselRunning) {
@@ -637,7 +626,7 @@ function displayMessages() {
   if (screenSaver.style.display === "flex") return;
 
   if (showListElements.length === 0) {
-    snackbar("没有找到可以显示的消息内容", 3000, "bottom");
+    snackbar("没有找到可以显示的消息内容", 3000, "bottom-end");
     return;
   }
 
@@ -739,7 +728,7 @@ function displayMessages() {
 function showPrevNotification() {
   // 无通知时提示
   if (notifications.length === 0) {
-    snackbar("暂无通知可切换", 1500, "bottom");
+    snackbar("暂无通知可切换", 1500, "bottom-end");
     return;
   }
 
@@ -759,7 +748,7 @@ function showPrevNotification() {
   lastSwitchSecond = new Date().getSeconds();
 
   // 提示
-  snackbar("已切换到上一条通知", 1000, "bottom");
+  snackbar("已切换到上一条通知", 1000, "bottom-end");
 }
 
 /**
@@ -768,7 +757,7 @@ function showPrevNotification() {
 function showNextNotification() {
   // 无通知时提示
   if (notifications.length === 0) {
-    snackbar("暂无通知可切换", 1500, "bottom");
+    snackbar("暂无通知可切换", 1500, "bottom-end");
     return;
   }
 
@@ -787,7 +776,7 @@ function showNextNotification() {
   lastSwitchSecond = new Date().getSeconds();
 
   // 提示
-  snackbar("已切换到下一条通知", 1000, "bottom");
+  snackbar("已切换到下一条通知", 1000, "bottom-end");
 }
 
 /**
@@ -878,7 +867,7 @@ function initSliderEvents(slider) {
   // 计算滑块当前值（基于滑块百分比）
   function getValueFromSlider(sliderEl) {
     const percent = parseFloat(
-      getComputedStyle(sliderEl).getPropertyValue("--active-width")
+      getComputedStyle(sliderEl).getPropertyValue("--active-width"),
     );
     return 1 + (percent / 100) * 4; // 百分比→字体大小（1-5rem）
   }
@@ -957,7 +946,7 @@ function showListContainer() {
     pages.forEach((page) => {
       page.style.transform = "translateX(14rem)";
       page.style.margin = "0rem 0rem 0rem 5rem";
-      page.style.width = "calc(100vw - 5rem - 14rem - 5rem - 1rem)";
+      page.style.width = "calc(100vw - 23rem)";
     });
     listContainerSwitch.innerHTML =
       '<span class="material-symbols-rounded">menu_open</span>';
@@ -1067,7 +1056,7 @@ let currentPlayingNotifyId = null;
 function openEditDialog() {
   // 若没有通知，直接提示并返回
   if (notifications.length === 0) {
-    snackbar("暂无通知可修改", 1500, "bottom");
+    snackbar("暂无通知可修改", 1500, "bottom-end");
     return;
   }
 
@@ -1082,7 +1071,7 @@ function openEditDialog() {
   // 从通知数组中匹配当前显示的内容
   const currentContent = showListElements[0]?.textContent.trim();
   const currentNotify = notifications.find(
-    (notify) => notify.content.trim() === currentContent
+    (notify) => notify.content.trim() === currentContent,
   );
 
   if (currentNotify) {
@@ -1111,7 +1100,7 @@ function initEditDialog() {
   closeEditBtn.addEventListener("click", () => {
     const newContent = editTextField.value.trim();
     if (!newContent) {
-      snackbar("通知内容不能为空", 1500, "bottom");
+      snackbar("通知内容不能为空", 1500, "bottom-end");
       return;
     }
 
@@ -1165,7 +1154,7 @@ function initEditDialog() {
 
 function deleteCurrentNotification() {
   if (notifications.length === 0) {
-    snackbar("没有通知可删除", 1500, "bottom");
+    snackbar("没有通知可删除", 1500, "bottom-end");
     return;
   }
 
@@ -1174,7 +1163,7 @@ function deleteCurrentNotification() {
     // 如果没有记录ID，尝试通过内容匹配
     const currentContent = showListElements[0]?.textContent.trim();
     const currentNotify = notifications.find(
-      (notify) => notify.content.trim() === currentContent
+      (notify) => notify.content.trim() === currentContent,
     );
     if (currentNotify) {
       currentPlayingNotifyId = currentNotify.id;

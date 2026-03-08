@@ -83,7 +83,7 @@
                         <span class="material-symbols-rounded">playlist_play</span>
                     </mdui-avatar>
                     <span id="time">Loading</span>
-                    <span slot="description"><span id="unreadCount">0</span> 通知在队列中</span>
+                    <span slot="description"><span id="unreadCount">0</span> 条通知</span>
                 </mdui-list-item>
             </div>
 
@@ -122,26 +122,32 @@
             <div class="showList" id="showList"></div>
 
             <div class="left-toolbar">
-                <mdui-button onclick="openEditDialog()" class="edit-btn normalBtn">
-                    <span class="material-symbols-rounded">edit</span>
-                </mdui-button>
+                <div class="bkg">
+                    <mdui-button-icon onclick="openEditDialog()" class="edit-btn">
+                        <span class="material-symbols-rounded">edit</span>
+                    </mdui-button-icon>
 
-                <mdui-button onclick="deleteCurrentNotification()" class="delete-btn normalBtn">
-                    <span class="material-symbols-rounded">delete</span>
-                </mdui-button>
+                    <mdui-button-icon onclick="deleteCurrentNotification()" class="delete-btn">
+                        <span class="material-symbols-rounded">delete</span>
+                    </mdui-button-icon>
 
-                <mdui-button onclick="toggleCarousel()" class="carousel-toggle-btn normalBtn">
-                    <span class="material-symbols-rounded">lock</span>
-                </mdui-button>
-            </div>
+                    <div style="display: inline-block;height: 2rem;position: relative;top: -0.2rem;">
+                        <mdui-divider vertical
+                            style="width: 0.05rem;border-radius: 1rem;background-color: rgb(var(--mdui-color-secondary),0.2);margin: 0 0.1rem;"></mdui-divider>
+                    </div>
 
-            <div class="right-toolbar">
-                <mdui-button id="prevNotificationBtn" class="normalBtn">
-                    <span class="material-symbols-rounded">arrow_back</span>
-                </mdui-button>
-                <mdui-button id="nextNotificationBtn" class="normalBtn">
-                    <span class="material-symbols-rounded">arrow_forward</span>
-                </mdui-button>
+                    <mdui-button-icon onclick="toggleCarousel()" class="carousel-toggle-btn">
+                        <span class="material-symbols-rounded">lock</span>
+                    </mdui-button-icon>
+
+                    <mdui-button-icon id="prevNotificationBtn" style="display: none;">
+                        <span class="material-symbols-rounded">arrow_back</span>
+                    </mdui-button-icon>
+
+                    <mdui-button-icon id="nextNotificationBtn" style="display: none;">
+                        <span class="material-symbols-rounded">arrow_forward</span>
+                    </mdui-button-icon>
+                </div>
             </div>
         </div>
 
@@ -280,18 +286,18 @@
                             <span class="material-symbols-rounded">keyboard_arrow_up</span>
                         </mdui-button>
                         当前已安装的更新
-                        <span slot="description">版本 1.2.11</span>
+                        <span slot="description">版本 1.2.12</span>
                     </mdui-list-item>
                     <mdui-list-item nonclickable
                         style="margin-top: 2px;background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-small);">
                         <p style="color: rgb(var(--mdui-color-secondary));margin: 0;">更新日志</p>
                         <span slot="description">
-                            26-02-20 08:38
+                            26-03-08 15:50
                             <p style="margin-top: 0.2rem;font-size: 0.7rem;">
                                 # 修补<br>
-                                - 优化：修复了应用程序层次不清的视觉错误，添加主要页面的底部阴影<br>
-                                - 优化：修改息屏切换图标<br>
-                                - 优化：更换更大的圆角统一视觉风格<br>
+                                - 优化：更新工具栏<br>
+                                - 优化：略微拓宽了通知显示范围，减小最小窗口大小<br>
+                                - 优化：调整部分文本和颜色样式
                             </p>
                         </span>
                     </mdui-list-item>
