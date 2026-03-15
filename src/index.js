@@ -275,6 +275,34 @@ function deleteNotification(id) {
   snackbar("通知已删除", 1000, "bottom-end");
   displayMessages();
 }
+
+function clearAllNotifications() {
+  if (notifications.length === 0) {
+    snackbar("队列中没有通知可以删除", 1500, "bottom-end");
+    return;
+    }
+  else {
+    mdui.dialog({
+      description: "确定要删除通知列表内的所有通知吗？此操作无法撤销。",
+      actions: [
+        {
+          text: "取消",
+        },
+        {
+          text: "确定",
+          onClick: () => {
+            notifications = [];
+            saveNotificationsToLocalStorage();
+            renderNotifications();
+            snackbar("通知队列已清空", 1500, "bottom-end");
+            displayMessages();
+          },
+        }
+      ]
+    });
+  }
+}
+
 /**
  * 更新通知内容（支持更新重要性状态）
  * @param {string} id - 通知ID
@@ -348,7 +376,7 @@ function renderNotifications() {
   const primaryColor = "rgb(var(--mdui-color-primary))";
 
   notifications.forEach((notification, index) => {
-    // 渲染主通知卡片
+    // 渲染卡片通知页面的卡片
     const card = document.createElement("mdui-card");
     card.className = "msgCard";
     card.dataset.id = notification.id;
@@ -359,12 +387,12 @@ function renderNotifications() {
     card.variant = "outlined";
 
     if (notification.isImportant) {
-      card.style.border = `0.15rem solid rgba(var(--mdui-color-primary),0.2)`;
+      card.style.border = `rgba(var(--mdui-color-primary), 0.5) solid 0.1rem`;
       card.style.color = primaryColor;
       card.style.backgroundColor =
         "rgba(var(--mdui-color-primary-container),0.1)";
     } else {
-      card.style.border = "0.15rem solid rgba(var(--mdui-color-secondary),0.2)";
+      card.style.border = "rgba(var(--mdui-color-secondary), 0.5) solid 0.1rem";
       card.style.color = "";
       card.style.backgroundColor =
         "rgba(var(--mdui-color-surface-container),0.3)";
@@ -411,6 +439,7 @@ function renderNotifications() {
 
     // 删除按钮
     const deleteBtn = document.createElement("mdui-button-icon");
+    deleteBtn.className = "deleteMsgBtn";
     deleteBtn.innerHTML =
       '<span class="material-symbols-rounded">delete</span>';
     deleteBtn.style.position = "absolute";
@@ -433,6 +462,9 @@ function renderNotifications() {
 
     if (notification.isImportant) {
       cardActions.appendChild(importantMark);
+
+      editBtn.style.color = "rgba(var(--mdui-color-primary),0.5)";
+      deleteBtn.style.color = "rgba(var(--mdui-color-primary),0.5)";
     }
     cardActions.appendChild(editBtn);
     cardActions.appendChild(deleteBtn);
@@ -448,6 +480,7 @@ function renderNotifications() {
     }
 
     const overviewItem = document.createElement("mdui-list-item");
+    overviewItem.className = "listItem";
     overviewItem.dataset.id = notification.id;
     overviewItem.dataset.index = index; // 存储当前通知的索引
     overviewItem.description = displayText;
@@ -517,12 +550,6 @@ function renderNotifications() {
     // 重新计时（重置轮播计时器）
     lastSwitchSecond = new Date().getSeconds();
 
-    // 如果轮播已停止，点击后自动启动
-    if (!isCarouselRunning) {
-      toggleCarousel();
-    }
-
-    // 提示用户已跳转到指定通知
     snackbar("已跳转到选中通知", 1000, "bottom-end");
   }
   if (prevBtn && nextBtn) {
@@ -567,7 +594,7 @@ function loadNotificationsFromLocalStorage() {
 }
 
 // ========================= 9. 轮播控制功能 =========================
-function toggleCarousel() {
+function toggleCarousel(isSlient) {
   isCarouselRunning = !isCarouselRunning;
 
   if (carouselToggleBtn) {
@@ -611,11 +638,13 @@ function toggleCarousel() {
     }
   }
 
-  snackbar(
-    isCarouselRunning ? "已继续通知轮播" : "已暂停通知轮播",
-    1000,
-    "bottom-end",
-  );
+  if (isSlient == "slient") {
+    snackbar(
+      isCarouselRunning ? "已继续通知轮播" : "已暂停通知轮播",
+      1000,
+      "bottom-end",
+    );
+  }
 
   if (isCarouselRunning) {
     lastSwitchSecond = new Date().getSeconds();
@@ -748,7 +777,7 @@ function showPrevNotification() {
   lastSwitchSecond = new Date().getSeconds();
 
   // 提示
-  snackbar("已切换到上一条通知", 1000, "bottom-end");
+  snackbar("已切换到上一条通知，轮播已暂停", 1000, "bottom-end");
 }
 
 /**
@@ -776,7 +805,7 @@ function showNextNotification() {
   lastSwitchSecond = new Date().getSeconds();
 
   // 提示
-  snackbar("已切换到下一条通知", 1000, "bottom-end");
+  snackbar("已切换到下一条通知，轮播已暂停", 1000, "bottom-end");
 }
 
 /**

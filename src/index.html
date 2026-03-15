@@ -79,11 +79,12 @@
         <div class="list-container">
             <div class="time-container">
                 <mdui-list-item nonclickable>
-                    <mdui-avatar class="statusIcon" slot="icon">
-                        <span class="material-symbols-rounded">playlist_play</span>
-                    </mdui-avatar>
                     <span id="time">Loading</span>
                     <span slot="description"><span id="unreadCount">0</span> 条通知</span>
+
+                    <mdui-button-icon class="statusIcon" slot="end-icon" onclick="clearAllNotifications()">
+                        <span class="material-symbols-rounded">clear_all</span>
+                    </mdui-button-icon>
                 </mdui-list-item>
             </div>
 
@@ -121,7 +122,7 @@
         <div class="page" id="mainPage">
             <div class="showList" id="showList"></div>
 
-            <div class="left-toolbar">
+            <div class="main-toolbar">
                 <div class="bkg">
                     <mdui-button-icon onclick="openEditDialog()" class="edit-btn">
                         <span class="material-symbols-rounded">edit</span>
@@ -246,7 +247,7 @@
             <mdui-list-item nonclickable>
                 <mdui-checkbox slot="end-icon" id="check-important-msg"></mdui-checkbox>
                 <span slot="icon" class="material-symbols-rounded-fill">flag</span>
-                是否为重要通知
+                重要通知标记
                 <span slot="description">重要通知的文字会使用强调色显示</span>
             </mdui-list-item>
         </mdui-card>
@@ -263,7 +264,7 @@
             <mdui-list-item nonclickable>
                 <mdui-checkbox slot="end-icon" id="change-important-msg"></mdui-checkbox>
                 <span slot="icon" class="material-symbols-rounded-fill">flag</span>
-                是否为重要通知
+                重要通知标记
                 <span slot="description">重要通知的文字会使用强调色显示</span>
             </mdui-list-item>
         </mdui-card>
@@ -286,18 +287,19 @@
                             <span class="material-symbols-rounded">keyboard_arrow_up</span>
                         </mdui-button>
                         当前已安装的更新
-                        <span slot="description">版本 1.2.12</span>
+                        <span slot="description">版本 1.2.13</span>
                     </mdui-list-item>
                     <mdui-list-item nonclickable
                         style="margin-top: 2px;background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-small);">
                         <p style="color: rgb(var(--mdui-color-secondary));margin: 0;">更新日志</p>
                         <span slot="description">
-                            26-03-08 15:50
+                            26-03-15 12:32
                             <p style="margin-top: 0.2rem;font-size: 0.7rem;">
                                 # 修补<br>
-                                - 优化：更新工具栏<br>
-                                - 优化：略微拓宽了通知显示范围，减小最小窗口大小<br>
-                                - 优化：调整部分文本和颜色样式
+                                - 优化：更新清除通知队列按钮和相应操作<br>
+                                - 修补：修复通知预览栏未处于激活状态的列表项在鼠标悬停时颜色与激活项不一致的问题<br>
+                                - 优化：调整卡片视图的卡片样式<br>
+                                - 优化：减少了snackbar的使用频率，现在只有在重要操作时才会显示
                             </p>
                         </span>
                     </mdui-list-item>
