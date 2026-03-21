@@ -235,7 +235,7 @@ div.time-container {
 
   .statusIcon:hover {
     color: rgb(var(--mdui-color-surface));
-    background-color: rgb(var(--mdui-color-error));
+    background-color: rgb(var(--mdui-color-secondary),0.5);
   }
 
 }
@@ -347,8 +347,6 @@ div.list-container {
 
   mdui-list-item[active]:hover {
     background-color: rgba(var(--mdui-color-secondary-container));
-
-    border-radius: 2rem !important;
   }
 
   mdui-list-subheader {
@@ -392,6 +390,7 @@ div.list-container {
     overflow: auto;
 
     scrollbar-color: rgb(var(--mdui-color-secondary), 0.2) #00000000;
+    scrollbar-width: thin;
   }
 }
 
