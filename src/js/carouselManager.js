@@ -45,8 +45,6 @@ export const toggleCarousel = (isSlient) => {
       carouselToggleBtn.style.color = "rgba(var(--mdui-color-secondary))";
 
       if (prevBtn && nextBtn) {
-        prevBtn.disabled = true;
-        nextBtn.disabled = true;
         const isDisabled = notifications.length <= 1;
         prevBtn.style.display = isDisabled ? "none" : "";
         nextBtn.style.display = isDisabled ? "none" : "";

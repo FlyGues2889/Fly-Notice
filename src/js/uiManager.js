@@ -1,13 +1,19 @@
-import { 
-  getNotifications, 
-  getCurrentIndex, 
+import {
+  getNotifications,
+  getCurrentIndex,
   setCurrentIndex,
   getCurrentPlayingNotifyId,
-  setCurrentPlayingNotifyId
+  setCurrentPlayingNotifyId,
 } from "./notificationManager.js";
 import { snackbar } from "./utils.js";
 import { updateFontSize, getCurrentFontSize } from "./fontSizeManager.js";
 import { UI_SELECTORS } from "./constants.js";
+import { toggleCarousel, getIsCarouselRunning } from "./carouselManager.js";
+import {
+  deleteNotification,
+  setIsDialogClosing,
+} from "./notificationManager.js";
+import { setLastSwitchSecond } from "./carouselManager.js";
 
 export const navigate = (pageId) => {
   const pages = document.querySelectorAll(UI_SELECTORS.PAGES);
@@ -31,15 +37,19 @@ export const navigate = (pageId) => {
   } else if (pageId === "listPage") {
     document.getElementById(UI_SELECTORS.TO_LIST)?.setAttribute("active", "");
   } else if (pageId === "settingPage") {
-    document.getElementById(UI_SELECTORS.TO_SETTINGS)?.setAttribute("active", "");
+    document
+      .getElementById(UI_SELECTORS.TO_SETTINGS)
+      ?.setAttribute("active", "");
   }
 };
 
 export const showListContainer = () => {
   const listContainer = document.querySelector(UI_SELECTORS.LIST_CONTAINER);
-  const listContainerSwitch = document.getElementById(UI_SELECTORS.LIST_CONTAINER_SWITCH);
+  const listContainerSwitch = document.getElementById(
+    UI_SELECTORS.LIST_CONTAINER_SWITCH,
+  );
   const pages = document.querySelectorAll(UI_SELECTORS.PAGES);
-  
+
   if (!listContainer || !listContainerSwitch) return;
 
   const isHidden =
@@ -80,7 +90,9 @@ export const renderNotifications = () => {
   const notifications = getNotifications();
   const msgList = document.querySelector(UI_SELECTORS.MSG_LIST);
   const overviewList = document.querySelector(UI_SELECTORS.OVERVIEW_LIST);
-  const showListElements = document.querySelectorAll(UI_SELECTORS.SHOW_LIST_ELEMENTS);
+  const showListElements = document.querySelectorAll(
+    UI_SELECTORS.SHOW_LIST_ELEMENTS,
+  );
   const unreadCount = document.getElementById(UI_SELECTORS.UNREAD_COUNT);
   const countDisplay = document.getElementById(UI_SELECTORS.COUNT_DISPLAY);
   const prevBtn = document.getElementById(UI_SELECTORS.PREV_BTN);
@@ -115,7 +127,7 @@ export const renderNotifications = () => {
       el.style.flexDirection = "column";
       el.style.color = "";
     });
-    
+
     if (prevBtn && nextBtn) {
       prevBtn.style.display = "none";
       nextBtn.style.display = "none";
@@ -182,7 +194,6 @@ export const renderNotifications = () => {
     deleteBtn.style.color = "rgba(var(--mdui-color-secondary),0.5)";
     deleteBtn.style.transform = "scale(0.8)";
     deleteBtn.addEventListener("click", () => {
-      const { deleteNotification } = import("./notificationManager.js");
       deleteNotification(notification.id);
     });
 
@@ -265,8 +276,7 @@ const jumpToNotification = (index) => {
 
   setCurrentIndex(index);
   updateNotificationDisplay(index);
-  
-  const { setLastSwitchSecond } = import("./carouselManager.js");
+
   setLastSwitchSecond(new Date().getSeconds());
 
   snackbar("已跳转到选中通知", 1000, "bottom-end");
@@ -276,7 +286,9 @@ export const updateNotificationDisplay = (index) => {
   const notifications = getNotifications();
   if (index < 0 || index >= notifications.length) return;
 
-  const showListElements = document.querySelectorAll(UI_SELECTORS.SHOW_LIST_ELEMENTS);
+  const showListElements = document.querySelectorAll(
+    UI_SELECTORS.SHOW_LIST_ELEMENTS,
+  );
   const overviewList = document.querySelector(UI_SELECTORS.OVERVIEW_LIST);
 
   if (!overviewList) return;
@@ -300,15 +312,15 @@ export const updateNotificationDisplay = (index) => {
 };
 
 const openEditDialog = (notification) => {
-  const { toggleCarousel, getIsCarouselRunning } = import("./carouselManager.js");
-  
   if (getIsCarouselRunning()) {
     toggleCarousel();
   }
 
   const editDialog = document.querySelector(".edit-dialog");
   const editTextField = document.getElementById("editMsgContent");
-  const changeImportantCheck = document.getElementById(UI_SELECTORS.CHANGE_IMPORTANT_CHECK);
+  const changeImportantCheck = document.getElementById(
+    UI_SELECTORS.CHANGE_IMPORTANT_CHECK,
+  );
 
   if (!editDialog || !editTextField || !changeImportantCheck) return;
 
@@ -316,7 +328,6 @@ const openEditDialog = (notification) => {
   editTextField.value = notification.content;
   changeImportantCheck.checked = notification.isImportant;
 
-  const { setIsDialogClosing } = import("./notificationManager.js");
   setIsDialogClosing(false);
   editDialog.open = true;
 };

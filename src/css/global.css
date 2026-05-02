@@ -235,7 +235,7 @@ div.time-container {
 
   .statusIcon:hover {
     color: rgb(var(--mdui-color-surface));
-    background-color: rgb(var(--mdui-color-secondary),0.5);
+    background-color: rgb(var(--mdui-color-secondary), 0.5);
   }
 
 }
@@ -473,8 +473,8 @@ div.list-container {
     bottom: 2rem;
     right: 2rem;
 
-    background-color: rgb(var(--mdui-color-secondary));
-    color: rgb(var(--mdui-color-surface));
+    background-color: unset;
+    color: rgb(var(--mdui-color-surface-light));
     border-radius: var(--mdui-shape-corner-extra-large);
 
     cursor: pointer;
@@ -507,9 +507,19 @@ div.margined {
   bottom: 1.5rem;
 
   display: block;
-  background-color: rgba(var(--mdui-color-surface));
   border-radius: 2rem;
   transition: all 0.2s;
+
+  div.blur {
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+
+    backdrop-filter: blur(5px);
+    background-color: rgba(var(--mdui-color-secondary-container), 0.3);
+    border-radius: 2rem;
+  }
 
   div.bkg {
     height: 2.5rem;

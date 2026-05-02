@@ -120,6 +120,7 @@
             <div class="showList" id="showList"></div>
 
             <div class="main-toolbar">
+                <div class="blur"></div>
                 <div class="bkg">
                     <mdui-button-icon class="edit-btn" id="edit-notification-btn">
                         <span class="material-symbols-rounded">edit</span>
@@ -273,25 +274,11 @@
 
         <mdui-list>
             <mdui-list-item nonclickable
-                style="background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-medium);margin-bottom: 0.5rem;">
+                style="background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-extra-large);margin-bottom: 0.5rem;">
                 <span slot="icon" class="material-symbols-rounded">install_desktop</span>
-                正在同步数据...
+                版本信息
                 <span slot="description">
-                    <mdui-linear-progress></mdui-linear-progress>
-                </span>
-            </mdui-list-item>
-            <mdui-list-item nonclickable
-                style="margin-top: 2px;background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-medium);">
-                <p style="color: rgb(var(--mdui-color-secondary));margin: 0;">更新日志 (v1.2.13)</p>
-                <span slot="description">
-                    26-03-15 12:32
-                    <p style="margin-top: 0.2rem;font-size: 0.7rem;">
-                        # 修补<br>
-                        - 优化：更新清除通知队列按钮和相应操作<br>
-                        - 修补：修复通知预览栏未处于激活状态的列表项在鼠标悬停时颜色与激活项不一致的问题<br>
-                        - 优化：调整卡片视图的卡片样式<br>
-                        - 优化：减少了snackbar的使用频率，现在只有在重要操作时才会显示
-                    </p>
+                    v1.2.13
                 </span>
             </mdui-list-item>
         </mdui-list>
