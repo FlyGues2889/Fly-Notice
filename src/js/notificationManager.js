@@ -11,16 +11,23 @@ let isDialogClosing = false;
 
 export const getNotifications = () => [...notifications];
 export const getCurrentIndex = () => currentIndex;
-export const setCurrentIndex = (index) => { currentIndex = index; };
+export const setCurrentIndex = (index) => {
+  currentIndex = index;
+};
 export const getCurrentPlayingNotifyId = () => currentPlayingNotifyId;
-export const setCurrentPlayingNotifyId = (id) => { currentPlayingNotifyId = id; };
+export const setCurrentPlayingNotifyId = (id) => {
+  currentPlayingNotifyId = id;
+};
 export const getIsDialogClosing = () => isDialogClosing;
-export const setIsDialogClosing = (value) => { isDialogClosing = value; };
+export const setIsDialogClosing = (value) => {
+  isDialogClosing = value;
+};
 
 export const addNotification = (content) => {
   if (!content.trim()) return;
 
-  const isImportant = document.getElementById(UI_SELECTORS.CHECK_IMPORTANT)?.checked || false;
+  const isImportant =
+    document.getElementById(UI_SELECTORS.CHECK_IMPORTANT)?.checked || false;
 
   const newNotification = {
     id: generateUniqueId(),
@@ -79,7 +86,7 @@ export const clearAllNotifications = () => {
     snackbar("队列中没有通知可以删除", 1500, "bottom-end");
     return;
   }
-  
+
   mdui.dialog({
     description: "确定要删除通知列表内的所有通知吗？此操作无法撤销。",
     actions: [
@@ -88,12 +95,24 @@ export const clearAllNotifications = () => {
         text: "确定",
         onClick: () => {
           notifications = [];
+          currentIndex = 0;
+          currentPlayingNotifyId = null;
           saveNotificationsToLocalStorage(notifications);
           renderNotifications();
+
+          import("./carouselManager.js").then(
+            ({ toggleCarousel, getIsCarouselRunning, displayMessages }) => {
+              if (getIsCarouselRunning()) {
+                toggleCarousel("slient");
+              }
+              displayMessages();
+            },
+          );
+
           snackbar("通知队列已清空", 1500, "bottom-end");
         },
-      }
-    ]
+      },
+    ],
   });
 };
 

@@ -83,6 +83,11 @@ mdui-menu {
   border-radius: var(--mdui-shape-corner-medium);
 }
 
+div.blur {
+  backdrop-filter: blur(5px);
+  background-color: rgba(var(--mdui-color-secondary-container), 0.3);
+  border-radius: 2rem;
+}
 
 /* 主窗口控件 */
 mdui-top-app-bar {
@@ -415,13 +420,15 @@ div.list-container {
 
   .time-display {
     position: absolute;
-    top: 2vh;
-    left: 50vw;
+    top: 32vh;
+    left: 14vw;
     transform: translateX(-50%);
 
+    white-space: pre-line;
     font-family: 'Nunito';
-    font-size: 10vh;
-    font-weight: 700;
+    line-height: 12vh;
+    font-size: 14vh;
+    font-weight: 800;
     text-align: center;
 
     opacity: 0.7;
@@ -429,11 +436,11 @@ div.list-container {
 
   .count-display {
     height: 5vh;
-    padding: 1rem;
 
+    padding: 1rem;
     position: absolute;
-    top: calc(2vh + 10vh + 2vh);
-    left: 50vw;
+    top: 60vh;
+    left: 14vw;
     transform: translateX(-50%);
 
     font-size: 1.6vh;
@@ -445,24 +452,33 @@ div.list-container {
   }
 
   .disturb-container {
-    width: 100vw;
-    height: calc(100vh - 20vh);
+    width: calc(100vw - 30vw);
+    height: 100vh;
+
+    padding: 0 1.5vw;
 
     position: absolute;
-    left: 0;
+    right: -1vw;
     bottom: 0;
 
     display: flex;
     align-items: flex-start;
 
-    background-color: rgb(var(--mdui-color-surface));
-    border-radius: 4vh 4vh 0 0;
+    background-color: rgb(var(--mdui-color-surface-light), 0.05);
+    border-radius: 4vh 0 0 4vh;
+  }
 
-    div.showList {
-      margin: 0.5rem 4rem 2.4rem 4rem;
-      max-height: calc(100vh - 20vh - 4rem);
-    }
+  div.blur {
+    width: 4.2rem;
+    height: 4.2rem;
 
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+
+    background-color: rgba(var(--mdui-color-on-surface),0.05);
+
+    border-radius: var(--mdui-shape-corner-extra-large);
   }
 
   .exit-button {
@@ -478,13 +494,15 @@ div.list-container {
     border-radius: var(--mdui-shape-corner-extra-large);
 
     cursor: pointer;
-    opacity: 0.3;
+    opacity: 0.5;
 
     transition: all 0.2s;
   }
 
   .exit-button:hover {
-    border-radius: var(--mdui-shape-corner-medium);
+    background-color: rgb(var(--mdui-color-secondary));
+    color: rgb(var(--mdui-color-surface));
+
     opacity: 1;
   }
 }
@@ -515,10 +533,6 @@ div.margined {
     height: 100%;
 
     position: absolute;
-
-    backdrop-filter: blur(5px);
-    background-color: rgba(var(--mdui-color-secondary-container), 0.3);
-    border-radius: 2rem;
   }
 
   div.bkg {

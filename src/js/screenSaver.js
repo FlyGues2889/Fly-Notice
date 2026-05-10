@@ -65,7 +65,7 @@ const updateDateTime = () => {
   const minutes = String(now.getMinutes()).padStart(2, "0");
   const timeDisplay = document.getElementById(UI_SELECTORS.TIME_DISPLAY);
   if (timeDisplay) {
-    timeDisplay.textContent = `${hours}:${minutes}`;
+    timeDisplay.textContent = `${hours}\n${minutes}`;
   }
 };
 

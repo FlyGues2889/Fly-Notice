@@ -1,9 +1,9 @@
-import { 
-  getNotifications, 
-  getCurrentIndex, 
+import {
+  getNotifications,
+  getCurrentIndex,
   setCurrentIndex,
   getCurrentPlayingNotifyId,
-  setCurrentPlayingNotifyId
+  setCurrentPlayingNotifyId,
 } from "./notificationManager.js";
 import { updateNotificationDisplay } from "./uiManager.js";
 import { snackbar } from "./utils.js";
@@ -16,12 +16,16 @@ let lastSwitchSecond = -1;
 
 export const getIsCarouselRunning = () => isCarouselRunning;
 export const getLastSwitchSecond = () => lastSwitchSecond;
-export const setLastSwitchSecond = (value) => { lastSwitchSecond = value; };
+export const setLastSwitchSecond = (value) => {
+  lastSwitchSecond = value;
+};
 
 export const toggleCarousel = (isSlient) => {
   isCarouselRunning = !isCarouselRunning;
 
-  const carouselToggleBtn = document.getElementById(UI_SELECTORS.CAROUSEL_TOGGLE_BTN);
+  const carouselToggleBtn = document.getElementById(
+    UI_SELECTORS.CAROUSEL_TOGGLE_BTN,
+  );
   const prevBtn = document.getElementById(UI_SELECTORS.PREV_BTN);
   const nextBtn = document.getElementById(UI_SELECTORS.NEXT_BTN);
   const notifications = getNotifications();
@@ -68,18 +72,17 @@ export const toggleCarousel = (isSlient) => {
 export const displayMessages = () => {
   const screenSaver = document.getElementById(UI_SELECTORS.SCREEN_SAVER);
   if (screenSaver && screenSaver.style.display === "flex") return;
-
-  const showListElements = document.querySelectorAll(UI_SELECTORS.SHOW_LIST_ELEMENTS);
+  const showListElements = document.querySelectorAll(
+    UI_SELECTORS.SHOW_LIST_ELEMENTS,
+  );
   if (showListElements.length === 0) {
     snackbar("没有找到可以显示的消息内容", 3000, "bottom-end");
     return;
   }
-
   if (messageInterval) {
     clearInterval(messageInterval);
     messageInterval = null;
   }
-
   const notifications = getNotifications();
   if (notifications.length === 0) {
     showListElements.forEach((el) => {
@@ -94,64 +97,71 @@ export const displayMessages = () => {
     });
     return;
   }
-
   const overviewList = document.querySelector(UI_SELECTORS.OVERVIEW_LIST);
-  const scrollTimeSlider = document.getElementById(UI_SELECTORS.SCROLL_TIME_SLIDER);
+  const scrollTimeSlider = document.getElementById(
+    UI_SELECTORS.SCROLL_TIME_SLIDER,
+  );
   let currentIndex = getCurrentIndex();
-
   if (!overviewList || !scrollTimeSlider) return;
   const overviewItems = overviewList.querySelectorAll("mdui-list-item");
-
   showListElements.forEach((el) => {
     el.textContent = notifications[currentIndex].content;
-    el.style.color = notifications[currentIndex].isImportant 
-      ? "rgb(var(--mdui-color-primary))" 
+    el.style.color = notifications[currentIndex].isImportant
+      ? "rgb(var(--mdui-color-primary))"
       : "";
   });
-
   overviewItems.forEach((item) => {
     item.removeAttribute("active");
   });
   if (overviewItems[currentIndex]) {
     overviewItems[currentIndex].setAttribute("active", "");
   }
-
   lastSwitchSecond = new Date().getSeconds();
   const initialScrollTime = parseInt(scrollTimeSlider.value);
   saveSettings(STORAGE_KEYS.SCROLL_TIME, initialScrollTime);
-
   scrollTimeSlider.oninput = () => {
     const newScrollTime = parseInt(scrollTimeSlider.value);
     saveSettings(STORAGE_KEYS.SCROLL_TIME, newScrollTime);
     lastSwitchSecond = new Date().getSeconds();
   };
-
   messageInterval = setInterval(() => {
     if (!isCarouselRunning) return;
+
+    const currentNotifications = getNotifications();
+    if (currentNotifications.length === 0) {
+      toggleCarousel("slient");
+      showListElements.forEach((el) => {
+        el.innerHTML =
+          '<span class="material-symbols-rounded" style="font-size: 3.2rem;font-weight:600">notifications_off</span>';
+        el.style.opacity = "0.2";
+        el.style.flexDirection = "column";
+        el.style.color = "";
+      });
+      document.querySelectorAll("mdui-list-item").forEach((item) => {
+        item.removeAttribute("active");
+      });
+      return;
+    }
 
     const now = new Date();
     const currentSecond = now.getSeconds();
     const scrollTime = parseInt(scrollTimeSlider.value);
     const secondDiff = (currentSecond - lastSwitchSecond + 60) % 60;
-
     if (secondDiff >= scrollTime) {
       showListElements.forEach((el) => {
-        el.textContent = notifications[currentIndex].content;
-        el.style.color = notifications[currentIndex].isImportant 
-          ? "rgb(var(--mdui-color-primary))" 
+        el.textContent = currentNotifications[currentIndex].content;
+        el.style.color = currentNotifications[currentIndex].isImportant
+          ? "rgb(var(--mdui-color-primary))"
           : "";
       });
-
       overviewItems.forEach((item) => {
         item.removeAttribute("active");
       });
       if (overviewItems[currentIndex]) {
         overviewItems[currentIndex].setAttribute("active", "");
       }
-
-      setCurrentPlayingNotifyId(notifications[currentIndex].id);
-
-      currentIndex = (currentIndex + 1) % notifications.length;
+      setCurrentPlayingNotifyId(currentNotifications[currentIndex].id);
+      currentIndex = (currentIndex + 1) % currentNotifications.length;
       setCurrentIndex(currentIndex);
       lastSwitchSecond = currentSecond;
     }
@@ -170,7 +180,8 @@ export const showPrevNotification = () => {
   }
 
   let currentIndex = getCurrentIndex();
-  currentIndex = (currentIndex - 1 + notifications.length) % notifications.length;
+  currentIndex =
+    (currentIndex - 1 + notifications.length) % notifications.length;
   setCurrentIndex(currentIndex);
 
   updateNotificationDisplay(currentIndex);
@@ -185,18 +196,14 @@ export const showNextNotification = () => {
     snackbar("暂无通知可切换", 1500, "bottom-end");
     return;
   }
-
   if (isCarouselRunning) {
     toggleCarousel();
   }
-
   let currentIndex = getCurrentIndex();
   currentIndex = (currentIndex + 1) % notifications.length;
   setCurrentIndex(currentIndex);
-
   updateNotificationDisplay(currentIndex);
   lastSwitchSecond = new Date().getSeconds();
-
   snackbar("已切换到下一条通知，轮播已暂停", 1000, "bottom-end");
 };
 
