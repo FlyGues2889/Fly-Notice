@@ -21,6 +21,8 @@
 </head>
 
 <body id="body" class="mdui-theme-auto" style="margin: 0;">
+    <div class="windowblur">
+    </div>
     <mdui-layout style="height: 100vh;">
         <div class="loadingLayer" id="loading-layer">
             <svg xmlns="http://www.w3.org/2000/svg" width="3.6em" height="3.6em" viewBox="0 0 24 24">
@@ -181,7 +183,7 @@
                         The quick brown fox jumps over the lazy dog.
                     </mdui-card>
                 </mdui-list-item>
-                <mdui-card class="upperCard-m">
+                <mdui-card class="card-s">
                     <mdui-list-item nonclickable>
                         <span slot="icon" class="material-symbols-rounded">text_fields</span>
                         卡片内容文字大小
@@ -193,9 +195,7 @@
                             <div class="decorate-dot-right">&nbsp;</div>
                         </div>
                     </mdui-list-item>
-                </mdui-card>
-
-                <mdui-card class="bottomCard-m">
+                    <mdui-divider middle></mdui-divider>
                     <mdui-list-item nonclickable style="text-align: left;" class="bottomList">
                         <span slot="icon" class="material-symbols-rounded">timer</span>
                         通知滚动时间
@@ -277,21 +277,27 @@
         <span slot="headline" style="font-family: 'Nunito';font-weight: bold;">FlyNotice</span>
         <span slot="icon" class="material-symbols-rounded">info</span>
 
-        <mdui-list>
-            <mdui-list-item nonclickable
-                style="background-color: rgb(var(--mdui-color-surface));border-radius: var(--mdui-shape-corner-extra-large);margin-bottom: 0.5rem;">
-                <span slot="icon" class="material-symbols-rounded">install_desktop</span>
-                版本信息
-                <span slot="description">
-                    v1.2.15
-                </span>
+        <mdui-card class="card-s">
+            <mdui-list-item nonclickable>
+                <span slot="icon" class="material-symbols-rounded">app_badging</span>
+                版本 1.2.16
+                <span slot="description">Made by Lvi_Fly</span>
+                <mdui-badge slot="end-icon" class="versionBadge">LTS Edition</mdui-badge>
             </mdui-list-item>
-        </mdui-list>
-        <mdui-list-item nonclickable>
-            Made by Lvi_Fly
-            <span slot="icon" class="material-symbols-rounded">info</span>
-            <span slot="description">https://github.com/FlyGues2889</span>
-        </mdui-list-item>
+            <mdui-list-item nonclickable>
+                <span slot="icon" class="material-symbols-rounded">code</span>
+                项目地址
+                <span slot="description">https://github.com/FlyGues2889/Fly-Notice</span>
+            </mdui-list-item>
+
+            <mdui-divider middle></mdui-divider>
+
+            <mdui-list-item nonclickable>
+                <span slot="icon" class="material-symbols-rounded">lightbulb</span>
+                AI项目
+                <span slot="description">本项目有人工智能辅助开发</span>
+            </mdui-list-item>
+        </mdui-card>
 
     </mdui-dialog>
 </body>

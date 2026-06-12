@@ -10,6 +10,8 @@ mdui-layout {
 
   user-select: none;
   overscroll-behavior: none;
+
+  background-color: rgba(var(--mdui-color-surface), 0.55) !important;
 }
 
 mdui-layout {
@@ -90,6 +92,17 @@ div.blur {
 }
 
 /* 主窗口控件 */
+.windowblur {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  background-color: rgba(var(--mdui-color-secondary-container), 0.5);
+}
+
 mdui-top-app-bar {
   z-index: 100;
 
@@ -476,7 +489,7 @@ div.list-container {
     bottom: 2rem;
     right: 2rem;
 
-    background-color: rgba(var(--mdui-color-on-surface),0.05);
+    background-color: rgba(var(--mdui-color-on-surface), 0.05);
 
     border-radius: var(--mdui-shape-corner-extra-large);
   }
@@ -587,7 +600,8 @@ div.margined {
   margin-top: 1rem;
 
   box-shadow: none;
-  background-color: rgb(var(--mdui-color-secondary-container), 0.4);
+  background-color: rgb(var(--mdui-color-surface-container), 0.7);
+  border: 0.1rem solid rgba(var(--mdui-color-secondary), 0.1);
   border-radius: var(--mdui-shape-corner-extra-large);
 
   mdui-list-item {
@@ -601,7 +615,8 @@ div.margined {
   margin-top: 1rem;
 
   box-shadow: none;
-  background-color: rgb(var(--mdui-color-secondary-container), 0.4);
+  background-color: rgb(var(--mdui-color-surface-container), 0.7);
+  border: 0.1rem solid rgba(var(--mdui-color-secondary), 0.1);
   border-radius: var(--mdui-shape-corner-extra-large) var(--mdui-shape-corner-extra-large) var(--mdui-shape-corner-extra-small) var(--mdui-shape-corner-extra-small);
 
   mdui-list-item {
@@ -615,7 +630,8 @@ div.margined {
   margin-top: 1px;
 
   box-shadow: none;
-  background-color: rgb(var(--mdui-color-secondary-container), 0.4);
+  background-color: rgb(var(--mdui-color-surface-container), 0.7);
+  border: 0.1rem solid rgba(var(--mdui-color-secondary), 0.1);
   border-radius: var(--mdui-shape-corner-extra-small) var(--mdui-shape-corner-extra-small) var(--mdui-shape-corner-extra-large) var(--mdui-shape-corner-extra-large);
 
   mdui-list-item {
@@ -626,4 +642,12 @@ div.margined {
 mdui-button-icon.deleteMsgBtn:hover {
   opacity: 1;
   color: rgb(var(--mdui-color-error)) !important;
+}
+
+.versionBadge{
+    height: 1.4rem;
+    padding: 0.6rem;
+
+    background-color: rgb(var(--mdui-color-secondary));
+    font-family: 'Nunito';
 }
