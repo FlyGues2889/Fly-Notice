@@ -1,0 +1,279 @@
+@import "material-symbols/rounded.css";
+@import "./font.css";
+@import "./theme.css";
+
+/* --- CSS Reset & Base --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+input, textarea, [contenteditable="true"], [contenteditable] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+:root {
+  /* Fonts */
+  --font-sans: "HarmonyOS Sans SC", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", sans-serif;
+  --font-headings: "Nunito", "HarmonyOS Sans SC", sans-serif;
+  --font-mono: "ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "Liberation Mono", "Fira Code", "JetBrains Mono", monospace;
+
+  /* Theme variables are loaded from theme.css and mapped there */
+  
+  /* Accent Colors (Light) mapped using MD3 Tertiary colors for harmonious palette */
+  --accent-indigo-bg: var(--md-sys-color-primary-container);
+  --accent-indigo-text: var(--md-sys-color-on-primary-container);
+  --accent-indigo-border: var(--md-sys-color-primary);
+  --accent-amber-bg: var(--md-sys-color-tertiary-container);
+  --accent-amber-text: var(--md-sys-color-on-tertiary-container);
+  --accent-amber-border: var(--md-sys-color-tertiary);
+  --accent-emerald-bg: #e8f5e9;
+  --accent-emerald-text: #1b5e20;
+  --accent-emerald-border: #2e7d32;
+  --accent-rose-bg: var(--md-sys-color-error-container);
+  --accent-rose-text: var(--md-sys-color-on-error-container);
+  --accent-rose-border: var(--md-sys-color-error);
+
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow: 0.35s ease;
+}
+
+/* --- Dark Theme Variables --- */
+:root.dark {
+  /* Accent Colors (Dark) mapped using MD3 Tertiary colors for harmonious palette */
+  --accent-indigo-bg: var(--md-sys-color-primary-container);
+  --accent-indigo-text: var(--md-sys-color-on-primary-container);
+  --accent-indigo-border: var(--md-sys-color-primary);
+  --accent-amber-bg: var(--md-sys-color-tertiary-container);
+  --accent-amber-text: var(--md-sys-color-on-tertiary-container);
+  --accent-amber-border: var(--md-sys-color-tertiary);
+  --accent-emerald-bg: #1b5e20;
+  --accent-emerald-text: #e8f5e9;
+  --accent-emerald-border: #81c784;
+  --accent-rose-bg: var(--md-sys-color-error-container);
+  --accent-rose-text: var(--md-sys-color-on-error-container);
+  --accent-rose-border: var(--md-sys-color-error);
+}
+
+/* --- Global Styles --- */
+body {
+  font-family: var(--font-sans);
+  font-weight: 400; /* Regular by default */
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  overflow-x: hidden;
+}
+
+/* Base styles for all headings in the app */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-headings) !important;
+  font-weight: 700 !important; /* Bold for Nunito, HarmonyOS Sans SC maps weight 700 to Medium */
+}
+
+/* Base styles for all buttons in the app */
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+.m3-segment-btn,
+.m3-nav-item,
+.theme-btn,
+.nav-item-btn {
+  font-family: var(--font-headings) !important;
+}
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--md-sys-color-surface-variant);
+  border-radius: 9999px;
+
+  opacity: 0.5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--md-sys-color-surface-variant);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- Helper Utilities --- */
+.font-sans { font-family: var(--font-sans); }
+.font-mono { font-family: var(--font-mono); }
+
+/* Custom Material You Slider Style */
+.m3-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: var(--md-sys-color-surface-2);
+  border-radius: 9999px;
+  outline: none;
+  transition: background var(--transition-fast);
+}
+
+.m3-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  transition: transform 0.15s, background-color 0.15s;
+}
+
+.m3-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  background: var(--primary-hover);
+}
+
+.m3-slider::-webkit-slider-thumb:active {
+  transform: scale(1.05);
+  background: var(--primary);
+}
+
+.m3-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  transition: transform 0.15s, background-color 0.15s;
+}
+
+.m3-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  background: var(--primary-hover);
+}
+
+.m3-slider::-moz-range-thumb:active {
+  transform: scale(1.05);
+  background: var(--primary);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Unified focus outline styles */
+button:focus-visible,
+.theme-btn:not(.active):focus-visible,
+.nav-item-btn:not(.active):focus-visible {
+  outline: 2px solid var(--primary) !important;
+  outline-offset: 2px !important;
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--transition-normal) forwards;
+}
+
+/* Material Symbols Adjustments */
+.material-symbols-outlined {
+  font-display: block;
+}
+
+.material-symbols-rounded-fill {
+  font-family: 'Material Symbols Rounded';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga';
+  font-variation-settings: 'FILL' 1;
+}
+
+/* Slightly enlarge icon font size inside normal buttons */
+button:not(.m3-nav-item):not(.win-btn):not(.action-btn):not(.delete-btn) .material-symbols-rounded,
+button:not(.m3-nav-item):not(.win-btn):not(.action-btn):not(.delete-btn) .material-symbols-rounded-fill,
+.theme-btn .material-symbols-rounded,
+.theme-btn .material-symbols-rounded-fill,
+.nav-item-btn .material-symbols-rounded,
+.nav-item-btn .material-symbols-rounded-fill,
+.btn-round .material-symbols-rounded,
+.btn-capsule .material-symbols-rounded,
+.icon-control,
+.exit-btn .material-symbols-rounded,
+.brand-icon-btn .material-symbols-rounded,
+.desktop-icon-btn .material-symbols-rounded {
+  font-size: 25px !important;
+}
+
+/* Decrease the icon size of the operation buttons inside the list and window control buttons */
+.icon-btn-small {
+  font-size: 20px !important;
+}
+
+.win-btn .material-symbols-rounded {
+  font-size: 16px !important;
+}
+
+/* --- Focus Mode Selector Styles --- */
+div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) {
+  width: 520px;
+}
+div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) {
+  width: 520px;
+}
+div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) {
+  width: 520px;
+}
+div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) {
+  width: 520px;
+}
+div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(2) {
+  width: 320px;
+}
+div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) {
+  width: 520px;
+}
+div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(2) {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) {
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-bottom: 12px;
+  padding-top: 12px;
+}

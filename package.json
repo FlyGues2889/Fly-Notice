@@ -1,13 +1,26 @@
 {
   "name": "flynotice",
   "private": true,
-  "version": "1.2.16",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tauri dev",
-    "build": "tauri build"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.11.1",
+    "@tauri-apps/plugin-opener": "^2",
+    "material-symbols": "^0.45.5",
+    "mdui": "^2.1.4",
+    "pinia": "^3.0.4",
+    "vue": "^3.5.13",
+    "vue-i18n": "^11.4.6"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2"
+    "@tauri-apps/cli": "^2",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^6.0.3"
   }
 }
