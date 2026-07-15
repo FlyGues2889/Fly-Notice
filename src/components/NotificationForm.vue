@@ -103,110 +103,111 @@ const handleSubmit = () => {
         <span class="material-symbols-rounded icon-close">close</span>
       </button>
     </div>
-
-    <form @submit.prevent="handleSubmit" class="form-container">
-      <!-- Title Input (M3 Filled Text Field) -->
-      <MD3TextField
-        id="m3-title-input"
-        :label="t.formFieldTitle"
-        v-model="title"
-      />
-
-      <!-- Display Text Input (M3 Filled Text Field) -->
-      <MD3TextField
-        id="m3-text-textarea"
-        :label="t.formFieldText"
-        v-model="text"
-        textarea
-        rows="4"
-      />
-
-      <!-- Combined Duration Settings List (Custom Duration toggle & Active Rotation Duration slider) -->
-      <MD3List class="m3-form-list">
-        <MD3ListItem :divider="useCustomDuration">
-          <template #headline>
-            <span class="m3-list-label">
-              {{ config.language === 'zh' ? '单独设置轮播持续时间' : 'Set individual rotation duration' }}
-            </span>
-          </template>
-          <template #supporting>
-            <span class="m3-list-desc">
-              {{ config.language === 'zh' ? '开启后此通知将采用专属持续时间，关闭则默认遵循系统全局设置' : 'If disabled, this notice will obey the global system speed default' }}
-            </span>
-          </template>
-          <template #trailing>
-            <MD3Switch v-model="useCustomDuration" />
-          </template>
-        </MD3ListItem>
-
-        <!-- If useCustomDuration is on, show the active rotation duration slider in the same list card -->
-        <MD3ListItem v-if="useCustomDuration" class="duration-slider-item animate-fade-in">
-          <template #headline>
-            <div class="duration-slider-header">
+    <div class="notification-form-card">
+      <form @submit.prevent="handleSubmit" class="form-container">
+        <!-- Title Input (M3 Filled Text Field) -->
+        <MD3TextField
+          id="m3-title-input"
+          :label="t.formFieldTitle"
+          v-model="title"
+        />
+  
+        <!-- Display Text Input (M3 Filled Text Field) -->
+        <MD3TextField
+          id="m3-text-textarea"
+          :label="t.formFieldText"
+          v-model="text"
+          textarea
+          rows="6"
+        />
+  
+        <!-- Combined Duration Settings List (Custom Duration toggle & Active Rotation Duration slider) -->
+        <MD3List class="m3-form-list">
+          <MD3ListItem :divider="useCustomDuration">
+            <template #headline>
               <span class="m3-list-label">
-                {{ t.formFieldDuration }}
+                {{ config.language === 'zh' ? '单独设置轮播持续时间' : 'Set individual rotation duration' }}
               </span>
-              <span class="duration-badge">
-                {{ durationSecs }} {{ config.language === 'zh' ? '秒' : 'seconds' }}
+            </template>
+            <template #supporting>
+              <span class="m3-list-desc">
+                {{ config.language === 'zh' ? '开启后此通知将采用专属持续时间，关闭则默认遵循系统全局设置' : 'If disabled, this notice will obey the global system speed default' }}
               </span>
-            </div>
-          </template>
-          <template #supporting>
-            <div class="slider-wrapper">
-              <MD3Slider
-                v-model="durationSecs"
-                :min="1"
-                :max="60"
-                variant="xs"
-              />
-            </div>
-          </template>
-        </MD3ListItem>
-      </MD3List>
-
-      <!-- Enable rotation list -->
-      <MD3List class="m3-form-list">
-        <MD3ListItem>
-          <template #headline>
-            <span class="m3-list-label">
-              {{ t.formEnabledRotation }}
-            </span>
-          </template>
-          <template #supporting>
-            <span class="m3-list-desc">
-              {{ t.formEnabledRotationDesc }}
-            </span>
-          </template>
-          <template #trailing>
-            <MD3Switch v-model="isActive" />
-          </template>
-        </MD3ListItem>
-      </MD3List>
-
-      <!-- Material Design 3 Snackbar for error reporting inside the Form -->
-      <MD3Snackbar 
-        :message="toastMessage" 
-        @close="toastMessage = null" 
-      />
-
-      <!-- Buttons -->
-      <div class="actions-row">
-        <button
-          type="button"
-          @click="emit('cancel')"
-          class="cancel-btn"
-        >
-          {{ t.cancel }}
-        </button>
-        <button
-          type="submit"
-          class="submit-btn"
-        >
-          <span class="material-symbols-rounded icon-save">save</span>
-          {{ notification ? t.updateNotice : t.addToList }}
-        </button>
-      </div>
-    </form>
+            </template>
+            <template #trailing>
+              <MD3Switch v-model="useCustomDuration" />
+            </template>
+          </MD3ListItem>
+  
+          <!-- If useCustomDuration is on, show the active rotation duration slider in the same list card -->
+          <MD3ListItem v-if="useCustomDuration" class="duration-slider-item animate-fade-in">
+            <template #headline>
+              <div class="duration-slider-header">
+                <span class="m3-list-label">
+                  {{ t.formFieldDuration }}
+                </span>
+                <span class="duration-badge">
+                  {{ durationSecs }} {{ config.language === 'zh' ? '秒' : 'seconds' }}
+                </span>
+              </div>
+            </template>
+            <template #supporting>
+              <div class="slider-wrapper">
+                <MD3Slider
+                  v-model="durationSecs"
+                  :min="1"
+                  :max="60"
+                  variant="xs"
+                />
+              </div>
+            </template>
+          </MD3ListItem>
+        </MD3List>
+  
+        <!-- Enable rotation list -->
+        <MD3List class="m3-form-list">
+          <MD3ListItem>
+            <template #headline>
+              <span class="m3-list-label">
+                {{ t.formEnabledRotation }}
+              </span>
+            </template>
+            <template #supporting>
+              <span class="m3-list-desc">
+                {{ t.formEnabledRotationDesc }}
+              </span>
+            </template>
+            <template #trailing>
+              <MD3Switch v-model="isActive" />
+            </template>
+          </MD3ListItem>
+        </MD3List>
+  
+        <!-- Material Design 3 Snackbar for error reporting inside the Form -->
+        <MD3Snackbar 
+          :message="toastMessage" 
+          @close="toastMessage = null" 
+        />
+  
+        <!-- Buttons -->
+        <div class="actions-row">
+          <button
+            type="button"
+            @click="emit('cancel')"
+            class="cancel-btn"
+          >
+            {{ t.cancel }}
+          </button>
+          <button
+            type="submit"
+            class="submit-btn"
+          >
+            <span class="material-symbols-rounded icon-save">save</span>
+            {{ notification ? t.updateNotice : t.addToList }}
+          </button>
+        </div>
+      </form>
+    </div>
   </MD3Card>
 </template>
 
@@ -253,93 +254,6 @@ const handleSubmit = () => {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-}
-
-/* M3 Filled Text Field Styling */
-.m3-text-field-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.m3-text-field {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--surface-variant);
-  border-radius: 12px 12px 0 0;
-  padding: 1.5rem 1rem 0.5rem 1rem;
-  transition: background-color var(--transition-fast);
-}
-
-.m3-text-field:hover {
-  background-color: var(--surface-container-high, rgba(128,128,128,0.18));
-}
-
-.m3-field-input {
-  width: 100%;
-  border: none;
-  background: transparent;
-  outline: none;
-  font-family: inherit;
-  font-size: 0.9375rem;
-  color: var(--text-color);
-  caret-color: var(--primary);
-  line-height: 1.5;
-}
-
-.textarea-input {
-  resize: none;
-  min-height: 5rem;
-}
-
-/* Floating Label styling */
-.m3-field-label {
-  position: absolute;
-  left: 1rem;
-  top: 1rem;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  pointer-events: none;
-  transform-origin: left top;
-  transition: transform 0.15s cubic-bezier(0.2, 0, 0, 1), color 0.15s cubic-bezier(0.2, 0, 0, 1);
-}
-
-/* Focus and Not-Empty states */
-.m3-field-input:focus ~ .m3-field-label,
-.m3-field-input:not(:placeholder-shown) ~ .m3-field-label {
-  transform: translateY(-0.6rem) scale(0.75);
-}
-
-.m3-field-input:focus ~ .m3-field-label {
-  color: var(--primary);
-}
-
-/* Active bottom line indicator */
-.m3-field-line {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background-color: var(--border-color-muted);
-  transition: background-color 0.15s;
-}
-
-.m3-field-line::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background-color: var(--primary);
-  transform: scaleX(0);
-  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
-}
-
-.m3-field-input:focus ~ .m3-field-line::after {
-  transform: scaleX(1);
 }
 
 /* M3 Custom Lists inside Form */
@@ -397,16 +311,6 @@ const handleSubmit = () => {
   }
 }
 
-.error-banner {
-  font-size: 0.75rem;
-  color: var(--error);
-  font-weight: 500;
-  padding: 0.75rem;
-  background-color: var(--error-container);
-  border: 1px solid var(--error);
-  border-radius: 0.75rem;
-}
-
 .actions-row {
   display: flex;
   align-items: center;
@@ -453,5 +357,10 @@ const handleSubmit = () => {
 
 .icon-save {
   font-size: 1rem;
+}
+
+.notification-form-card {
+  padding-right: 0.25rem;
+  overflow: auto;
 }
 </style>

@@ -1,7 +1,6 @@
 export default {
   appName: "Notice Board",
   appDesc: "Windows desktop notification creator and carousel display station",
-  seed: "Theme color:",
   fullscreen: "Fullscreen Mode",
   tabMonitor: "Dashboard",
   tabList: "Notices",
@@ -14,20 +13,14 @@ export default {
   pageSubtitleSettings: "Customize system theme modes, language preference, and global settings.",
 
   // Settings tab
-  settingsTitle: "System General Settings",
-  settingsDesc: "Configure system theme modes, interface language and global carousel parameters.",
   themeSeedColor: "M3 Theme Mode",
   appLanguage: "Application Language",
-  timeFormat: "System Clock Format",
   carouselSpeed: "Global Playback Speed (seconds)",
-  brandColor: "Material Primary Base",
   themeModeAuto: "Auto (Follow System)",
   themeModeLight: "Light Mode",
   themeModeDark: "Dark Mode",
   
   // Notification Manager
-  managerTitle: "Notification Records",
-  managerDesc: "Create, modify, or toggle notices active inside the carousel rotations.",
   createNotice: "Create Notification",
   searchPlaceholder: "Search within notices...",
   filterAll: "all",
@@ -37,7 +30,6 @@ export default {
   noNoticeMatched: "No notices matched criteria",
   tryAdjustFilters: "Try adjusting your filters.",
   clickToCreate: 'Click "Create Notification" to build your first one!',
-  durationDisplay: "{secs}s duration",
   untitled: "Untitled",
   deactivateNotice: "Deactivate from carousel",
   activateNotice: "Activate in carousel",
@@ -49,12 +41,9 @@ export default {
   formNewTitle: "New Notification",
   formFieldTitle: "Title / Topic Name",
   formFieldText: "Display Content Text",
-  formTitlePlaceholder: "e.g., Weather Alert, Meeting Notice...",
   formFieldDuration: "Active Rotation Duration",
-  formFieldAccent: "Material Palette Tone Accent",
   formEnabledRotation: "Enabled for Rotation",
   formEnabledRotationDesc: "If disabled, notice will not be included in active carousel cycles",
-  formErrorTitleRequired: "Notification title is required.",
   formErrorTextRequired: "Notification display text is required.",
   formErrorDuration: "Duration must be at least 1 second.",
   cancel: "Cancel",
@@ -62,15 +51,10 @@ export default {
   addToList: "Add to List",
 
   // Notification Carousel
-  carouselTitle: "Carousel Board Simulator",
-  scriptEngineActive: "JS Script Engine Active",
   noActiveNotice: "No Active Notifications",
   noActiveNoticeDesc: "Add a notification or enable disabled notices to begin rotation.",
-  nextNotice: "Next: {title}",
-  onlyNoticeActive: "Only notice active",
   displayTextSize: "Display Text Size",
   globalCarouselInterval: "Global Carousel Interval",
-  manualSkip: "Manual skip",
   prevNoticeTitle: "Previous notification",
   nextNoticeTitle: "Next notification",
 

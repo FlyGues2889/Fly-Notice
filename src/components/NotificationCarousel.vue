@@ -404,8 +404,6 @@ const triggerNext = () => {
   align-items: center;
   text-align: center;
   padding: 0;
-  width: 100%;
-  height: 100%;
 }
 
 .notice-tag {
@@ -429,15 +427,12 @@ const triggerNext = () => {
   font-weight: 400;
   color: var(--text-color);
   line-height: 1.5;
-  width: 100%;
-  height: 100%;
   max-width: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   text-align: center;
   padding: 0;
   transition: all 0.5s ease;
+  white-space: pre-wrap;
+  text-align: left;
 }
 
 /* Font size mapping system */

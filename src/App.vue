@@ -14,6 +14,7 @@ import MD3Snackbar from './components/MD3Components/MD3Snackbar.vue';
 import PageHeader from './components/PageHeader.vue';
 import MD3Card from './components/MD3Components/MD3Card.vue';
 import MD3LoadingModal from './components/MD3Components/MD3LoadingModal.vue';
+import MD3Sidebar from './components/MD3Components/MD3Sidebar.vue';
 
 // Initial mock dataset
 const DEFAULT_NOTIFICATIONS: NotificationItem[] = [];
@@ -24,9 +25,6 @@ const config = ref<AppConfig>({
   themeMode: 'system',
   carouselSpeedSecs: 6,
   fontSize: 2.0,
-  scriptContent: '',
-  scriptEnabled: false,
-  systemTimeFormat: '24h',
   language: 'en'
 });
 
@@ -91,9 +89,6 @@ onMounted(() => {
     themeMode: 'system',
     carouselSpeedSecs: 6,
     fontSize: 2.0,
-    scriptContent: '',
-    scriptEnabled: false,
-    systemTimeFormat: '24h',
     language: defaultLang
   };
 
@@ -153,7 +148,7 @@ const updateTheme = () => {
   const isDark =
     config.value.themeMode === 'dark' ||
     (config.value.themeMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  
+
   if (isDark) {
     root.classList.add('dark');
   } else {
@@ -334,42 +329,26 @@ const updateConfig = (newConf: Partial<AppConfig>) => {
 
 <template>
   <div class="app-container" :style="{ '--sidebar-width': sidebarExpanded ? '256px' : '80px' }">
-    
+
     <!-- MD3 Booting Loading Modal -->
     <MD3LoadingModal :show="isBooting" />
 
     <!-- Immersive full screen simulator overlay -->
-    <FullScreenView
-      v-if="isFullscreen"
-      :processedNotifications="processedNotifications"
-      :currentIndex="currentIndex"
-      :config="config"
-      :progress-percent="progressPercent"
-      @exit="isFullscreen = false"
-    />
+    <FullScreenView v-if="isFullscreen" :processedNotifications="processedNotifications" :currentIndex="currentIndex"
+      :config="config" :progress-percent="progressPercent" @exit="isFullscreen = false" />
 
     <!-- Windows Title Bar for Tauri Window controls -->
     <div class="windows-title-bar" data-tauri-drag-region>
       <div class="windows-controls">
-        <button 
-          id="titlebar-minimize"
-          class="win-btn win-minimize" 
-          :title="config.language === 'zh' ? '最小化' : 'Minimize'"
-        >
+        <button id="titlebar-minimize" class="win-btn win-minimize"
+          :title="config.language === 'zh' ? '最小化' : 'Minimize'">
           <span class="material-symbols-rounded">minimize</span>
         </button>
-        <button 
-          id="titlebar-maximize"
-          class="win-btn win-maximize" 
-          :title="config.language === 'zh' ? '最大化 / 恢复' : 'Maximize / Restore'"
-        >
+        <button id="titlebar-maximize" class="win-btn win-maximize"
+          :title="config.language === 'zh' ? '最大化 / 恢复' : 'Maximize / Restore'">
           <span class="material-symbols-rounded">crop_square</span>
         </button>
-        <button 
-          id="titlebar-close"
-          class="win-btn win-close" 
-          :title="config.language === 'zh' ? '关闭' : 'Close'"
-        >
+        <button id="titlebar-close" class="win-btn win-close" :title="config.language === 'zh' ? '关闭' : 'Close'">
           <span class="material-symbols-rounded">close</span>
         </button>
       </div>
@@ -378,217 +357,183 @@ const updateConfig = (newConf: Partial<AppConfig>) => {
     <!-- Real Application Layout wrapper -->
     <div class="app-layout-wrapper">
       <!-- 1. DESKTOP SIDEBAR (Left panel, hidden on mobile) -->
-      <aside 
-        class="app-sidebar"
-        :class="{ 'expanded': sidebarExpanded }"
-        data-tauri-drag-region
-      >
-      <div class="sidebar-top-section" :class="{ 'align-center': !sidebarExpanded }">
+      <MD3Sidebar :expanded="sidebarExpanded">
         <!-- Brand Header & Toggle -->
-        <div class="brand-row">
-          <div class="brand-identity">
-            <button
-              @click="sidebarExpanded = !sidebarExpanded"
-              class="brand-icon-btn"
-              :title="sidebarExpanded ? (config.language === 'zh' ? '收起侧边栏' : 'Collapse Sidebar') : (config.language === 'zh' ? '展开侧边栏' : 'Expand Sidebar')"
-            >
-              <span class="material-symbols-rounded brand-menu-icon">
-                {{ sidebarExpanded ? 'menu_open' : 'menu' }}
-              </span>
-            </button>
-            <div v-if="sidebarExpanded" class="brand-info">
-              <h1 class="brand-title" style="color: var(--primary);">
-                {{ t.appName }}
-              </h1>
+        <template #top>
+          <div class="brand-row">
+            <div class="brand-identity">
+              <button @click="sidebarExpanded = !sidebarExpanded" class="brand-icon-btn"
+                :title="sidebarExpanded ? (config.language === 'zh' ? '收起侧边栏' : 'Collapse Sidebar') : (config.language === 'zh' ? '展开侧边栏' : 'Expand Sidebar')">
+                <span class="material-symbols-rounded brand-menu-icon">
+                  {{ sidebarExpanded ? 'menu_open' : 'menu' }}
+                </span>
+              </button>
+              <div v-if="sidebarExpanded" class="brand-info">
+                <h1 class="brand-title" style="color: var(--primary);">
+                  {{ t.appName }}
+                </h1>
+              </div>
             </div>
           </div>
-        </div>
+        </template>
 
-        <!-- Nav Links -->
-        <nav class="sidebar-nav" :class="{ 'align-center-width': !sidebarExpanded }">
-          <SidebarNavItem
-            tab="monitor"
-            :active-tab="activeTab"
-            :label="t.tabMonitor"
-            icon="dashboard"
-            :expanded="sidebarExpanded"
-            @select="tab => { activeTab = tab; isEditing = false; }"
-          />
-          <SidebarNavItem
-            tab="list"
-            :active-tab="activeTab"
-            :label="t.tabList"
-            icon="inbox_text"
-            :expanded="sidebarExpanded"
-            @select="tab => { activeTab = tab; isEditing = false; }"
-          />
-        </nav>
-      </div>
+        <!-- Middle Section Slot (Navigation menu items) -->
+        <template #middle>
+          <nav class="sidebar-nav" :class="{ 'align-center-width': !sidebarExpanded }">
+            <SidebarNavItem tab="monitor" :active-tab="activeTab" :label="t.tabMonitor" icon="dashboard"
+              :expanded="sidebarExpanded" @select="tab => { activeTab = tab; isEditing = false; }" />
+            <SidebarNavItem tab="list" :active-tab="activeTab" :label="t.tabList" icon="inbox_text"
+              :expanded="sidebarExpanded" @select="tab => { activeTab = tab; isEditing = false; }" />
+          </nav>
+        </template>
 
-      <!-- Settings Tab (Anchored to Bottom of Sidebar) -->
-      <div class="sidebar-bottom-section" :class="{ 'align-center': !sidebarExpanded }">
-        <SidebarNavItem
-          tab="settings"
-          :active-tab="activeTab"
-          :label="t.tabSettings"
-          icon="settings"
-          :expanded="sidebarExpanded"
-          @select="tab => { activeTab = tab; isEditing = false; }"
-        />
-      </div>
-    </aside>
+        <!-- Bottom Section Slot (Settings Tab) -->
+        <template #bottom>
+          <SidebarNavItem tab="settings" :active-tab="activeTab" :label="t.tabSettings" icon="settings"
+            :expanded="sidebarExpanded" @select="tab => { activeTab = tab; isEditing = false; }" />
+        </template>
+      </MD3Sidebar>
 
-    <!-- 3. MAIN WORKSPACE VIEW CONTAINER -->
-    <main 
-      class="main-workspace"
-      :class="activeTab === 'monitor' ? 'workspace-monitor' : 'workspace-scroll'"
-    >
-      <!-- Dynamic Page Header -->
-      <PageHeader
-        v-if="activeTab !== 'monitor'"
-        :title="activeTab === 'list' ? t.pageTitleList : activeTab === 'script' ? t.pageTitleScript : t.pageTitleSettings"
-        :subtitle="activeTab === 'list' ? t.pageSubtitleList : activeTab === 'script' ? t.pageSubtitleScript : t.pageSubtitleSettings"
-      />
+      <!-- 3. MAIN WORKSPACE VIEW CONTAINER -->
+      <main class="main-workspace" :class="[
+        activeTab === 'monitor' ? 'workspace-monitor' : 'workspace-scroll',
+        activeTab === 'list' ? 'workspace-list-mode' : ''
+      ]">
+        <!-- Dynamic Page Header -->
+        <PageHeader v-if="activeTab !== 'monitor'" :title="activeTab === 'list' ? t.pageTitleList : t.pageTitleSettings"
+          :subtitle="activeTab === 'list' ? t.pageSubtitleList : t.pageSubtitleSettings" />
 
-      <!-- Content Body space -->
-      <div 
-        class="content-body"
-        :class="activeTab === 'monitor' ? 'content-body-monitor' : 'content-body-scroll'"
-      >
-        <!-- Monitor Mode Tab -->
-        <NotificationCarousel
-          v-if="activeTab === 'monitor'"
-          :notifications="notifications"
-          :config="config"
-          :processedNotifications="processedNotifications"
-          :currentIndex="currentIndex"
-          :progressPercent="progressPercent"
-          :isPlaying="isPlaying"
-          @config-change="updateConfig"
-          @index-change="currentIndex = $event"
-          @play-pause="isPlaying = !isPlaying"
-          @fullscreen="isFullscreen = true"
-        />
+        <!-- Content Body space -->
+        <div class="content-body" :class="activeTab === 'monitor' ? 'content-body-monitor' : 'content-body-scroll'">
+          <!-- Monitor Mode Tab -->
+          <NotificationCarousel v-if="activeTab === 'monitor'" :notifications="notifications" :config="config"
+            :processedNotifications="processedNotifications" :currentIndex="currentIndex"
+            :progressPercent="progressPercent" :isPlaying="isPlaying" @config-change="updateConfig"
+            @index-change="currentIndex = $event" @play-pause="isPlaying = !isPlaying"
+            @fullscreen="isFullscreen = true" />
 
-        <!-- Notification List Manager Tab -->
-        <div v-if="activeTab === 'list'" class="full-width">
-          <NotificationForm
-            v-if="isEditing"
-            :notification="editingNotification"
-            :config="config"
-            @save="handleSaveNotification"
-            @cancel="isEditing = false; editingNotification = null"
-          />
-          <NotificationManager
-            v-else
-            :notifications="notifications"
-            :config="config"
-            @edit="editingNotification = $event; isEditing = true"
-            @delete="handleDeleteNotification"
-            @toggle-active="handleToggleActive"
-            @add-new-click="editingNotification = null; isEditing = true"
-            @import-notifications="handleImportNotifications"
-            @export-notifications="handleExportNotifications"
-          />
-        </div>
+          <!-- Notification List Manager Tab -->
+          <div v-if="activeTab === 'list'" class="list-tab-container">
+            <NotificationForm v-if="isEditing" :notification="editingNotification" :config="config"
+              @save="handleSaveNotification" @cancel="isEditing = false; editingNotification = null" />
+            <NotificationManager v-else :notifications="notifications" :config="config"
+              @edit="editingNotification = $event; isEditing = true" @delete="handleDeleteNotification"
+              @toggle-active="handleToggleActive" @add-new-click="editingNotification = null; isEditing = true"
+              @import-notifications="handleImportNotifications" @export-notifications="handleExportNotifications" />
+          </div>
 
-        <!-- Settings tab panel -->
-        <div v-if="activeTab === 'settings'" class="settings-grid">
-          
-          <!-- Card 1: Theme Preferences -->
-          <MD3Card variant="outlined" class="settings-card">
-            <div class="settings-card-header">
-              <h4 class="settings-card-title">
-                {{ config.language === 'zh' ? '主题与配色设置' : 'Theme Preferences' }}
-              </h4>
+          <!-- Settings tab panel -->
+          <div v-if="activeTab === 'settings'" class="settings-container">
+            <div class="settings-grid">
+
+              <!-- Card 1: Theme Preferences -->
+              <MD3Card variant="outlined" class="settings-card">
+                <div class="settings-card-header">
+                  <h4 class="settings-card-title">
+                    {{ config.language === 'zh' ? '主题与配色设置' : 'Theme Preferences' }}
+                  </h4>
+                </div>
+
+                <MD3List>
+                  <MD3ListItem>
+                    <template #leading>
+                      <span class="material-symbols-rounded">palette</span>
+                    </template>
+                    <template #headline>{{ t.themeSeedColor }}</template>
+                    <template #supporting>
+                      {{ config.language === 'zh' ? '选择系统的深色 or 浅色主题外观' : 'Select dark or light visual theme of the system' }}
+                    </template>
+                    <template #trailing>
+                      <MD3Tabs v-model="config.themeMode" :options="[
+                        { value: 'system', label: t.themeModeAuto },
+                        { value: 'light', label: t.themeModeLight },
+                        { value: 'dark', label: t.themeModeDark }
+                      ]" />
+                    </template>
+                  </MD3ListItem>
+                </MD3List>
+              </MD3Card>
+
+              <!-- Card 2: Language Preference -->
+              <MD3Card variant="outlined" class="settings-card">
+                <div class="settings-card-header">
+                  <h4 class="settings-card-title">
+                    {{ config.language === 'zh' ? '显示偏好设置' : 'Localization & Formatting' }}
+                  </h4>
+                </div>
+
+                <MD3List>
+                  <!-- Language select -->
+                  <MD3ListItem>
+                    <template #leading>
+                      <span class="material-symbols-rounded">translate</span>
+                    </template>
+                    <template #headline>{{ t.appLanguage }}</template>
+                    <template #supporting>
+                      {{ config.language === 'zh' ? '更改界面的首选显示语言' : 'Choose your preferred localization option' }}
+                    </template>
+                    <template #trailing>
+                      <MD3Tabs v-model="config.language" :options="[
+                        { value: 'en', label: 'English' },
+                        { value: 'zh', label: '简体中文' }
+                      ]" />
+                    </template>
+                  </MD3ListItem>
+                </MD3List>
+              </MD3Card>
+
             </div>
 
-            <MD3List>
-              <MD3ListItem>
-                <template #leading>
-                  <span class="material-symbols-rounded">palette</span>
-                </template>
-                <template #headline>{{ t.themeSeedColor }}</template>
-                <template #supporting>
-                  {{ config.language === 'zh' ? '选择系统的深色或浅色主题外观' : 'Select dark or light visual theme of the system' }}
-                </template>
-                <template #trailing>
-                  <MD3Tabs
-                    v-model="config.themeMode"
-                    :options="[
-                      { value: 'system', label: t.themeModeAuto },
-                      { value: 'light', label: t.themeModeLight },
-                      { value: 'dark', label: t.themeModeDark }
-                    ]"
-                  />
-                </template>
-              </MD3ListItem>
-            </MD3List>
-          </MD3Card>
+            <!-- Card 3: About System (with larger margin from the top cards) -->
+            <div class="about-card-section">
+              <MD3Card variant="outlined" class="settings-card">
+                <div class="settings-card-header">
+                  <h4 class="settings-card-title">
+                    {{ config.language === 'zh' ? '关于 Notice Board' : 'About Notice Board' }}
+                  </h4>
+                </div>
 
-          <!-- Card 2: Language Preference -->
-          <MD3Card variant="outlined" class="settings-card">
-            <div class="settings-card-header">
-              <h4 class="settings-card-title">
-                {{ config.language === 'zh' ? '显示偏好设置' : 'Localization & Formatting' }}
-              </h4>
+                <MD3List>
+                  <!-- Version Number -->
+                  <MD3ListItem>
+                    <template #leading>
+                      <span class="material-symbols-rounded">app_badging</span>
+                    </template>
+                    <template #headline>
+                      {{ config.language === 'zh' ? '版本号' : 'Version' }}
+                    </template>
+                    <template #trailing>
+                      <span class="about-value">v2.0.1</span>
+                    </template>
+                  </MD3ListItem>
+
+                  <!-- Author -->
+                  <MD3ListItem>
+                    <template #leading>
+                      <span class="material-symbols-rounded">person</span>
+                    </template>
+                    <template #headline>
+                      {{ config.language === 'zh' ? '作者' : 'Author' }}
+                    </template>
+                    <template #supporting>
+                      {{ config.language === 'zh' ? '本应用由AI辅助开发' : 'This application is AI-assisted development' }}
+                    </template>
+                    <template #trailing>
+                      <span class="about-value">LviFly</span>
+                    </template>
+                  </MD3ListItem>
+                </MD3List>
+              </MD3Card>
             </div>
 
-            <MD3List>
-              <!-- Language select -->
-              <MD3ListItem>
-                <template #leading>
-                  <span class="material-symbols-rounded">translate</span>
-                </template>
-                <template #headline>{{ t.appLanguage }}</template>
-                <template #supporting>
-                  {{ config.language === 'zh' ? '更改界面的首选显示语言' : 'Choose your preferred localization option' }}
-                </template>
-                <template #trailing>
-                  <MD3Tabs
-                    v-model="config.language"
-                    :options="[
-                      { value: 'en', label: 'English' },
-                      { value: 'zh', label: '简体中文' }
-                    ]"
-                  />
-                </template>
-              </MD3ListItem>
-
-              <!-- Format selection -->
-              <MD3ListItem>
-                <template #leading>
-                  <span class="material-symbols-rounded">schedule</span>
-                </template>
-                <template #headline>{{ t.timeFormat }}</template>
-                <template #supporting>
-                  {{ config.language === 'zh' ? '更改数码时钟的显示格式' : 'Adjust the simulated digital clock time format' }}
-                </template>
-                <template #trailing>
-                  <MD3Tabs
-                    v-model="config.systemTimeFormat"
-                    :options="[
-                      { value: '24h', label: '24h' },
-                      { value: '12h', label: '12h' }
-                    ]"
-                  />
-                </template>
-              </MD3ListItem>
-            </MD3List>
-          </MD3Card>
-
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
 
     </div>
 
     <!-- Material Design 3 Snackbar -->
-    <MD3Snackbar 
-      :message="toastMessage || ''"
-      :language="config.language"
-      @close="toastMessage = null"
-    />
+    <MD3Snackbar :message="toastMessage || ''" :language="config.language" @close="toastMessage = null" />
 
   </div>
 </template>
@@ -878,194 +823,7 @@ const updateConfig = (newConf: Partial<AppConfig>) => {
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Sidebar Styling */
-.app-sidebar {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100vh;
-  position: sticky;
-  top: 0;
-  background-color: var(--surface-variant);
-  border-right: none;
-  flex-shrink: 0;
-  transition: all var(--transition-normal);
-  overflow: hidden;
-}
-
-.app-sidebar.expanded {
-  width: 16rem;
-  padding: 1rem;
-}
-
-.app-sidebar:not(.expanded) {
-  width: 80px;
-  padding: 1rem 0;
-}
-
-.sidebar-top-section {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  width: 100%;
-}
-
-.sidebar-top-section.align-center {
-  align-items: center;
-}
-
-.brand-row {
-  display: flex;
-  width: 100%;
-  align-items: center;
-}
-
-.brand-identity {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-width: 0;
-  width: 100%;
-}
-
-.app-sidebar:not(.expanded) .brand-identity {
-  justify-content: center;
-}
-
-.brand-icon-btn {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 12rem;
-  color: var(--text-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  flex-shrink: 0;
-  color: var(--Secondary);
-  border:none;
-  background-color: var(--surface-variant);
-}
-
-.brand-icon-btn:hover {
-  background-color: var(--border-color-muted);
-}
-
-.brand-menu-icon {
-  font-size: 1.25rem;
-}
-
-.brand-info {
-  min-width: 0;
-}
-
-.brand-title {
-  font-family: "Nunito", sans-serif !important;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text-color);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.2;
-}
-
-.brand-badge {
-  font-size: 0.625rem;
-  font-weight: 700;
-  padding: 0.125rem 0.5rem;
-  background-color: var(--primary-container);
-  color: var(--on-primary-container);
-  border-radius: 9999px;
-  margin-top: 0.25rem;
-  display: inline-block;
-}
-
-
-
-.sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-  width: 100%;
-}
-
-.sidebar-nav.align-center-width {
-  align-items: center;
-  width: 100%;
-}
-
-.nav-item-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  border-radius: 9999px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  height: 3rem;
-  min-height: 3rem;
-  max-height: 3rem;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-.nav-item-btn:hover, .nav-item-btn:focus-visible {
-  outline: none;
-}
-
-.nav-item-btn.active {
-  background-color: var(--primary-container);
-  color: var(--on-primary-container);
-}
-
-.nav-item-btn.inactive {
-  color: var(--text-secondary);
-}
-
-.nav-item-btn.inactive:hover {
-  color: var(--text-color);
-  background-color: var(--border-color-muted);
-}
-
-.expanded-padding {
-  padding: 0 1.25rem;
-  width: 100%;
-}
-
-.collapsed-padding {
-  justify-content: center;
-  padding: 0;
-  width: 3rem;
-  height: 3rem;
-}
-
-.icon-nav {
-  font-size: 1.125rem;
-  flex-shrink: 0;
-}
-
-.nav-label {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
-  min-width: 0;
-  flex: 1;
-  text-align: left;
-}
-
-.sidebar-bottom-section {
-  width: 100%;
-}
-
-.sidebar-bottom-section.align-center {
-  display: flex;
-  justify-content: center;
-}
+/* Sidebar styling has been moved to MD3Sidebar.vue */
 
 /* Mobile Navbar Styling */
 .mobile-navbar {
@@ -1156,6 +914,36 @@ const updateConfig = (newConf: Partial<AppConfig>) => {
   }
 }
 
+@media (min-width: 768px) {
+  .workspace-list-mode {
+    overflow: hidden !important;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .workspace-list-mode .content-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    height: auto !important;
+    max-height: none !important;
+    padding-bottom: 2rem;
+    overflow: hidden;
+  }
+
+  .workspace-list-mode .content-body-scroll {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: auto !important;
+    max-height: none !important;
+  }
+}
+
 /* Content Body Styling */
 .content-body {
   padding: 2rem;
@@ -1184,13 +972,45 @@ const updateConfig = (newConf: Partial<AppConfig>) => {
   width: 100%;
 }
 
+.list-tab-container {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 /* Settings Tab Styling */
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .settings-grid {
   display: grid;
-  grid-template-cols: repeat(2, minmax(0, 1fr));
+  grid-template-cols: 1fr;
   gap: 1.5rem;
   align-items: start;
   width: 100%;
+}
+
+@media (min-width: 768px) {
+  .settings-grid {
+    grid-template-cols: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.about-card-section {
+  margin-top: 3rem;
+  width: 100%;
+}
+
+.about-value {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--secondary);
 }
 
 .settings-card {
@@ -1227,42 +1047,5 @@ const updateConfig = (newConf: Partial<AppConfig>) => {
   font-size: 0.875rem;
   font-weight: 700;
   color: var(--text-secondary);
-}
-
-.theme-select-row {
-  display: flex;
-  background-color: var(--surface-variant);
-  padding: 0.25rem;
-  border-radius: 0.75rem;
-  border: 1px solid var(--border-color-muted);
-}
-
-.theme-btn {
-  flex: 1;
-  text-align: center;
-  padding: 0.5rem 0;
-  font-size: 0.875rem;
-  font-weight: 700;
-  border-radius: 0.5rem;
-  border: none;
-  background: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.theme-btn:hover, .theme-btn:focus-visible {
-  border-radius: 0.375rem;
-  outline: none;
-}
-
-.theme-btn.active {
-  background-color: var(--primary);
-  color: var(--md-sys-color-on-primary);
-}
-
-.theme-btn:not(.active):hover {
-  color: var(--text-color);
-  background-color: rgba(128, 128, 128, 0.08);
 }
 </style>

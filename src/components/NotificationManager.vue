@@ -229,7 +229,7 @@ const stats = computed(() => {
       </div>
 
       <!-- Scrollable list window -->
-      <div class="list-container" style="position: relative; min-height: 250px;">
+      <div class="list-container">
         <!-- Loading states (only visible if loading takes > 1s) -->
         <div v-if="showListLoader" class="loading-overlay">
           <MD3Loading variant="standard" />
@@ -256,7 +256,7 @@ const stats = computed(() => {
           </p>
         </div>
         
-        <MD3List v-else>
+        <MD3List v-else class="noticeList">
           <div 
             v-for="(item, index) in filteredNotifications" 
             :key="item.id" 
@@ -400,82 +400,8 @@ const stats = computed(() => {
   width: 100%;
 }
 
-.search-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex: 1;
-}
-
-.search-icon {
-  font-size: 1.5rem;
-  position: absolute;
-  left: 1rem;
-  color: var(--text-secondary);
-  user-select: none;
-  pointer-events: none;
-}
-
-.search-input {
-  width: 100%;
-  height: 3rem;
-  font-size: 0.9375rem;
-  padding: 0 1rem 0 3.25rem;
-  border-radius: 9999px;
-  border: none;
-  outline: none;
-  background-color: var(--surface-variant);
-  color: var(--text-color);
-  transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.search-input::placeholder {
-  color: var(--text-tertiary);
-}
-
-.search-input:focus {
-  background-color: var(--surface-color);
-  box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.12), 0px 1px 2px 0px rgba(0, 0, 0, 0.2);
-}
-
 .filter-tabs-container {
   flex-shrink: 0;
-}
-
-.filter-tabs {
-  display: flex;
-  background-color: var(--surface-variant);
-  padding: 0.25rem;
-  border-radius: 9999px;
-  border: 1px solid var(--border-color-muted);
-}
-
-.filter-btn {
-  padding: 0.375rem 1rem;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  border-radius: 9999px;
-  border: none;
-  background: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all var(--transition-fast);
-}
-
-.filter-btn:hover, .filter-btn:focus-visible {
-  border-radius: 9999px;
-  outline: none;
-}
-
-.filter-btn.active {
-  background-color: var(--primary);
-  color: var(--md-sys-color-on-primary);
-}
-
-.filter-btn:not(.active):hover {
-  color: var(--text-color);
-  background-color: rgba(128, 128, 128, 0.08);
 }
 
 .header-actions {
@@ -559,6 +485,29 @@ const stats = computed(() => {
   padding-right: 0.25rem;
 }
 
+@media (min-width: 768px) {
+  .grid-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+  .right-panel {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .list-container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    max-height: none !important;
+  }
+}
+
 .empty-list {
   display: flex;
   flex-direction: column;
@@ -589,17 +538,23 @@ const stats = computed(() => {
   margin-top: 0.25rem;
 }
 
+.noticeList {
+  height: 100%;
+  overflow-y: auto;
+}
+
 .list-item-row {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 0.5rem;
+  padding: 0 0.25rem;
   width: 100%;
 }
 
 .item-index-badge {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   width: 24px;
   color: var(--secondary);
@@ -607,6 +562,9 @@ const stats = computed(() => {
   font-size: 1.25rem;
   font-weight: 700;
   flex-shrink: 0;
+
+  height: 100%;
+  margin-top:1.6rem;
 }
 
 .item-card-inner {
@@ -645,59 +603,6 @@ const stats = computed(() => {
   opacity: 0.85;
 }
 
-/* Switch styling */
-.toggle-btn {
-  position: relative;
-  display: inline-flex;
-  height: 1.5rem;
-  width: 2.75rem;
-  flex-shrink: 0;
-  cursor: pointer;
-  align-items: center;
-  border-radius: 9999px;
-  border: 2px solid var(--border-color);
-  background-color: var(--surface-color);
-  transition: all 0.2s ease-in-out;
-  outline: none;
-  margin-top: 0.25rem;
-}
-
-.toggle-btn.active {
-  background-color: var(--primary);
-  border-color: transparent;
-}
-
-.toggle-dot {
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: all 0.2s ease-in-out;
-}
-
-.toggle-dot.active {
-  transform: translateX(1.375rem);
-  height: 1.125rem;
-  width: 1.125rem;
-  background-color: var(--md-sys-color-on-primary);
-  color: var(--primary);
-}
-
-.toggle-dot.inactive {
-  transform: translateX(0.125rem);
-  height: 0.875rem;
-  width: 0.875rem;
-  background-color: var(--text-tertiary);
-}
-
-.toggle-checkmark {
-  height: 0.75rem;
-  width: 0.75rem;
-  stroke: currentColor;
-  stroke-width: 3px;
-}
-
 .item-body {
   flex: 1;
   min-width: 0;
@@ -719,15 +624,6 @@ const stats = computed(() => {
   text-overflow: ellipsis;
 }
 
-.item-badge {
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.125rem 0.5rem;
-  border-radius: 9999px;
-  background-color: var(--primary-container);
-  color: var(--on-primary-container);
-}
-
 .item-duration {
   font-size: 0.75rem;
   color: var(--text-tertiary);
@@ -740,6 +636,7 @@ const stats = computed(() => {
   color: var(--text-secondary);
   line-height: 1.5;
   word-break: break-all;
+  white-space: pre-wrap;
 }
 
 .item-actions {
@@ -817,4 +714,10 @@ const stats = computed(() => {
   background-color: var(--secondary) !important;
   color: var(--md-sys-color-on-secondary, #ffffff) !important;
 }
+
+.list-container {
+  height:100%;
+  overflow: auto
+}
+
 </style>

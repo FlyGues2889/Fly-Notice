@@ -12,15 +12,5 @@ export interface AppConfig {
   themeMode: 'light' | 'dark' | 'system';
   carouselSpeedSecs: number; // Global default speed
   fontSize: number;
-  scriptContent: string;
-  scriptEnabled: boolean;
-  systemTimeFormat: '12h' | '24h';
   language?: 'en' | 'zh';
-}
-
-export interface LogEntry {
-  id: string;
-  timestamp: string;
-  type: 'info' | 'success' | 'error' | 'warn';
-  message: string;
 }

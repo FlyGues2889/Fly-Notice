@@ -25,7 +25,7 @@ defineProps<{
 
 <style scoped>
 .page-header {
-  padding: 2rem;
+  padding: 2rem 2rem 0px 2rem;
   background-color: transparent;
   flex-shrink: 0;
   margin-top: 2.4rem;
@@ -56,6 +56,7 @@ defineProps<{
   color: var(--text-color);
   letter-spacing: -0.01em;
   line-height: 1.2;
+  padding-top: 24px;
 }
 
 .header-subtitle-text {
