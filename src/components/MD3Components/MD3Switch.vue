@@ -120,7 +120,7 @@ const toggle = () => {
   width: 24px;
   height: 24px;
   background-color: var(--md-sys-color-on-primary);
-  transform: translate(24px, -50%); /* Moves it to the right with 4px right margin: 52 - 24 - 4 = 24px */
+  transform: translate(22px, -50%);
 }
 
 /* Interaction effects */
